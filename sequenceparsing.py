@@ -11,7 +11,6 @@
 from copy import deepcopy
 import xlrd
 
-
 # Parses an Excel file with program sequencing information (when courses are taken)
 # and returns a dictionary storing the program plan name as key (Traditional, Co-op plan 1, etc.)
 # and a dict as value. This inner dict has the term name (Term 1, Term 2, etc.) as key
@@ -19,7 +18,7 @@ import xlrd
 #
 # Parameters:
 #   course_obj_dict (dictionary): dict with course name for key and 
-#   Course class as value. Course class described in parsing.py
+#   Course class as value
 #   filename (string): Name of the Excel file to be parsed for sequencing
 #   info. Format described in README. Can only be a .xls file (NOT .xlsx)
 #
@@ -74,7 +73,7 @@ def parseSeq(filename, course_obj_dict, plainNameList):
                                 continue
                             # course_obj_dict key has section number in key, orname doesn't; need to search for 
                             # full name (with section number)
-                            fullOrNames = findPlainName(course_obj_dict, orname)
+                            fullOrNames = findFullNames(course_obj_dict, orname)
                             for fullOrName in fullOrNames:
                                 orcourse = deepcopy(course_obj_dict[fullOrName])
                                 if namelist[-1] == pureName:
@@ -91,7 +90,9 @@ def parseSeq(filename, course_obj_dict, plainNameList):
                     if name not in plainNameList:
                         continue
 
-                    fullNames = findPlainName(course_obj_dict, name)
+                    # course_obj_dict key has section number in key, name doesn't; need to search for 
+                    # full name (with section number)
+                    fullNames = findFullNames(course_obj_dict, name)
                     for fullName in fullNames:
                         # deepcopy since sequencing leads to prereqs and coreqs not being the same between different plans
                         curr_course = deepcopy(course_obj_dict[fullName])
@@ -114,10 +115,21 @@ def parseSeq(filename, course_obj_dict, plainNameList):
     # return course_seq, dept_name
     return course_seq
 
-def findPlainName(course_obj_dict, courseName):
+# Searches through course_obj_dict for courses with plainNames that match input courseName
+# Returns a list of names of courses in course_obj_dict with matching plainName
+# Parameters:
+#   course_obj_dict (dictionary): dict with course name for key and 
+#   Course class as value.
+#   courseName (string): plain name of course in Sequencing Excel file
+# Returns:
+#   fullNames (list of strings): list of full names of courses in course_obj_dict
+#   with plainNames matching courseName
+def findFullNames(course_obj_dict, courseName):
     fullNames = []
     for course in course_obj_dict:
+        # Have to search through entire dict
         if course_obj_dict[course].plainName == courseName:
+            # Found a match
             fullNames.append(course)
 
     return fullNames
