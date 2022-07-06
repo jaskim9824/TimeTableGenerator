@@ -2,10 +2,18 @@
     float: left;
     margin-left: 5px;
     position: relative;
+    width: 17%;
+}
+
+.daylabels {
+    float: left;
+    margin-left: 5px;
+    position: relative;
 }
 
 .courseholder {
     position: relative;
+    width: 100%;
 }
 
 .label {
@@ -27,7 +35,8 @@
     text-align: center; 
 }
 
-p {
-    padding-top: 0%;
-    padding-bottom: 0%;
+
+
+.day h3{
+    text-align: center;
 }
