@@ -72,15 +72,18 @@ def parseSeq(filename, course_obj_dict, plainNameList):
                             orname = orname.strip()
                             if orname not in plainNameList:
                                 continue
-                            fullOrName = findPlainName(course_obj_dict, orname)
-                            orcourse = deepcopy(course_obj_dict[fullOrName])
-                            if namelist[-1] == pureName:
-                                orcourse.calendar_print = "lastor"
-                            else:
-                                orcourse.calendar_print = "or"
-                            if course_group != "":
-                                orcourse.course_group = course_group
-                            term_list.append(orcourse)
+                            # course_obj_dict key has section number in key, orname doesn't; need to search for 
+                            # full name (with section number)
+                            fullOrNames = findPlainName(course_obj_dict, orname)
+                            for fullOrName in fullOrNames:
+                                orcourse = deepcopy(course_obj_dict[fullOrName])
+                                if namelist[-1] == pureName:
+                                    orcourse.calendar_print = "lastor"
+                                else:
+                                    orcourse.calendar_print = "or"
+                                if course_group != "":
+                                    orcourse.course_group = course_group
+                                term_list.append(orcourse)
                         plan_dict[term_name] = term_list
                         row += 1
                         continue
@@ -88,12 +91,13 @@ def parseSeq(filename, course_obj_dict, plainNameList):
                     if name not in plainNameList:
                         continue
 
-                    fullName = findPlainName(course_obj_dict, name)
-                    # deepcopy since sequencing leads to prereqs and coreqs not being the same between different plans
-                    curr_course = deepcopy(course_obj_dict[fullName])
-                    if course_group != "":
-                        curr_course.course_group = course_group
-                    term_list.append(curr_course)  # store each course in a list
+                    fullNames = findPlainName(course_obj_dict, name)
+                    for fullName in fullNames:
+                        # deepcopy since sequencing leads to prereqs and coreqs not being the same between different plans
+                        curr_course = deepcopy(course_obj_dict[fullName])
+                        if course_group != "":
+                            curr_course.course_group = course_group
+                        term_list.append(curr_course)  # store each course in a list
                 plan_dict[term_name] = term_list  # store each list in a dict (key is term name)
                 col += 1
             course_seq[sheet.name] = plan_dict  # store each term dict in a plan dict (key is plan name (traditional, etc.))
@@ -111,12 +115,12 @@ def parseSeq(filename, course_obj_dict, plainNameList):
     return course_seq
 
 def findPlainName(course_obj_dict, courseName):
-    fullName = ""
+    fullNames = []
     for course in course_obj_dict:
         if course_obj_dict[course].plainName == courseName:
-            fullName = course
+            fullNames.append(course)
 
-    return fullName
+    return fullNames
 
 # Checks that all coreqs for a course are taken in the same term,
 # if not, the coreq is changed to become a prereq. Similarly,
