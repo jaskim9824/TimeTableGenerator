@@ -30,7 +30,7 @@
         <p class="label">6:00 PM</p>
     </div>
     <div id="main" ng-app="main" ng-controller="main">
-        <div ng-switch="selected">
+        <div ng-switch="selectedPlan+selectedTerm">
             <div id="planAterm1" ng-switch-when="planAterm1">
                 <div class="day" id="M">
                     <h3>Monday</h3>
@@ -72,7 +72,6 @@
                 </div>
             </div>
         </div>
-        
     </div>
 </body>
 </html>
