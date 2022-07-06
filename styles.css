@@ -11,3 +11,13 @@
 .label {
     margin-bottom: 120px;
 }
+
+.course {
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+}
+
+.course p{
+    text-align: center;   
+}
