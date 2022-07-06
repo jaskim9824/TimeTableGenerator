@@ -11,17 +11,16 @@
 from copy import deepcopy
 import xlrd
 
-
 # Parses an Excel file with program sequencing information (when courses are taken)
 # and returns a dictionary storing the program plan name as key (Traditional, Co-op plan 1, etc.)
 # and a dict as value. This inner dict has the term name (Term 1, Term 2, etc.) as key
-# and a list of Course objects as value.
+# and a list of Course objects taken in that term as value.
 #
 # Parameters:
 #   course_obj_dict (dictionary): dict with course name for key and 
-#   Course class as value. Course class described in parsing.py
+#   Course object as value
 #   filename (string): Name of the Excel file to be parsed for sequencing
-#   info. Format described in README. Can only be a .xls file (NOT .xlsx)
+#   info. Can only be a .xls file (NOT .xlsx)
 #
 # Returns:
 #   course_seq (dictionary): Key is plan name, value is another dict with 
@@ -52,7 +51,7 @@ def parseSeq(filename, course_obj_dict, plainNameList):
                         continue
                     course_group = ""
                     if ("(" in name) and (")" in name):
-                        # course group is between open and close bracket
+                        # course group is between opening and closing brackets
                         open_bracket = name.find("(")
                         close_bracket = name.find(")")
                         course_group = name[open_bracket + 1:close_bracket]
@@ -65,7 +64,7 @@ def parseSeq(filename, course_obj_dict, plainNameList):
                             name = name[:open_bracket] + name[close_bracket + 1:]
 
                     if "OR" in name:
-                        # If OR case, follow the same procedure but set calendar_print as "or"
+                        # If OR case, follow the same procedure but set calendar_print as "or" (or "lastor")
                         namelist = name.split("OR")
                         for orname in namelist:
                             pureName = orname
@@ -74,10 +73,11 @@ def parseSeq(filename, course_obj_dict, plainNameList):
                                 continue
                             # course_obj_dict key has section number in key, orname doesn't; need to search for 
                             # full name (with section number)
-                            fullOrNames = findPlainName(course_obj_dict, orname)
+                            fullOrNames = findFullNames(course_obj_dict, orname)
                             for fullOrName in fullOrNames:
                                 orcourse = deepcopy(course_obj_dict[fullOrName])
                                 if namelist[-1] == pureName:
+                                    # last OR course (courses after this are not in this OR option, will be a different div)
                                     orcourse.calendar_print = "lastor"
                                 else:
                                     orcourse.calendar_print = "or"
@@ -91,7 +91,9 @@ def parseSeq(filename, course_obj_dict, plainNameList):
                     if name not in plainNameList:
                         continue
 
-                    fullNames = findPlainName(course_obj_dict, name)
+                    # course_obj_dict key has section number in key, name doesn't; need to search for 
+                    # full name (with section number)
+                    fullNames = findFullNames(course_obj_dict, name)
                     for fullName in fullNames:
                         # deepcopy since sequencing leads to prereqs and coreqs not being the same between different plans
                         curr_course = deepcopy(course_obj_dict[fullName])
@@ -100,24 +102,37 @@ def parseSeq(filename, course_obj_dict, plainNameList):
                         term_list.append(curr_course)  # store each course in a list
                 plan_dict[term_name] = term_list  # store each list in a dict (key is term name)
                 col += 1
-            course_seq[sheet.name] = plan_dict  # store each term dict in a plan dict (key is plan name (traditional, etc.))
+            course_seq[sheet.name] = plan_dict  # store each term dict in a plan dict (key is plan name (traditional, co-op plan 1, etc.))
 
+        # Not in use, overrides Calendar description
         # Make sure that co-reqs are only for courses in the same term
         # Had to do this after pulling from Sequencing.xls
-        # course_seq = checkReqs(course_seq)  Not used, keep everything exactly like Calendar
+        # course_seq = checkReqs(course_seq)
 
     except FileNotFoundError:
         raise FileNotFoundError("Excel sequencing file not found, ensure it is present and the name is correct.")
     except xlrd.biffh.XLRDError:
         raise ValueError("Error reading data from sequencing Excel sheet. Ensure it is formatted exactly as specified")
 
-    # return course_seq, dept_name
     return course_seq
 
-def findPlainName(course_obj_dict, courseName):
+# Searches through course_obj_dict for courses with plainNames that match input courseName
+# Returns a list of names of courses in course_obj_dict with matching plainName
+#
+# Parameters:
+#   course_obj_dict (dictionary): dict with course name for key and 
+#   Course object as value.
+#   courseName (string): plain name of course in Sequencing Excel file
+#
+# Returns:
+#   fullNames (list of strings): list of full names of courses in course_obj_dict
+#   with plainNames matching courseName
+def findFullNames(course_obj_dict, courseName):
     fullNames = []
     for course in course_obj_dict:
+        # Have to search through entire dict
         if course_obj_dict[course].plainName == courseName:
+            # Found a match
             fullNames.append(course)
 
     return fullNames
@@ -243,6 +258,3 @@ def extractCourseFromTerm(planDict, term):
         course_name = course.name.replace(" ", "").replace("or", " or ")
         term_course_names.append(course_name)
     return term_course_names
-
-
-
