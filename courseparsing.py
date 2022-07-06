@@ -2,7 +2,7 @@ import xlrd
 import sequenceparsing
 
 class Course:
-    def __init__(self, name, acadOrg = "", term = "", shortDesc = "", classNbr = "", 
+    def __init__(self, name, plainName = "", acadOrg = "", term = "", shortDesc = "", classNbr = "", 
     subject = "", catalog = "", component = "", sect = "", classStatus = "", 
     descr = "", crsStatus = "", facilID = "", place = "", pat = "", startDate = "", 
     endDate = "", hrsFrom = "", hrsTo = "", mon = "", tues = "", wed = "", thurs = "", 
@@ -12,6 +12,7 @@ class Course:
     duration = "", career = "", consent = "", calendarDescr = "", maxUnits = ""):
 
         self.name = str(name)
+        self.plainName = str(plainName)
         self.acadOrg = str(acadOrg)
         self.term = str(term)
         self.shortDesc = str(shortDesc)
@@ -63,6 +64,7 @@ def parseCourses(filename, sequenceFileName):
         book = xlrd.open_workbook(filename)
         sheet = book.sheet_by_index(0)
         courseObjDict = {}
+        plainNameList = []
         for row in range(2, sheet.nrows):
             acadOrg = sheet.cell_value(row, 0)
             term = sheet.cell_value(row, 1)
@@ -109,9 +111,11 @@ def parseCourses(filename, sequenceFileName):
             calendarDescr = sheet.cell_value(row, 42)
             maxUnits = sheet.cell_value(row, 43)
 
+            plainName = subject + catalog
+            plainNameList.append(plainName)
             courseName = subject + catalog + " " + sect
 
-            courseObjDict[courseName] = Course(courseName, acadOrg, term, shortDesc, classNbr,
+            courseObjDict[courseName] = Course(courseName, plainName, acadOrg, term, shortDesc, classNbr,
             subject, catalog, component, sect, classStatus, descr, crsStatus,
             facilID, place, pat, startDate, endDate, hrsFrom, hrsTo,
             mon, tues, wed, thurs, fri, sat, sun, name, instructor, email,
@@ -119,7 +123,7 @@ def parseCourses(filename, sequenceFileName):
             rqGroup, openTo, approvedHrs, duration, career, consent, calendarDescr,
             maxUnits)
 
-        courseSeqDict = sequenceparsing.parseSeq(sequenceFileName, courseObjDict)
+        courseSeqDict = sequenceparsing.parseSeq(sequenceFileName, courseObjDict, plainNameList)
 
         return courseObjDict, courseSeqDict
 
@@ -135,7 +139,7 @@ if __name__ == "__main__":
         for term in courseSeqDict[plan]:
             print(term)
             for course in courseSeqDict[plan][term]:
-                print(courseSeqDict[plan][term][course].name)
+                print(course.name)
             print()
         print()
 

@@ -26,7 +26,7 @@ import xlrd
 # Returns:
 #   course_seq (dictionary): Key is plan name, value is another dict with 
 #   term name as the key and a list of the Course objects taken in that term as value.
-def parseSeq(filename, course_obj_dict):
+def parseSeq(filename, course_obj_dict, plainNameList):
     try:
         book = xlrd.open_workbook(filename)
         numsheets = book.nsheets
@@ -70,9 +70,10 @@ def parseSeq(filename, course_obj_dict):
                         for orname in namelist:
                             pureName = orname
                             orname = orname.strip()
-                            if orname not in course_obj_dict:
+                            if orname not in plainNameList:
                                 continue
-                            orcourse = deepcopy(course_obj_dict[orname])
+                            fullOrName = findPlainName(course_obj_dict, orname)
+                            orcourse = deepcopy(course_obj_dict[fullOrName])
                             if namelist[-1] == pureName:
                                 orcourse.calendar_print = "lastor"
                             else:
@@ -84,11 +85,12 @@ def parseSeq(filename, course_obj_dict):
                         row += 1
                         continue
 
-                    if name not in course_obj_dict:
+                    if name not in plainNameList:
                         continue
 
+                    fullName = findPlainName(course_obj_dict, name)
                     # deepcopy since sequencing leads to prereqs and coreqs not being the same between different plans
-                    curr_course = deepcopy(course_obj_dict[name])
+                    curr_course = deepcopy(course_obj_dict[fullName])
                     if course_group != "":
                         curr_course.course_group = course_group
                     term_list.append(curr_course)  # store each course in a list
@@ -107,6 +109,14 @@ def parseSeq(filename, course_obj_dict):
 
     # return course_seq, dept_name
     return course_seq
+
+def findPlainName(course_obj_dict, courseName):
+    fullName = ""
+    for course in course_obj_dict:
+        if course_obj_dict[course].plainName == courseName:
+            fullName = course
+
+    return fullName
 
 # Checks that all coreqs for a course are taken in the same term,
 # if not, the coreq is changed to become a prereq. Similarly,
