@@ -18,7 +18,7 @@ import xlrd
 #
 # Parameters:
 #   course_obj_dict (dictionary): dict with course name for key and 
-#   Course class as value
+#   Course object as value
 #   filename (string): Name of the Excel file to be parsed for sequencing
 #   info. Format described in README. Can only be a .xls file (NOT .xlsx)
 #
@@ -119,7 +119,7 @@ def parseSeq(filename, course_obj_dict, plainNameList):
 # Returns a list of names of courses in course_obj_dict with matching plainName
 # Parameters:
 #   course_obj_dict (dictionary): dict with course name for key and 
-#   Course class as value.
+#   Course object as value.
 #   courseName (string): plain name of course in Sequencing Excel file
 # Returns:
 #   fullNames (list of strings): list of full names of courses in course_obj_dict
@@ -255,6 +255,3 @@ def extractCourseFromTerm(planDict, term):
         course_name = course.name.replace(" ", "").replace("or", " or ")
         term_course_names.append(course_name)
     return term_course_names
-
-
-

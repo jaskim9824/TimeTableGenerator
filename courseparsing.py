@@ -1,7 +1,18 @@
+# Author: Zachary Schmidt
+# Collaborators: Jason Kim, Moaz Abdelmonem
+# Oversight: Dr. David Nobes
+# University of Alberta, Summer 2022, Curriculum Development Co-op Term
+
+# This file contains the functions neccesary to parse the Excel file
+# containing the information for each course
+
+# Dependencies: xlrd, sequenceparsing
+
 import xlrd
 import sequenceparsing
 
 class Course:
+    # Data storage for info parsed from Excel files
     def __init__(self, name, plainName = "", acadOrg = "", term = "", shortDesc = "", classNbr = "", 
     subject = "", catalog = "", component = "", sect = "", classStatus = "", 
     descr = "", crsStatus = "", facilID = "", place = "", pat = "", startDate = "", 
@@ -58,14 +69,24 @@ class Course:
         self.calendarDescr = str(calendarDescr)
         self.maxUnits = str(maxUnits)
 
-
+# Main function for parsing information from list of courses Excel file.
+# Uses parseSeq to organize courses by plan and by term
+# Parameters:
+#   filename (string): name of the Excel file with course info
+#   sequenceFileName (string): name of the Exel file with sequencing info
+# Returns:
+#   courseObjDict (dict): dict with course name for key and 
+#   Course object as value
+#   courseSeqDict (dict): Key is plan name, value is another dict with 
+#   term name as the key and a list of the Course objects taken in that term as value.
 def parseCourses(filename, sequenceFileName):
     try:
         book = xlrd.open_workbook(filename)
         sheet = book.sheet_by_index(0)
         courseObjDict = {}
-        plainNameList = []
+        plainNameList = []  # list of plain names (without section numbers) of all courses parsed
         for row in range(2, sheet.nrows):
+            # Parse cells row by row (each row is one course)
             acadOrg = sheet.cell_value(row, 0)
             term = sheet.cell_value(row, 1)
             shortDesc = sheet.cell_value(row, 2)
@@ -111,9 +132,9 @@ def parseCourses(filename, sequenceFileName):
             calendarDescr = sheet.cell_value(row, 42)
             maxUnits = sheet.cell_value(row, 43)
 
-            plainName = subject + catalog
-            plainNameList.append(plainName)
-            courseName = subject + catalog + " " + sect
+            plainName = subject + catalog  # no section number
+            plainNameList.append(plainName)  # allows easy search in parseSeq
+            courseName = subject + catalog + " " + sect  # with section number
 
             courseObjDict[courseName] = Course(courseName, plainName, acadOrg, term, shortDesc, classNbr,
             subject, catalog, component, sect, classStatus, descr, crsStatus,
@@ -123,7 +144,7 @@ def parseCourses(filename, sequenceFileName):
             rqGroup, openTo, approvedHrs, duration, career, consent, calendarDescr,
             maxUnits)
 
-        courseSeqDict = sequenceparsing.parseSeq(sequenceFileName, courseObjDict, plainNameList)
+        courseSeqDict = sequenceparsing.parseSeq(sequenceFileName, courseObjDict, plainNameList)  # organize courses by plan & by term
 
         return courseObjDict, courseSeqDict
 
@@ -133,6 +154,7 @@ def parseCourses(filename, sequenceFileName):
         raise ValueError("Error reading data from Course information Excel sheet. Ensure it is formatted exactly as specified")
 
 if __name__ == "__main__":
+    # Testing
     courseObjDict, courseSeqDict = parseCourses("TimeTable.xls", "Sequencing.xls")
     for plan in courseSeqDict:
         print(plan)
@@ -145,4 +167,3 @@ if __name__ == "__main__":
 
     for course in courseObjDict:
         print(courseObjDict[course].name)
-
