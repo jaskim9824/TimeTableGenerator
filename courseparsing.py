@@ -4,7 +4,7 @@
 # University of Alberta, Summer 2022, Curriculum Development Co-op Term
 
 # This file contains the functions neccesary to parse the Excel file
-# containing the information for each course
+# containing the information for each course (instructor, location, time, etc.)
 
 # Dependencies: xlrd, sequenceparsing
 
@@ -71,14 +71,16 @@ class Course:
 
 # Main function for parsing information from list of courses Excel file.
 # Uses parseSeq to organize courses by plan and by term
+#
 # Parameters:
 #   filename (string): name of the Excel file with course info
 #   sequenceFileName (string): name of the Exel file with sequencing info
+#
 # Returns:
 #   courseObjDict (dict): dict with course name for key and 
 #   Course object as value
 #   courseSeqDict (dict): Key is plan name, value is another dict with 
-#   term name as the key and a list of the Course objects taken in that term as value.
+#   term name as the key and a list of the Course objects taken in that term as value
 def parseCourses(filename, sequenceFileName):
     try:
         book = xlrd.open_workbook(filename)
@@ -87,6 +89,7 @@ def parseCourses(filename, sequenceFileName):
         plainNameList = []  # list of plain names (without section numbers) of all courses parsed
         for row in range(2, sheet.nrows):
             # Parse cells row by row (each row is one course)
+            # Location of headers is fixed & therefore hard-coded here
             acadOrg = sheet.cell_value(row, 0)
             term = sheet.cell_value(row, 1)
             shortDesc = sheet.cell_value(row, 2)
