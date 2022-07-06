@@ -1,0 +1,13 @@
+.day {
+    float: left;
+    margin-left: 10vw;
+    position: relative;
+}
+
+.courseholder {
+    position: relative;
+}
+
+.label {
+    margin-bottom: 120px;
+}
