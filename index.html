@@ -9,7 +9,7 @@
     <script>
         var app = angular.module("main", []);
         app.controller("main", function($scope) { 
-            $scope.obj = {selectedPlan:"planA", selectedTerm:"term1", OR12: "1"};
+            $scope.obj = {selectedPlan:"planA", selectedTerm:"term1", OR12: "1", OR34: "3", OR56: "5"};
         });
     </script>
     <link rel="stylesheet" href="styles.css">
@@ -67,6 +67,22 @@
                     <label for="2">2</label><br/>
                 </div>
             </div>
+            <div id="planAterm2options" ng-switch-when="planAterm2">
+                <div id="OR34">
+                    <input id="3" name="optionselector" ng-model="obj.OR34" type="radio" value="3"/>
+                    <label for="3">3</label><br/>
+                    <input id="4" name="optionselector" ng-model="obj.OR34" type="radio" value="4"/>
+                    <label for="4">4</label><br/>
+                </div>
+            </div>
+            <div id="planBterm4options" ng-switch-when="planBterm4">
+                <div id="OR56">
+                    <input id="5" name="optionselector" ng-model="obj.OR56" type="radio" value="5"/>
+                    <label for="5">5</label><br/>
+                    <input id="6" name="optionselector" ng-model="obj.OR56" type="radio" value="6"/>
+                    <label for="6">6</label><br/>
+                </div>
+            </div>
         </div>
         <div class="daylabels" id="hour">
             <h3>Hour</h3>
@@ -90,10 +106,10 @@
                     <h3>Monday</h3>
                     <div class="courseholder">
                         <div class="course" style="position: absolute; top: 122px; height: 179px;">
-                            <p>Course</p>
+                            <p>ENG PH 200</p>
                         </div>
                         <div class="course" style="position: absolute; top: 305px; height: 118px;">
-                            <p>Course</p>
+                            <p>CH E 233</p>
                         </div>
                     </div>
                 </div>
@@ -103,15 +119,15 @@
                     <h3>Tuesday</h3>
                     <div class="courseholder">
                         <div class="course" style="position: absolute; height: 118px;">
-                            <p>Course</p>
+                            <p>ECE 311</p>
                         </div>
                         <div ng-switch="obj.OR12">
                             <div class="course" style="position: absolute; top: 122px; height: 118px;" ng-switch-when="1">
-                                <p>Course</p>
+                                <p>ECE 343</p>
                             </div>
                         </div>
                         <div class="course" style="position: absolute; top: 244px; height: 118px;">
-                            <p>Course</p>
+                            <p>MATH 200</p>
                         </div>
                     </div>
                 </div>
@@ -119,14 +135,14 @@
                     <h3>Wednesday</h3>
                     <div class="courseholder">
                         <div class="course" style="position: absolute; top: 61px; height: 179px;">
-                            <p>Course</p>
+                            <p>MATH 111</p>
                         </div>
                         <div class="course" style="position: absolute; top: 244px; height: 118px;">
-                            <p>Course</p>
+                            <p>ECE 231</p>
                         </div>
                         <div ng-switch="obj.OR12">
                             <div class="course" style="position: absolute; top: 366px; height: 118px;" ng-switch-when="2">
-                                <p>Course</p>
+                                <p>ENGG 300</p>
                             </div>
                         </div>
                     </div>
@@ -135,10 +151,10 @@
                     <h3>Thursday</h3>
                     <div class="courseholder">
                         <div class="course" style="position: absolute; top: 244px; height: 118px;">
-                            <p>Course</p>
+                            <p>ECE 123</p>
                         </div>
                         <div class="course" style="position: absolute; top: 366px; height: 118px;">
-                            <p>Course</p>
+                            <p>ENGL 199</p>
                         </div>
                     </div>
                 </div>
@@ -146,14 +162,153 @@
                     <h3>Friday</h3>
                     <div class="courseholder">
                         <div class="course" style="position: absolute; top: 244px; height: 118px;">
-                            <p>Course</p>
+                            <p>ECE 121</p>
                         </div>
                         <div class="course" style="position: absolute; top: 366px; height: 118px;">
-                            <p>Course</p>
+                            <p>MEC E 100</p>
                         </div>
                     </div>
                 </div>
             </div>
+            <div id="planAterm2" ng-switch-when="planAterm2">
+                <div class="day" id="M">
+                    <h3>Monday</h3>
+                    <div class="courseholder">
+                        <div class="course" style="position: absolute; top: 122px; height: 179px;">
+                            <p>ENG PH 200</p>
+                        </div>
+                        <div class="course" style="position: absolute; top: 305px; height: 118px;">
+                            <p>CH E 233</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- 30 min chunk = 57px, 60 min chunk = 118px -->
+                <!-- 30 min pos = 61 px, 60 min pos = 122px -->
+                <div class="day" id="Tu">
+                    <h3>Tuesday</h3>
+                    <div class="courseholder">
+                        <div class="course" style="position: absolute; height: 118px;">
+                            <p>ECE 311</p>
+                        </div>
+                        <div ng-switch="obj.OR34">
+                            <div class="course" style="position: absolute; top: 122px; height: 118px;" ng-switch-when="3">
+                                <p>ECE 343</p>
+                            </div>
+                        </div>
+                        <div class="course" style="position: absolute; top: 244px; height: 118px;">
+                            <p>MATH 200</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="day" id="W">
+                    <h3>Wednesday</h3>
+                    <div class="courseholder">
+                        <div class="course" style="position: absolute; top: 61px; height: 179px;">
+                            <p>MATH 111</p>
+                        </div>
+                        <div class="course" style="position: absolute; top: 244px; height: 118px;">
+                            <p>ECE 231</p>
+                        </div>
+                        <div ng-switch="obj.OR34">
+                            <div class="course" style="position: absolute; top: 366px; height: 118px;" ng-switch-when="4">
+                                <p>ENGG 300</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="day" id="Th">
+                    <h3>Thursday</h3>
+                    <div class="courseholder">
+                        <div class="course" style="position: absolute; top: 244px; height: 118px;">
+                            <p>ECE 123</p>
+                        </div>
+                        <div class="course" style="position: absolute; top: 366px; height: 118px;">
+                            <p>ENGL 199</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="day" id="F">
+                    <h3>Friday</h3>
+                    <div class="courseholder">
+                        <div class="course" style="position: absolute; top: 244px; height: 118px;">
+                            <p>ECE 121</p>
+                        </div>
+                        <div class="course" style="position: absolute; top: 366px; height: 118px;">
+                            <p>MEC E 100</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="planBterm4" ng-switch-when="planBterm4">
+                <div class="day" id="M">
+                    <h3>Monday</h3>
+                    <div class="courseholder">
+                        <div class="course" style="position: absolute; top: 122px; height: 179px;">
+                            <p>ENG PH 200</p>
+                        </div>
+                        <div class="course" style="position: absolute; top: 305px; height: 118px;">
+                            <p>CH E 233</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- 30 min chunk = 57px, 60 min chunk = 118px -->
+                <!-- 30 min pos = 61 px, 60 min pos = 122px -->
+                <div class="day" id="Tu">
+                    <h3>Tuesday</h3>
+                    <div class="courseholder">
+                        <div class="course" style="position: absolute; height: 118px;">
+                            <p>ECE 311</p>
+                        </div>
+                        <div ng-switch="obj.OR56">
+                            <div class="course" style="position: absolute; top: 122px; height: 118px;" ng-switch-when="5">
+                                <p>ECE 343</p>
+                            </div>
+                        </div>
+                        <div class="course" style="position: absolute; top: 244px; height: 118px;">
+                            <p>MATH 200</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="day" id="W">
+                    <h3>Wednesday</h3>
+                    <div class="courseholder">
+                        <div class="course" style="position: absolute; top: 61px; height: 179px;">
+                            <p>MATH 111</p>
+                        </div>
+                        <div class="course" style="position: absolute; top: 244px; height: 118px;">
+                            <p>ECE 231</p>
+                        </div>
+                        <div ng-switch="obj.OR56">
+                            <div class="course" style="position: absolute; top: 366px; height: 118px;" ng-switch-when="6">
+                                <p>ENGG 300</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="day" id="Th">
+                    <h3>Thursday</h3>
+                    <div class="courseholder">
+                        <div class="course" style="position: absolute; top: 244px; height: 118px;">
+                            <p>ECE 123</p>
+                        </div>
+                        <div class="course" style="position: absolute; top: 366px; height: 118px;">
+                            <p>ENGL 199</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="day" id="F">
+                    <h3>Friday</h3>
+                    <div class="courseholder">
+                        <div class="course" style="position: absolute; top: 244px; height: 118px;">
+                            <p>ECE 121</p>
+                        </div>
+                        <div class="course" style="position: absolute; top: 366px; height: 118px;">
+                            <p>MEC E 100</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         </div>
     </div>
 </body>
