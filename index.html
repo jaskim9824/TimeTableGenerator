@@ -9,8 +9,7 @@
     <script>
         var app = angular.module("main", []);
         app.controller("main", function($scope) { 
-            $scope.selectedPlan = "planA";
-            $scope.selectedTerm = "term1";
+            $scope.obj = {selectedPlan:"planA", selectedTerm:"term1", OR12: "1"};
         });
     </script>
     <link rel="stylesheet" href="styles.css">
@@ -23,21 +22,51 @@
     <div id="legend">
     </div>
     <div id="main" ng-app="main" ng-controller="main">
+        <p>{{obj.selectedPlan+obj.selectedTerm}}</p>
+        <p>{{obj.OR12}}</p>
         <div id="planlegend">
-            <input id="planA" name="planselector" ng-model="selectedPlan" type="radio" value="planA"/>
+            <input id="planA" name="planselector" ng-model="obj.selectedPlan" type="radio" value="planA"/>
             <label for="planA">Plan A</label><br/>
-            <input id="planB" name="planselector" ng-model="selectedPlan" type="radio" value="planB"/>
+            <input id="planB" name="planselector" ng-model="obj.selectedPlan" type="radio" value="planB"/>
             <label for="planB">Plan B</label><br/>
-            <input id="planC" name="planselector" ng-model="selectedPlan" type="radio" value="planC"/>
+            <input id="planC" name="planselector" ng-model="obj.selectedPlan" type="radio" value="planC"/>
             <label for="planC">Plan C</label><br/>
         </div>
-        <div id="termlegend">
-            <input id="term1" name="termselector" ng-model="selectedTerm" type="radio" value="term1"/>
-            <label for="term1">Term 1</label><br/>
-            <input id="term2" name="termselector" ng-model="selectedTerm" type="radio" value="term2"/>
-            <label for="term2">Term 2</label><br/>
-            <input id="term3" name="termselector" ng-model="selectedTerm" type="radio" value="term3"/>
-            <label for="term3">Term 3</label><br/>
+        <div id="termlegend" ng-switch="obj.selectedPlan">
+            <div ng-switch-when="planA">
+                <input id="term1" name="termselector" ng-model="obj.selectedTerm" type="radio" value="term1"/>
+                <label for="term1">Term 1</label><br/>
+                <input id="term2" name="termselector" ng-model="obj.selectedTerm" type="radio" value="term2"/>
+                <label for="term2">Term 2</label><br/>
+                <input id="term3" name="termselector" ng-model="obj.selectedTerm" type="radio" value="term3"/>
+                <label for="term3">Term 3</label><br/>
+            </div>
+            <div ng-switch-when="planB">
+                <input id="term4" name="termselector" ng-model="obj.selectedTerm" type="radio" value="term4"/>
+                <label for="term4">Term 4</label><br/>
+                <input id="term5" name="termselector" ng-model="obj.selectedTerm" type="radio" value="term5"/>
+                <label for="term5">Term 5</label><br/>
+                <input id="term6" name="termselector" ng-model="obj.selectedTerm" type="radio" value="term6"/>
+                <label for="term6">Term 6</label><br/>
+            </div>
+            <div ng-switch-when="planC">
+                <input id="term1" name="termselector" ng-model="obj.selectedTerm" type="radio" value="term1"/>
+                <label for="term1">Term 1</label><br/>
+                <input id="term2" name="termselector" ng-model="obj.selectedTerm" type="radio" value="term2"/>
+                <label for="term2">Term 2</label><br/>
+                <input id="term3" name="termselector" ng-model="obj.selectedTerm" type="radio" value="term3"/>
+                <label for="term3">Term 3</label><br/>
+            </div>
+        </div>
+        <div id="optionlegend" ng-switch="obj.selectedPlan+obj.selectedTerm">
+            <div id="planAterm1options" ng-switch-when="planAterm1">
+                <div id="OR12">
+                    <input id="1" name="optionselector" ng-model="obj.OR12" type="radio" value="1"/>
+                    <label for="1">1</label><br/>
+                    <input id="2" name="optionselector" ng-model="obj.OR12" type="radio" value="2"/>
+                    <label for="2">2</label><br/>
+                </div>
+            </div>
         </div>
         <div class="daylabels" id="hour">
             <h3>Hour</h3>
@@ -55,7 +84,7 @@
             <p class="label">7:00 PM</p>
             <p class="label">8:00 PM</p>
         </div>
-        <div ng-switch="selectedPlan+selectedTerm">
+        <div ng-switch="obj.selectedPlan+obj.selectedTerm">
             <div id="planAterm1" ng-switch-when="planAterm1">
                 <div class="day" id="M">
                     <h3>Monday</h3>
@@ -76,8 +105,10 @@
                         <div class="course" style="position: absolute; height: 118px;">
                             <p>Course</p>
                         </div>
-                        <div class="course" style="position: absolute; top: 122px; height: 118px;">
-                            <p>Course</p>
+                        <div ng-switch="obj.OR12">
+                            <div class="course" style="position: absolute; top: 122px; height: 118px;" ng-switch-when="1">
+                                <p>Course</p>
+                            </div>
                         </div>
                         <div class="course" style="position: absolute; top: 244px; height: 118px;">
                             <p>Course</p>
@@ -93,8 +124,10 @@
                         <div class="course" style="position: absolute; top: 244px; height: 118px;">
                             <p>Course</p>
                         </div>
-                        <div class="course" style="position: absolute; top: 366px; height: 118px;">
-                            <p>Course</p>
+                        <div ng-switch="obj.OR12">
+                            <div class="course" style="position: absolute; top: 366px; height: 118px;" ng-switch-when="2">
+                                <p>Course</p>
+                            </div>
                         </div>
                     </div>
                 </div>
