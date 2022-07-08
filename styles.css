@@ -5,6 +5,14 @@
     width: 17%;
 }
 
+.label {
+    font-size: 2vw;
+}
+
+.content {
+    font-size: 1.5vw;
+}
+
 .daylabels {
     float: left;
     margin-left: 5px;
