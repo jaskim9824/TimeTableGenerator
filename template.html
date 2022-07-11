@@ -14,12 +14,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <!--Leader Line import-->
     <script src="https://cdn.jsdelivr.net/npm/leader-line@1.0.7/leader-line.min.js"></script>
-    <script>
-        var app = angular.module("main", []);
-        app.controller("main", function($scope) { 
-            $scope.obj = {selectedPlan:"TraditionalPlan", selectedTerm:"FallTerm1", OR2A2B:"2A", OR3A3B:"3A", OR4A4B:"4A"};
-        });
-    </script>
 </head>
 <body>
     <!--header-->
@@ -48,15 +42,16 @@
                 <li>To clear all selections, refresh the page.</li>
             </ul>
         </div>
-        <p>{{obj.selectedPlan+obj.selectedTerm}}</p>
-        <p>{{obj.OR2A2B}}</p>
-        <p>{{obj.OR3A3B}}</p>
-        <p>{{obj.OR4A4B}}</p>
+        <p>{{selectedPlan}}</p>
+        <p>{{selectedTerm}}</p>
+        <p>{{field2.group2}}</p>
+        <p>{{field3.group3}}</p>
+        <p>{{field4.group4}}</p>
         <div id="planlegend">
         </div>
-        <div id="termlegend" ng-switch="obj.selectedPlan+obj.OR2A2B+obj.OR3A3B+obj.OR4A4B">
+        <div id="termlegend" ng-switch="selectedPlan">
         </div>
-        <div id="optionlegend" ng-switch="obj.selectedPlan+obj.OR2A2B+obj.OR3A3B+obj.OR4A4B+obj.selectedTerm">
+        <div id="optionlegend" ng-switch="selectedPlan">
         </div>
     </div>
     <footer>
@@ -69,5 +64,6 @@
             </table>
         </div>
     </footer>
+    <script src="js/controller.js"></script>
 </body>
 </html>

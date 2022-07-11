@@ -2,10 +2,12 @@ import courseparsing
 import coursegroupparsing
 from bs4 import BeautifulSoup
 import htmlgen
+import javascriptgen
 
 def main():
     try:
         with open("template.html") as input:
+            controller = open("./output/js/controller.js", "w")
             soup = BeautifulSoup(input, 'html.parser')
             courseObjDict, sequenceDict = courseparsing.parseCourses("TimeTable.xls", "Sequencing.xls")
             deptName = "Test Department"
@@ -14,6 +16,12 @@ def main():
             courseGroupDict = coursegroupparsing.extractPlanCourseGroupDict(sequenceDict)
             courseGroupList = coursegroupparsing.findListofAllCourseGroups(courseGroupDict)
             intitalCourseGroupVals = coursegroupparsing.findIntitalValuesofCourseGroups(courseGroupDict, courseGroupList)
+
+            javascriptgen.intializeControllerJavaScript(sequenceDict, 
+                                                        intitalCourseGroupVals,
+                                                        courseGroupDict,
+                                                        courseGroupList, 
+                                                        controller)
 
             topTitleTag = soup.head.find("title")
             titleTag = soup.body.find("a", class_="site-title")
@@ -44,6 +52,8 @@ def main():
             htmlgen.placePlanDivs(displayTag, 
                                   sequenceDict, 
                                   soup)
+
+            javascriptgen.closeControllerJavaScript(controller)
 
     except FileNotFoundError as err:
        if (err.strerror == "No such file or directory"):
