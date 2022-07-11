@@ -50,7 +50,7 @@ def placeLegend(legendTag, categoryDict, soup):
 #   formTag - form HTML tag where the inputs will be placed
 #   courseGroupDict - dict that maps the plans to the course groups in it
 #   soup - soup object, used to create HTML tags
-def placeRadioInputs(formTag, termTag, courseGroupDict, sequenceDict, soup):
+def placeRadioInputs(formTag, termTag, courseGroupTag, courseGroupDict, sequenceDict, soup):
     for plan in courseGroupDict:
         radioInput = soup.new_tag("input", attrs={"type":"radio", 
                                                   "name":"planselector", 
@@ -79,6 +79,31 @@ def placeRadioInputs(formTag, termTag, courseGroupDict, sequenceDict, soup):
             breakTag = soup.new_tag("br")
             planWrapper.append(breakTag)
         termTag.append(planWrapper)
+
+    for plan in sequenceDict:
+        for plainPlan in courseGroupDict:
+            if plainPlan in plan:
+                plainPlanSave = plainPlan
+                break
+        for term in sequenceDict[plan]:
+            wrapperDiv = soup.new_tag("div", attrs={"id": cleaner.cleanString(plan) + cleaner.cleanString(term) + "options",
+                                                "ng-switch-when": cleaner.cleanString(plan) + cleaner.cleanString(term)})
+            
+            for courseGroupList in courseGroupDict[plainPlanSave].values():
+                totalCourseGroup = ""
+                for indivCourseGroup in courseGroupList:
+                    totalCourseGroup += indivCourseGroup
+                courseGroupWrapper = soup.new_tag("div", attrs={"id": "OR" + totalCourseGroup})
+                for indivCourseGroup in courseGroupList:
+                    radioInput = soup.new_tag("input", attrs={"id":indivCourseGroup, "name":"optionselector",
+                                    "ng-model":"obj.OR" + totalCourseGroup, "type":"radio", "value":indivCourseGroup})
+                    labelTag = soup.new_tag("label", attrs={"for":indivCourseGroup})
+                    labelTag.append(indivCourseGroup)
+                    courseGroupWrapper.append(radioInput)
+                    courseGroupWrapper.append(labelTag)
+                    wrapperDiv.append(courseGroupWrapper)
+
+            courseGroupTag.append(wrapperDiv)
 
 # Function that places the outer divs for the course group selection 
 # radio inputs for each plan
