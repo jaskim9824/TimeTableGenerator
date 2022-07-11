@@ -42,3 +42,50 @@
 .day h3{
     text-align: center;
 }
+
+/*This is for the Hover over course description*/
+.tooltip {
+    position: relative;
+    display: inline-block;            
+}
+
+/* On hover, dsiplay course description */
+.tooltip:hover .tooltiptext{
+    visibility: visible;
+    opacity: 1;
+}
+
+.tooltip .tooltiptext{
+    visibility: hidden;
+    width: 46vw;
+    max-width: 900px;
+    padding: 0px 10px;
+    background-color: #EEEEEE;
+    border: 1px solid #444444;
+    color: #2B292A;
+    text-align: left;           
+    border-radius: 0px;
+    padding: 5px 10px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 100%;
+    font-weight: inherit;
+    font-style: inherit;
+    font-family: 'Roboto', sans-serif;
+    vertical-align: baseline;
+    white-space: normal;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";         
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #EEEEEE transparent transparent transparent;
+}
