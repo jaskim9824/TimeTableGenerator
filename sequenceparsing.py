@@ -78,11 +78,11 @@ def parseSeq(filename, course_obj_dict, plainNameList):
                                 orcourse = deepcopy(course_obj_dict[fullOrName])
                                 if namelist[-1] == pureName:
                                     # last OR course (courses after this are not in this OR option, will be a different div)
-                                    orcourse.calendar_print = "lastor"
+                                    orcourse.calendarPrint = "lastor"
                                 else:
-                                    orcourse.calendar_print = "or"
+                                    orcourse.calendarPrint = "or"
                                 if course_group != "":
-                                    orcourse.course_group = course_group
+                                    orcourse.courseGroup = course_group
                                 term_list.append(orcourse)
                         plan_dict[term_name] = term_list
                         row += 1
@@ -98,7 +98,7 @@ def parseSeq(filename, course_obj_dict, plainNameList):
                         # deepcopy since sequencing leads to prereqs and coreqs not being the same between different plans
                         curr_course = deepcopy(course_obj_dict[fullName])
                         if course_group != "":
-                            curr_course.course_group = course_group
+                            curr_course.courseGroup = course_group
                         term_list.append(curr_course)  # store each course in a list
                 plan_dict[term_name] = term_list  # store each list in a dict (key is term name)
                 col += 1

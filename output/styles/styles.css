@@ -1,0 +1,44 @@
+.day {
+    float: left;
+    margin-left: 5px;
+    position: relative;
+    width: 17%;
+}
+
+.label {
+    font-size: 2vw;
+}
+
+.content {
+    font-size: 1.5vw;
+}
+
+.daylabels {
+    float: left;
+    margin-left: 5px;
+    position: relative;
+}
+
+.courseholder {
+    position: relative;
+    width: 100%;
+}
+
+
+.course {
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.course p{
+    text-align: center; 
+}
+
+.day h3{
+    text-align: center;
+}

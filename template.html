@@ -1,0 +1,164 @@
+<!--This is the template HTML which is the input for the generation script-->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- This makes website responsive on different devices-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+        <script>
+            var app = angular.module("main", []);
+            app.controller("main", function($scope) { 
+                $scope.obj = {selectedPlan:"planA", selectedTerm:"term1", OR12: "1", OR34: "3", OR56: "5"};
+            });
+        </script>
+        <link rel="stylesheet" href="styles.css">
+        <title>ENGG Plan Timetable</title>
+    </head>
+<body>
+    <!--header-->
+    <header>
+        <div class="header" id="header" style="width:1730px;">
+            <table>
+                <tr>
+                    <td style="width: 65%;"><a href="#"> <img src="./images/uofalogo.png" alt="UofA logo"></a></td>
+                    <td><a href="#default" class="site-title"></a> </td>
+                </tr>
+            </table>
+        </div>
+    </header>
+    <div id="main" ng-app="main" ng-controller="main" style="height:1480px;">
+        <div id="explainertext">
+            <p>Welcome to the University of Alberta's Engineering Program Plan Visualizer.</p>
+            <p>On this page, you will find all of the information found on the University Calendar, presented in an easier to understand format.</p>
+            <p>There are some features you should be aware of:</p>
+            <ul>
+                <li>Hover over a course to see its Calendar description pop-up.</li>
+                <li>Left click on a course to draw arrows between that course and its prerequisites and corequisites, as well as the courses it is a prerequisite and corequisite for.</li>
+                <li>Right click on a course to have its Calendar description stay in place.</li>
+                <li>Switch the ordering of course groups by toggling the buttons to the right of the selected plan. The selected course group will be displayed first (before the other course group).</li>
+                <li>Switch between plans by toggling the buttons below "Plan".</li>
+                <li>Highlight all courses in a category by left-clicking on one of the colored boxes to the right of the course group selector.</li>
+                <li>To clear all selections, refresh the page.</li>
+            </ul>
+        </div>
+        <p>{{obj.selectedPlan+obj.selectedTerm}}</p>
+        <p>{{obj.OR12}}</p>
+        <div id="planlegend">
+            <input id="planA" name="planselector" ng-model="obj.selectedPlan" type="radio" value="planA"/>
+            <label for="planA">Plan A</label><br/>
+            <input id="planB" name="planselector" ng-model="obj.selectedPlan" type="radio" value="planB"/>
+            <label for="planB">Plan B</label><br/>
+            <input id="planC" name="planselector" ng-model="obj.selectedPlan" type="radio" value="planC"/>
+            <label for="planC">Plan C</label><br/>
+        </div>
+        <div id="termlegend" ng-switch="obj.selectedPlan">
+            <div ng-switch-when="planA">
+                <input id="term1" name="termselector" ng-model="obj.selectedTerm" type="radio" value="term1"/>
+                <label for="term1">Term 1</label><br/>
+                <input id="term2" name="termselector" ng-model="obj.selectedTerm" type="radio" value="term2"/>
+                <label for="term2">Term 2</label><br/>
+                <input id="term3" name="termselector" ng-model="obj.selectedTerm" type="radio" value="term3"/>
+                <label for="term3">Term 3</label><br/>
+            </div>
+            <div ng-switch-when="planB">
+                <input id="term4" name="termselector" ng-model="obj.selectedTerm" type="radio" value="term4"/>
+                <label for="term4">Term 4</label><br/>
+                <input id="term5" name="termselector" ng-model="obj.selectedTerm" type="radio" value="term5"/>
+                <label for="term5">Term 5</label><br/>
+                <input id="term6" name="termselector" ng-model="obj.selectedTerm" type="radio" value="term6"/>
+                <label for="term6">Term 6</label><br/>
+            </div>
+            <div ng-switch-when="planC">
+                <input id="term1" name="termselector" ng-model="obj.selectedTerm" type="radio" value="term1"/>
+                <label for="term1">Term 1</label><br/>
+                <input id="term2" name="termselector" ng-model="obj.selectedTerm" type="radio" value="term2"/>
+                <label for="term2">Term 2</label><br/>
+                <input id="term3" name="termselector" ng-model="obj.selectedTerm" type="radio" value="term3"/>
+                <label for="term3">Term 3</label><br/>
+            </div>
+        </div>
+        <div id="optionlegend" ng-switch="obj.selectedPlan+obj.selectedTerm">
+            <div id="planAterm1options" ng-switch-when="planAterm1">
+                <div id="OR12">
+                    <input id="1" name="optionselector" ng-model="obj.OR12" type="radio" value="1"/>
+                    <label for="1">1</label><br/>
+                    <input id="2" name="optionselector" ng-model="obj.OR12" type="radio" value="2"/>
+                    <label for="2">2</label><br/>
+                </div>
+            </div>
+            <div id="planAterm2options" ng-switch-when="planAterm2">
+                <div id="OR34">
+                    <input id="3" name="optionselector" ng-model="obj.OR34" type="radio" value="3"/>
+                    <label for="3">3</label><br/>
+                    <input id="4" name="optionselector" ng-model="obj.OR34" type="radio" value="4"/>
+                    <label for="4">4</label><br/>
+                </div>
+            </div>
+            <div id="planBterm4options" ng-switch-when="planBterm4">
+                <div id="OR56">
+                    <input id="5" name="optionselector" ng-model="obj.OR56" type="radio" value="5"/>
+                    <label for="5">5</label><br/>
+                    <input id="6" name="optionselector" ng-model="obj.OR56" type="radio" value="6"/>
+                    <label for="6">6</label><br/>
+                </div>
+            </div>
+        </div>
+        <div class="daylabels" id="hour">
+            <h3 class="label">Hour</h3>
+            <div style="position: relative;">
+                <div class="course" style="position: absolute; height: 118px;">
+                    <p class="content">8:00 AM</p>
+                </div>
+                <div class="course" style="position: absolute; top: 122px; height: 118px;">
+                    <p class="content">9:00 AM</p>
+                </div>
+                <div class="course" style="position: absolute; top: 244px; height: 118px;">
+                    <p class="content">10:00 AM</p>
+                </div>
+                <div class="course" style="position: absolute; top: 366px; height: 118px;">
+                    <p class="content">11:00 AM</p>
+                </div>
+                <div class="course" style="position: absolute; top: 488px; height: 118px;">
+                    <p class="content">12:00 PM</p>
+                </div>
+                <div class="course" style="position: absolute; top: 610px; height: 118px;">
+                    <p class="content">1:00 PM</p>
+                </div>
+                <div class="course" style="position: absolute; top: 732px; height: 118px;">
+                    <p class="content">2:00 PM</p>
+                </div>
+                <div class="course" style="position: absolute; top: 854px; height: 118px;">
+                    <p class="content">3:00 PM</p>
+                </div>
+                <div class="course" style="position: absolute; top: 976px; height: 118px;">
+                    <p class="content">4:00 PM</p>
+                </div>
+                <div class="course" style="position: absolute; top: 1098px; height: 118px;">
+                    <p class="content">5:00 PM</p>
+                </div>
+                <div class="course" style="position: absolute; top: 1220px; height: 118px;">
+                    <p class="content">6:00 PM</p>
+                </div>
+                <div class="course" style="position: absolute; top: 1342px; height: 118px;">
+                    <p class="content">7:00 PM</p>
+                </div>
+                <div class="course" style="position: absolute; top: 1464px; height: 118px;">
+                    <p class="content">8:00 PM</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="footer" id="footer" style="width:1730px;">
+            <table>
+                <tr>
+                    <td style="width: 65%;"><a href="#"> <img src="./images/uofalogo.png" alt="UofA logo"></a></td>
+                    <td><p id="copyright">&copy 2022 University of Alberta</p></td>
+                </tr>
+            </table>
+        </div>
+    </footer>
+</body>
+</html>

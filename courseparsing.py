@@ -20,7 +20,8 @@ class Course:
     fri = "", sat = "", sun = "", instructorName = "", instructor = "", email = "", 
     classType = "", capEnrl = "", totEnrl = "", campus = "", location = "", 
     notesNbr = "", noteNbr = "", note = "", rqGroup = "", openTo = "", approvedHrs = "", 
-    duration = "", career = "", consent = "", calendarDescr = "", maxUnits = ""):
+    duration = "", career = "", consent = "", calendarDescr = "", maxUnits = "", calendarPrint = "",
+    courseGroup = ""):
 
         self.name = str(name)
         self.plainName = str(plainName)
@@ -68,6 +69,8 @@ class Course:
         self.consent = str(consent)
         self.calendarDescr = str(calendarDescr)
         self.maxUnits = str(maxUnits)
+        self.calendarPrint = str(calendarPrint)
+        self.courseGroup = str(courseGroup)
 
 # Main function for parsing information from list of courses Excel file.
 # Uses parseSeq to organize courses by plan and by term
@@ -155,18 +158,3 @@ def parseCourses(filename, sequenceFileName):
         raise FileNotFoundError("Excel course information file not found, ensure it is present and the name is correct.")
     except xlrd.biffh.XLRDError:
         raise ValueError("Error reading data from Course information Excel sheet. Ensure it is formatted exactly as specified")
-
-if __name__ == "__main__":
-    # Testing
-    courseObjDict, courseSeqDict = parseCourses("TimeTable.xls", "Sequencing.xls")
-    for plan in courseSeqDict:
-        print(plan)
-        for term in courseSeqDict[plan]:
-            print(term)
-            for course in courseSeqDict[plan][term]:
-                print(course.name)
-            print()
-        print()
-
-    for course in courseObjDict:
-        print(courseObjDict[course].name)
