@@ -269,10 +269,10 @@ def courseParse(name):
             return courseParseCourseGroups(nameList)
         # non course group case
         else:
-            return nameList
+            return [item.upper() for item in nameList]
     #single course
     else:
-        return nameList[0]
+        return nameList[0].upper()
 
 def courseParseCourseGroups(nameList):
     courseGroups = []
@@ -287,7 +287,7 @@ def courseParseCourseGroups(nameList):
         courseList = strippedCourses.split("or")
         courseGroupList = []
         for course in courseList:
-            courseGroupList.append(course)
+            courseGroupList.append(course.upper())
         courseGroupList.append(courseGroupName)
         courseGroups.append(courseGroupList)
     return courseGroups
