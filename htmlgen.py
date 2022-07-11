@@ -50,11 +50,11 @@ def placeLegend(legendTag, categoryDict, soup):
 #   formTag - form HTML tag where the inputs will be placed
 #   courseGroupDict - dict that maps the plans to the course groups in it
 #   soup - soup object, used to create HTML tags
-def placeRadioInputs(formTag, courseGroupDict, soup):
+def placeRadioInputs(formTag, termTag, courseGroupDict, sequenceDict, soup):
     for plan in courseGroupDict:
         radioInput = soup.new_tag("input", attrs={"type":"radio", 
                                                   "name":"planselector", 
-                                                  "ng-model":"selectedPlan",
+                                                  "ng-model":"obj.selectedPlan",
                                                   "value": cleaner.cleanString(plan),
                                                   "id": cleaner.cleanString(plan)})
         labelTag = soup.new_tag("label", attrs={"for":cleaner.cleanString(plan)})
@@ -63,6 +63,22 @@ def placeRadioInputs(formTag, courseGroupDict, soup):
         formTag.append(labelTag)
         breakTag = soup.new_tag("br")
         formTag.append(breakTag)
+
+    for plan in sequenceDict:
+        planWrapper = soup.new_tag("div", attrs={"ng-switch-when": cleaner.cleanString(plan)})
+        for term in sequenceDict[plan]:
+            radioInput = soup.new_tag("input", attrs={"type":"radio", 
+                                                  "name":"termselector", 
+                                                  "ng-model":"obj.selectedTerm",
+                                                  "value": cleaner.cleanString(term),
+                                                  "id": cleaner.cleanString(term)})
+            labelTag = soup.new_tag("label", attrs={"for": cleaner.cleanString(term)})
+            labelTag.append(term)
+            planWrapper.append(radioInput)
+            planWrapper.append(labelTag)
+            breakTag = soup.new_tag("br")
+            planWrapper.append(breakTag)
+        termTag.append(planWrapper)
 
 # Function that places the outer divs for the course group selection 
 # radio inputs for each plan

@@ -23,15 +23,17 @@ def main():
 
             htmlgen.switchTitle(titleTag, topTitleTag, deptName)
 
-            formTag = mainTag.find("form")
+            formTag = mainTag.find(id = "planlegend")
 
-            htmlgen.placeRadioInputs(formTag, courseGroupDict, soup)
+            termTag = mainTag.find(id = "termlegend")
+
+            htmlgen.placeRadioInputs(formTag, termTag, courseGroupDict, sequenceDict, soup)
 
             # locating course group selector
-            courseGroupSelectTag = soup.body.find("div", class_="coursegroupselector")
+            # courseGroupSelectTag = soup.body.find("div", class_="coursegroupselector")
 
             # placing submenu radio inputs
-            htmlgen.placeCourseGroupRadioInputs(courseGroupSelectTag, soup, courseGroupDict)
+            # htmlgen.placeCourseGroupRadioInputs(courseGroupSelectTag, soup, courseGroupDict)
 
             displayTag = htmlgen.generateDisplayDiv(soup, courseGroupList)
 
