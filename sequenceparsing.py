@@ -258,3 +258,36 @@ def extractCourseFromTerm(planDict, term):
         course_name = course.name.replace(" ", "").replace("or", " or ")
         term_course_names.append(course_name)
     return term_course_names
+
+
+def courseParse(name):
+    name = name.strip().replace(" ","")
+    nameList = name.split("OR")
+    if len(nameList) > 1:
+        # course group case
+        if nameList[0].find("{") != -1:
+            return courseParseCourseGroups(nameList)
+        # non course group case
+        else:
+            return nameList
+    #single course
+    else:
+        return nameList[0]
+
+def courseParseCourseGroups(nameList):
+    courseGroups = []
+    for name in nameList:
+        name = name.replace("{","").replace("}","")
+        courseGroupNameIndexStart = name.find("(")
+        courseGroupNameIndexEnd = name.find(")")
+        if courseGroupNameIndexEnd == -1 or courseGroupNameIndexStart == -1:
+            raise ValueError("Course group name inproperly formatted")
+        courseGroupName = name[courseGroupNameIndexStart+1:courseGroupNameIndexEnd]
+        strippedCourses = name[0:courseGroupNameIndexStart]
+        courseList = strippedCourses.split("or")
+        courseGroupList = []
+        for course in courseList:
+            courseGroupList.append(course)
+        courseGroupList.append(courseGroupName)
+        courseGroups.append(courseGroupList)
+    return courseGroups
