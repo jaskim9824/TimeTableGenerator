@@ -27,7 +27,9 @@ def main():
 
             termTag = mainTag.find(id = "termlegend")
 
-            htmlgen.placeRadioInputs(formTag, termTag, courseGroupDict, sequenceDict, soup)
+            courseGroupTag = mainTag.find(id = "optionlegend")
+
+            htmlgen.placeRadioInputs(formTag, termTag, courseGroupTag, courseGroupDict, sequenceDict, soup)
 
             # locating course group selector
             # courseGroupSelectTag = soup.body.find("div", class_="coursegroupselector")
