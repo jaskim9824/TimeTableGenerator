@@ -42,14 +42,9 @@ def parseSeq(filename, course_obj_dict, plainNameList):
                 term_list = []  # stores Course objects in a list for that term
                 for row in range(1, sheet.nrows):
                     name = str(sheet.cell_value(row, col))
-                    name = name.upper()  # course name must be uppercase
-                    # Remove unnecessary white space
-                    name = name.strip()
-                    name = name.replace("  ", " ")
                     if name == "":
                         # Cell in Excel is empty, skip over this cell
                         continue
-                    course_group = ""
                     if ("(" in name) and (")" in name):
                         # course group is between opening and closing brackets
                         open_bracket = name.find("(")
@@ -260,21 +255,38 @@ def extractCourseFromTerm(planDict, term):
     return term_course_names
 
 
-def courseParse(name):
-    name = name.strip().replace(" ","")
+class CourseSectionWrapper:
+    def __init__(self, name = ""):
+        self.name = name
+        self.sections = []
+    
+    def addSection(self, section):
+        self.sections.append(section)
+
+def createCourseSection(course, course_obj_dict):
+    fullNames = findFullNames(course_obj_dict, course)
+    wrapper = CourseSectionWrapper(course)
+    for fullName in fullNames:
+        curr_course = deepcopy(course_obj_dict[fullName])
+        wrapper.addSection(curr_course)
+    return wrapper
+
+
+def courseParse(name, course_obj_dict):
+    name = name.strip().replace("  "," ")
     nameList = name.split("OR")
     if len(nameList) > 1:
         # course group case
-        if nameList[0].find("{") != -1:
-            return courseParseCourseGroups(nameList)
+        if "{" in nameList[0]:
+            return courseParseCourseGroups(nameList, course_obj_dict)
         # non course group case
         else:
-            return [item.upper() for item in nameList]
+            return [createCourseSection(item.upper(), course_obj_dict) for item in nameList]
     #single course
     else:
-        return nameList[0].upper()
+        return createCourseSection(nameList[0].upper(), course_obj_dict)
 
-def courseParseCourseGroups(nameList):
+def courseParseCourseGroups(nameList, course_obj_dict):
     courseGroups = []
     for name in nameList:
         name = name.replace("{","").replace("}","")
@@ -287,7 +299,7 @@ def courseParseCourseGroups(nameList):
         courseList = strippedCourses.split("or")
         courseGroupList = []
         for course in courseList:
-            courseGroupList.append(course.upper())
+            courseGroupList.append(createCourseSection(course.upper(), course_obj_dict))
         courseGroupList.append(courseGroupName)
         courseGroups.append(courseGroupList)
     return courseGroups
