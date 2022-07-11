@@ -95,7 +95,7 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, courseGroupDict, sequence
                     totalCourseGroup += indivCourseGroup
                 courseGroupWrapper = soup.new_tag("div", attrs={"id": "OR" + totalCourseGroup})
                 for indivCourseGroup in courseGroupList:
-                    radioInput = soup.new_tag("input", attrs={"id":indivCourseGroup, "name":"optionselector",
+                    radioInput = soup.new_tag("input", attrs={"id":indivCourseGroup, "name":totalCourseGroup + "optionselector",
                                     "ng-model":"obj.OR" + totalCourseGroup, "type":"radio", "value":indivCourseGroup})
                     labelTag = soup.new_tag("label", attrs={"for":indivCourseGroup})
                     labelTag.append(indivCourseGroup)
