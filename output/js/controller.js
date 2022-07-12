@@ -2,6 +2,18 @@ var app = angular.module("main", []);
 app.controller("main", function($scope) { 
 $scope.selectedPlan = "TraditionalPlan";
 $scope.selectedTerm = "FallTerm1";
+$scope.updateTerm = function(term) {
+  $scope.selectedTerm = term;
+}
+$scope.updateField2 = function(field2) {
+  $scope.field2.group2 = field2;
+}
+$scope.updateField3 = function(field3) {
+  $scope.field3.group3 = field3;
+}
+$scope.updateField4 = function(field4) {
+  $scope.field4.group4 = field4;
+}
 var that = this;
 this.render = function(plan) {
             this.disable(this.previousPlan);
@@ -169,36 +181,42 @@ this.previousPlan = $scope.selectedPlan+$scope.field2.group2+$scope.field3.group
 this.setDefaults = function(plan) { 
   switch(plan) { 
       case "TraditionalPlan": 
+            $scope.selectedTerm = "FallTerm1";
             $scope.field2.group2 ="2A";
             $scope.field3.group3 ="3A";
             $scope.field4.group4 ="4A";
           $scope.$apply();
           break;
       case "AlternatePlan": 
+            $scope.selectedTerm = "FallTerm1";
             $scope.field2.group2 ="";
             $scope.field3.group3 ="3A";
             $scope.field4.group4 ="4A";
           $scope.$apply();
           break;
       case "CoopPlan1": 
+            $scope.selectedTerm = "FallTerm1";
             $scope.field2.group2 ="";
             $scope.field3.group3 ="3A";
             $scope.field4.group4 ="";
           $scope.$apply();
           break;
       case "CoopPlan2": 
+            $scope.selectedTerm = "FallTerm1";
             $scope.field2.group2 ="";
             $scope.field3.group3 ="3A";
             $scope.field4.group4 ="";
           $scope.$apply();
           break;
       case "CoopPlan3Biomedical": 
+            $scope.selectedTerm = "FallTerm1";
             $scope.field2.group2 ="";
             $scope.field3.group3 ="";
             $scope.field4.group4 ="";
           $scope.$apply();
           break;
       case "CoopPlan4": 
+            $scope.selectedTerm = "FallTerm1";
             $scope.field2.group2 ="";
             $scope.field3.group3 ="3A";
             $scope.field4.group4 ="";

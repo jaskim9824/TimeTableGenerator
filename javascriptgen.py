@@ -11,12 +11,16 @@ import cleaner
 
 # Function that generates the JS before the generation of the course diagram
 # Parameters:
-#   controller - file handle for controller JS file
 #   sequenceDict - dict that maps plan name to a dict that represents the plan sequence
-def intializeControllerJavaScript(sequenceDict, intitalCourseGroupVals, courseGroupDict, courseGroupList, controller):
-    generateIntitalBlockController(courseGroupDict, courseGroupList, list(list(sequenceDict.values())[0].keys())[0], controller)
+#   initialCourseGroupVals - dict that maps the course group with the initial value it should take
+#   courseGroupDict - dict that maps plans to a dict that maps course groups to the 
+#   options avaiable in that course group 
+#   courseGroupList - list of course groups taken overall in the program
+#   controller - file handle for controller JS file
+def intializeControllerJavaScript(sequenceDict, initialCourseGroupVals, courseGroupDict, courseGroupList, controller):
+    generateInitialBlockController(courseGroupDict, courseGroupList, list(list(sequenceDict.values())[0].keys())[0], controller)
     generatePlanBasedBlocksController(sequenceDict, 
-                                      intitalCourseGroupVals,
+                                      initialCourseGroupVals,
                                       courseGroupDict, 
                                       courseGroupList,
                                       controller)
@@ -30,15 +34,34 @@ def closeControllerJavaScript(controller):
     writeRadioChangeDirective(controller)
     controller.close()
 
-# Function that generates the intital block of Javascript in controller.js
+# Function that generates the initial block of Javascript in controller.js
 # Parameters:
-#   controller - file handle for controller JS file
-def generateIntitalBlockController(courseGroupDict, courseGroupList, initialTerm, controller):
+#   courseGroupDict - dict that maps plans to a dict that maps course groups to the 
+#   options avaiable in that course group
+#   courseGroupList - list of course groups taken overall in the program
+#   initialTerm - First term to occur, must be the same for all plans (should always be Fall Term 1 in engineering)
+#   controller - file handle to controller.js
+def generateInitialBlockController(courseGroupDict, courseGroupList, initialTerm, controller):
     planList = list(courseGroupDict.keys())
     controller.write("var app = angular.module(\"main\", []);\n")
     controller.write("app.controller(\"main\", function($scope) { \n")
+    # Initializing selectedPlan and selectedTerm scope vars
     controller.write("$scope.selectedPlan = \"" + cleaner.cleanString(planList[0])+ "\";\n")
-    controller.write("$scope.selectedTerm = \"" + cleaner.cleanString(initialTerm)+ "\";\n")
+    controller.write("$scope.selectedTerm = \"" + cleaner.cleanString(initialTerm) + "\";\n")
+    # Writing functions that update term and course group fields. Functions are called when changing
+    # radio inputs. Note: selectedPlan can be altered directly, these vars need these helper funtions
+    controller.write("""$scope.updateTerm = function(term) {
+  $scope.selectedTerm = term;
+}\n""")
+    controller.write("""$scope.updateField2 = function(field2) {
+  $scope.field2.group2 = field2;
+}
+$scope.updateField3 = function(field3) {
+  $scope.field3.group3 = field3;
+}
+$scope.updateField4 = function(field4) {
+  $scope.field4.group4 = field4;
+}\n""")
     controller.write("var that = this;\n")
     controller.write("""this.render = function(plan) {
             this.disable(this.previousPlan);
@@ -57,15 +80,18 @@ Array.prototype.forEach.call(radios, function (radio) {
     generateHighlightElement(controller)
     generateUnHighlightElement(controller)
 
-
 # Function that generates the blocks of the controller JS file that is dependent
 # on the number and names of plans provided
 # Parameters:
 #   sequenceDict - dict that maps plan name to a dict that represents the plan sequence
-#   controller - file handle for controller.js file
-def generatePlanBasedBlocksController(sequenceDict, intitalCourseGroupVals, courseGroupDict, courseGroupList, controller):
-    generatePlanBasedInitalVariables(sequenceDict, intitalCourseGroupVals, courseGroupList, controller)
-    generateSetDefaults(courseGroupDict, courseGroupList, controller)
+#   initialCourseGroupVals - dict that maps the course group with the initial value it should take
+#   courseGroupDict - dict that maps plans to a dict that maps course groups to the 
+#   options avaiable in that course group 
+#   courseGroupList - list of course groups taken overall in the program
+#   controller - file handle for controller JS file
+def generatePlanBasedBlocksController(sequenceDict, initialCourseGroupVals, courseGroupDict, courseGroupList, controller):
+    generatePlanBasedInitalVariables(sequenceDict, initialCourseGroupVals, courseGroupList, controller)
+    generateSetDefaults(courseGroupDict, courseGroupList, list(list(sequenceDict.values())[0].keys())[0], controller)
     generateSubRadioListener(courseGroupList, controller)
     generateDisableSwitchStatement(sequenceDict, controller)
     generateEnableSwitchStatement(sequenceDict, controller)
@@ -115,8 +141,12 @@ def writeRadioChangeDirective(controller):
 # based on the plans
 # Parameters: 
 #   sequenceDict - dict that maps plan name to a dict that represents the plan sequence
-#   controller - file handle for controller.js file
-def generatePlanBasedInitalVariables(sequenceDict, intitalCourseGroupVals, courseGroupList, controller):
+#   initialCourseGroupVals - dict that maps the course group with the initial value it should take
+#   courseGroupDict - dict that maps plans to a dict that maps course groups to the 
+#   options avaiable in that course group 
+#   courseGroupList - list of course groups taken overall in the program
+#   controller - file handle for controller JS file
+def generatePlanBasedInitalVariables(sequenceDict, initialCourseGroupVals, courseGroupList, controller):
     for plan in sequenceDict:
         controller.write("this." + cleaner.cleanString(plan) + "List = [];\n")
         controller.write("this." + cleaner.cleanString(plan) + "Clicked = [];\n")
@@ -131,23 +161,27 @@ def generatePlanBasedInitalVariables(sequenceDict, intitalCourseGroupVals, cours
             if termcourses > maxcourses:
                 maxcourses = termcourses
         controller.write("this." + cleaner.cleanString(plan) + "MaxCourses = " + str(maxcourses) + ";\n")
-    for courseGroup in intitalCourseGroupVals:
+    for courseGroup in initialCourseGroupVals:
         formattedCourseGroupVar = "$scope.field{number} = {{ group{number}: \"{val}\" }};\n"
         controller.write(formattedCourseGroupVar.format(number=courseGroup, 
-                                                        val=intitalCourseGroupVals[courseGroup]))
+                                                        val=initialCourseGroupVals[courseGroup]))
     planString = generatePlanString(courseGroupList)
     controller.write("this.previousPlan = " +planString + "\n")
 
-# Function that writes the setDefaults function based on the plans and course groups
+# Function that writes the setDefaults function based on the plans and course groups.
+# The JS generated sets the default term and course group options for each plan. 
+# Reverts to these on switching between plans.
 # Parameters:
 #   courseGroupDict - dict that maps plans to a dict that maps course groups to the 
 #   options avaiable in that course group
 #   courseGroupList - list of course groups taken overall in the program
+#   initialTerm - First term to occur, must be the same for all plans (should always be Fall Term 1 in engineering)
 #   controller - file handle to controller.js
-def generateSetDefaults(courseGroupDict, courseGroupList, controller):
+def generateSetDefaults(courseGroupDict, courseGroupList, initialTerm, controller):
     controller.write("this.setDefaults = function(plan) { \n")
-    controller.write("  switch(plan) { \n")
+    controller.write("  switch(plan) { \n")  # different term and course group options in each plan
     formattedCaseStatement = "      case \"{case}\": \n"
+    formattedTerm = "            $scope.selectedTerm = \"" + cleaner.cleanString(initialTerm) + "\";\n"
     formattedCourseGroup = "            $scope.field{number}.group{number} ="
     switchEndString = """    default:
     console.log("shouldn't be here");
@@ -155,6 +189,7 @@ def generateSetDefaults(courseGroupDict, courseGroupList, controller):
 };\n"""
     for mainPlan in courseGroupDict:
         controller.write(formattedCaseStatement.format(case=cleaner.cleanString(mainPlan)))
+        controller.write(formattedTerm)
         for element in courseGroupList:
             controller.write(formattedCourseGroup.format(number=element))
             if element not in courseGroupDict[mainPlan]:
@@ -165,6 +200,10 @@ def generateSetDefaults(courseGroupDict, courseGroupList, controller):
         controller.write("          break;\n")
     controller.write(switchEndString)
 
+# Function that writes the highlightElement function that highlights a single element
+# by adding "-highlighted" to the element's class name
+# Parameters:
+#   controller - file handle to controller.js
 def generateHighlightElement(controller):
     controller.write("""this.highlightElement = function(element, category) {
         if (element.classList.contains(category + "-highlighted")) {
@@ -174,6 +213,10 @@ def generateHighlightElement(controller):
         element.classList.add(category + "-highlighted");
     };\n""")
 
+# Function that writes the unhighlightElement function that unhighlights a single element
+# by removing "-highlighted" from the element's class name
+# Parameters:
+#   controller - file handle to controller.js
 def generateUnHighlightElement(controller):
     controller.write("""this.unHighlightElement = function(element, category) {
         if (!element.classList.contains(category + "-highlighted")) {
@@ -182,7 +225,6 @@ def generateUnHighlightElement(controller):
         element.classList.remove(category + "-highlighted");
         element.classList.add(category);
     };\n""")
-
 
 # Function that generates the listener that listens to course group selection
 # radio inputs
@@ -268,6 +310,7 @@ def generateEnableSwitchStatement(sequenceDict, controller):
 # Function that generates the switch statement and function addLine
 # Parameters:
 #   sequenceDict - dict that maps plan name to a dict that represents the plan sequence
+#   courseGroupList - list of course groups taken overall in the program
 #   controller - file handle for controller.js file
 def generateAddLineSwitch(sequenceDict, courseGroupList, controller):
     switchEndString = """    default:
@@ -296,6 +339,7 @@ switch({planString}) {{ \n"""
 # Function that generates the switch statement and function removeLine
 # Parameters:
 #   sequenceDict - dict that maps plan name to a dict that represents the plan sequence
+#   courseGroupList - list of course groups taken overall in the program
 #   controller - file handle for controller.js file
 def generateDeleteLineSwitch(sequenceDict, courseGroupList, controller):
     switchEndString = """    default:
@@ -325,6 +369,7 @@ switch({planString}) {{ \n"""
 # Function that generates the switch statement associated with the addToClicked method
 # Parameters:
 #   sequenceDict - dict that maps plan name to a dict that represents the plan sequence
+#   courseGroupList - list of course groups taken overall in the program
 #   controller - file handle for controller.js file
 def generateAddToClickSwitch(sequenceDict, courseGroupList, controller):
     switchEndString = """    default:
@@ -354,6 +399,7 @@ switch({planString}) {{ \n"""
 # Function that generates the switch statement associated with the deleteFromClicked method
 # Parameters:
 #   sequenceDict - dict that maps plan name to a dict that represents the plan sequence
+#   courseGroupList - list of course groups taken overall in the program
 #   controller - file handle for controller.js file
 def generateDeleteFromClickSwitch(sequenceDict, courseGroupList, controller):
     switchEndString = """    default:
@@ -465,9 +511,9 @@ def generateCourseStatements(courseList, controller, plan, category, highlight):
             continue
         # not an elective, fill formatted statement in with course attributes
         if highlight:
-            generateNormalCourseHighlightStatement(course, plan, category, controller)
+            generateNormalCourseHighlightStatement(course, plan, controller)
         else:
-            generateNormalCourseUnhighlightStatement(course, plan, category, controller)
+            generateNormalCourseUnhighlightStatement(course, plan, controller)
 
 # Generates the statements needed to unhighlight a single elective when pressing
 # the legend buttons
@@ -539,7 +585,7 @@ def generateElectiveUnhighlightStatement(elective, longelective, plan, counter, 
 #   - plan: current plan
 #   - category: category of course
 #   - controller: file handle to controller.js
-def generateNormalCourseHighlightStatement(course, plan, category, controller):
+def generateNormalCourseHighlightStatement(course, plan, controller):
     # # finding the element with the appropriate id
     # formattedGetElement = """       var {courseName}{planName}element = document.getElementById("{courseName}{planName}");\n"""
     # # remove from list of unclicked
@@ -572,7 +618,7 @@ def generateNormalCourseHighlightStatement(course, plan, category, controller):
 #   - plan: current plan
 #   - category: category of course
 #   - controller: file handle to controller.js
-def generateNormalCourseUnhighlightStatement(course, plan, category, controller):
+def generateNormalCourseUnhighlightStatement(course, plan, controller):
     # formattedIfStatement = "if (!{courseName}{planName}flag) {{ \n"
     # # finding the element with the appropriate id
     # formattedGetElement = """       var {courseName}{planName}element = document.getElementById("{courseName}{planName}");\n"""
