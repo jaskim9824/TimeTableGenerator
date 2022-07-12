@@ -7,7 +7,6 @@
 
 # Dependencies: cleaner, linegen, html
 
-from operator import truediv
 import cleaner
 import html
 
