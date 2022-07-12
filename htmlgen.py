@@ -73,6 +73,7 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, courseGroupDict, sequence
             radioInput = soup.new_tag("input", attrs={"type":"radio", 
                                                   "name":cleaner.cleanString(plan) + "termselector", 
                                                   "ng-model":"selectedTerm",
+                                                  "ng-change":"updateTerm(\"" + cleaner.cleanString(term) + "\")",
                                                   "value": cleaner.cleanString(term),
                                                   "id": cleaner.cleanString(term)})
             labelTag = soup.new_tag("label", attrs={"for": cleaner.cleanString(term)})
@@ -83,8 +84,7 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, courseGroupDict, sequence
             planWrapper.append(breakTag)
             termTag.append(planWrapper)
 
-        wrapperDiv = soup.new_tag("div", attrs={"id": cleaner.cleanString(plan) + "options",
-                                            "ng-switch-when": cleaner.cleanString(plan)})
+        wrapperDiv = soup.new_tag("div", attrs={"ng-switch-when": cleaner.cleanString(plan)})
         
         for courseGroupList in courseGroupDict[plan].values():
             totalCourseGroup = ""
@@ -92,8 +92,12 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, courseGroupDict, sequence
                 totalCourseGroup += indivCourseGroup
             courseGroupWrapper = soup.new_tag("div", attrs={"id": "OR" + totalCourseGroup})
             for indivCourseGroup in courseGroupList:
-                radioInput = soup.new_tag("input", attrs={"id":indivCourseGroup, "name":totalCourseGroup + "optionselector",
-                                "ng-model":"OR" + totalCourseGroup, "type":"radio", "value":indivCourseGroup})
+                radioInput = soup.new_tag("input", attrs={"type":"radio", 
+                                        "name":cleaner.cleanString(plan) + totalCourseGroup + "optionselector",
+                                        "ng-model":"field" + indivCourseGroup[0] + ".group" + indivCourseGroup[0], 
+                                        "ng-change": "updateField" + indivCourseGroup[0] + "(\"" + indivCourseGroup + "\")",
+                                        "value":indivCourseGroup,
+                                        "id":indivCourseGroup})
                 labelTag = soup.new_tag("label", attrs={"for":indivCourseGroup})
                 labelTag.append(indivCourseGroup)
                 courseGroupWrapper.append(radioInput)

@@ -38,7 +38,19 @@ def generateIntitalBlockController(courseGroupDict, courseGroupList, initialTerm
     controller.write("var app = angular.module(\"main\", []);\n")
     controller.write("app.controller(\"main\", function($scope) { \n")
     controller.write("$scope.selectedPlan = \"" + cleaner.cleanString(planList[0])+ "\";\n")
-    controller.write("$scope.selectedTerm = \"" + cleaner.cleanString(initialTerm)+ "\";\n")
+    controller.write("$scope.selectedTerm = \"" + cleaner.cleanString(initialTerm) + "\";\n")
+    controller.write("""$scope.updateTerm = function(term) {
+  $scope.selectedTerm = term;
+}\n""")
+    controller.write("""$scope.updateField2 = function(field2) {
+  $scope.field2.group2 = field2;
+}
+$scope.updateField3 = function(field3) {
+  $scope.field3.group3 = field3;
+}
+$scope.updateField4 = function(field4) {
+  $scope.field4.group4 = field4;
+}\n""")
     controller.write("var that = this;\n")
     controller.write("""this.render = function(plan) {
             this.disable(this.previousPlan);
@@ -65,7 +77,7 @@ Array.prototype.forEach.call(radios, function (radio) {
 #   controller - file handle for controller.js file
 def generatePlanBasedBlocksController(sequenceDict, intitalCourseGroupVals, courseGroupDict, courseGroupList, controller):
     generatePlanBasedInitalVariables(sequenceDict, intitalCourseGroupVals, courseGroupList, controller)
-    generateSetDefaults(courseGroupDict, courseGroupList, controller)
+    generateSetDefaults(courseGroupDict, courseGroupList, list(list(sequenceDict.values())[0].keys())[0], controller)
     generateSubRadioListener(courseGroupList, controller)
     generateDisableSwitchStatement(sequenceDict, controller)
     generateEnableSwitchStatement(sequenceDict, controller)
@@ -144,10 +156,11 @@ def generatePlanBasedInitalVariables(sequenceDict, intitalCourseGroupVals, cours
 #   options avaiable in that course group
 #   courseGroupList - list of course groups taken overall in the program
 #   controller - file handle to controller.js
-def generateSetDefaults(courseGroupDict, courseGroupList, controller):
+def generateSetDefaults(courseGroupDict, courseGroupList, initialTerm, controller):
     controller.write("this.setDefaults = function(plan) { \n")
     controller.write("  switch(plan) { \n")
     formattedCaseStatement = "      case \"{case}\": \n"
+    formattedTerm = "            $scope.selectedTerm = \"" + cleaner.cleanString(initialTerm) + "\";\n"
     formattedCourseGroup = "            $scope.field{number}.group{number} ="
     switchEndString = """    default:
     console.log("shouldn't be here");
@@ -155,6 +168,7 @@ def generateSetDefaults(courseGroupDict, courseGroupList, controller):
 };\n"""
     for mainPlan in courseGroupDict:
         controller.write(formattedCaseStatement.format(case=cleaner.cleanString(mainPlan)))
+        controller.write(formattedTerm)
         for element in courseGroupList:
             controller.write(formattedCourseGroup.format(number=element))
             if element not in courseGroupDict[mainPlan]:
