@@ -26,6 +26,7 @@ def generateDisplayDiv(soup, courseGroupList):
 # from Sequncing Excel file
 # Parameters:
 #   titleTag - "site-title" HTML tag at the top of the page
+#   topTitleTag - title appearing as name of tab
 #   deptName - department name pulled from Sequencing Excel file
 def switchTitle(titleTag, topTitleTag, deptName):
     titleTag.append(deptName + " Program Plan Visualizer")
@@ -46,11 +47,14 @@ def placeLegend(legendTag, categoryDict, soup):
 # Function that places the radio inputs into the form which controls
 # which plan is currently selected on the webpage
 # Parameters:
-#   formTag - form HTML tag where the inputs will be placed
+#   formTag - form HTML tag where the plan radio inputs will be placed
+#   termTag - div HTML tag where the term radio inputs will be placed
+#   courseGroupTag - div HTML tag where the course group radio inputs will be placed
 #   courseGroupDict - dict that maps the plans to the course groups in it
 #   soup - soup object, used to create HTML tags
 def placeRadioInputs(formTag, termTag, courseGroupTag, courseGroupDict, sequenceDict, soup):
     for plan in courseGroupDict:
+        # radio inputs for selecting plan, can ng-model directly to selectedPlan
         radioInput = soup.new_tag("input", attrs={"type":"radio", 
                                                   "name":"planselector", 
                                                   "ng-model":"selectedPlan",
@@ -63,12 +67,19 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, courseGroupDict, sequence
         breakTag = soup.new_tag("br")
         formTag.append(breakTag)
         
+        # the plan names in sequenceDict and courseGroupDict are not the same. 
+        # sequenceDict contains course group with curly braces in name. Plan name in 
+        # sequenceDict recovered by searching and comparing
         for fullPlan in sequenceDict:
             if plan in fullPlan:
                 savedPlan = fullPlan
 
         planWrapper = soup.new_tag("div", attrs={"ng-switch-when": cleaner.cleanString(plan)})
         for term in sequenceDict[savedPlan]:
+            # the terms are the same regardless of course groups so any savedPlan that matched fullPlan would
+            # have worked
+
+            # ng-change used to update $scope.selectedTerm
             radioInput = soup.new_tag("input", attrs={"type":"radio", 
                                                   "name":cleaner.cleanString(plan) + "termselector", 
                                                   "ng-model":"selectedTerm",
@@ -86,11 +97,12 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, courseGroupDict, sequence
         wrapperDiv = soup.new_tag("div", attrs={"ng-switch-when": cleaner.cleanString(plan)})
         
         for courseGroupList in courseGroupDict[plan].values():
-            totalCourseGroup = ""
-            for indivCourseGroup in courseGroupList:
-                totalCourseGroup += indivCourseGroup
+            # courseGroupList is a list fo course groups that go together (eg: ["2A", "2B"] or ["4A", "4B"])
+            totalCourseGroup = "".join(courseGroupList)
             courseGroupWrapper = soup.new_tag("div", attrs={"id": "OR" + totalCourseGroup})
             for indivCourseGroup in courseGroupList:
+                # indivCourseGroup is one of the options in a group (eg: "2A" or "3B")
+                # ng-change used to update $scope.fieldX.groupX
                 radioInput = soup.new_tag("input", attrs={"type":"radio", 
                                         "name":cleaner.cleanString(plan) + totalCourseGroup + "optionselector",
                                         "ng-model":"field" + indivCourseGroup[0] + ".group" + indivCourseGroup[0], 
@@ -123,19 +135,12 @@ def placeCourseGroupRadioInputs(courseGroupSelectTag, soup, courseGroupDict):
 #   displayTag - HTML tag representing outer display div where the different plan sequences are placed
 #   sequenceDict - dict that maps plan name to a dict that represents the plan sequence
 #   soup - soup object, used to create HTML tags
-#   indexJS - file handle for index.js, used to write to index.js
-#   controller - file handle for controller.js, used to write to controller.js
-#   lineManager - line manager object, used to handle line placement and generation
-#   electiveLinkDict - dict that maps elective type to the link of the list of the links
 def placePlanDivs(displayTag, sequenceDict, soup):
     for plan in sequenceDict:
         switchInput = soup.new_tag("div", attrs={"id":cleaner.cleanString(plan),
                                                  "ng-switch-when":cleaner.cleanString(plan),
                                                  "style":"height:fit-content; display:flex; flex-direction:row; flex-wrap:column;"})
-        placeTermsDivs(switchInput, 
-                       sequenceDict[plan], 
-                       soup,  
-                       plan)
+        placeTermsDivs(switchInput, sequenceDict[plan], soup, plan)
         displayTag.append(switchInput)
 
 # Function that places the legend description tag
@@ -522,5 +527,3 @@ def formatCourseDescriptionForRegular(soup, course, courseDisc):
     # courseDisc.append(courseTermAvail)
     courseDisc.append(courseAlphaHours)
     courseDisc.append(courseDescription)
-
-
