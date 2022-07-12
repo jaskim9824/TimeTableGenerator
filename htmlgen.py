@@ -19,6 +19,7 @@ def generateDisplayDiv(soup, courseGroupList):
     formattedCourseGroupVar="field{number}.group{number}"
     for element in courseGroupList:
         switchVariable += "+" + formattedCourseGroupVar.format(number=element)
+    switchVariable += "+selectedTerm"
     return soup.new_tag("div", attrs={"class":"display",
                                       "ng-switch":switchVariable})
 
@@ -137,11 +138,12 @@ def placeCourseGroupRadioInputs(courseGroupSelectTag, soup, courseGroupDict):
 #   soup - soup object, used to create HTML tags
 def placePlanDivs(displayTag, sequenceDict, soup):
     for plan in sequenceDict:
-        switchInput = soup.new_tag("div", attrs={"id":cleaner.cleanString(plan),
-                                                 "ng-switch-when":cleaner.cleanString(plan),
-                                                 "style":"height:fit-content; display:flex; flex-direction:row; flex-wrap:column;"})
-        placeTermsDivs(switchInput, sequenceDict[plan], soup, plan)
-        displayTag.append(switchInput)
+        for term in sequenceDict[plan]:
+            switchInput = soup.new_tag("div", attrs={"id":cleaner.cleanString(plan) + cleaner.cleanString(term),
+                                                    "ng-switch-when":cleaner.cleanString(plan) + cleaner.cleanString(term),
+                                                    "style":"height:fit-content; display:flex; flex-direction:row; flex-wrap:column;"})
+            placeTermDivs(switchInput, sequenceDict[plan], soup, plan, term)
+            displayTag.append(switchInput)
 
 # Function that places the legend description tag
 # Parameters:
@@ -225,20 +227,19 @@ def placeCourseGroupRadioInputsForSubPlan(subPlanTag, soup, subPlanOptionList, s
 #   controller - file handle for controller.js, used to write to controller.js
 #   plan - name of plan whose terms are being placed
 #   lineManager - line manager object, used to handle line placement and generation
-def placeTermsDivs(planTag, planDict, soup, plan):
+def placeTermDivs(planTag, planDict, soup, plan, term):
     # wrapper that holds the number of each type of elective taken this plan
     electiveCounterWrapper = {"ITS": 0, "PROG": 0, "COMP": 0}
     # count of amount of term columns placed in the plan
     termcounter = 0
 
-    for term in planDict:
-        termDiv = soup.new_tag("div", attrs={"class":"term"})
-        termHeader = soup.new_tag("h3", attrs={"class":"termheader"})
-        termHeader.append(term)
-        termDiv.append(termHeader)
-        placeCourses(termDiv, planDict[term], soup, plan, termcounter, electiveCounterWrapper)
-        planTag.append(termDiv)
-        termcounter += 1
+    termDiv = soup.new_tag("div", attrs={"class":"term"})
+    termHeader = soup.new_tag("h3", attrs={"class":"termheader"})
+    termHeader.append(term)
+    termDiv.append(termHeader)
+    placeCourses(termDiv, planDict[term], soup, plan, termcounter, electiveCounterWrapper)
+    planTag.append(termDiv)
+    termcounter += 1
     # generating a list of all courses taken in this plan
     courseList = []
     for courses in planDict.values():
@@ -331,7 +332,7 @@ def placeCourses(termTag, termList, soup, plan, termcounter, electiveCountWrappe
 
                 # text appearing in course box (eg: CHEM 103)
                 courseHeader = soup.new_tag("h3", attrs={"class":"embed"})
-                courseHeader.append(course.name)
+                courseHeader.append(course.plainName + " (" + course.sect + ")")
 
                 courseDiv.append(courseHeader)
                 courseDiv.append(courseDisc)
@@ -496,7 +497,7 @@ def formatCourseDescriptionForElective(soup, course, courseDisc):
 def formatCourseDescriptionForRegular(soup, course, courseDisc):
     # formatting title in course description
     courseTitle = soup.new_tag("b", attrs={"class":"descriptiontitle"})
-    courseTitle.append(course.name + " - " + course.descr)
+    courseTitle.append(course.plainName + " (" + course.sect + ")" + " - " + course.descr)
 
     # adding line seperating title and description
     courseLine = soup.new_tag("hr", attrs={"class":"descriptionline"})
