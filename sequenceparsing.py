@@ -281,7 +281,7 @@ def courseParse(name, course_obj_dict):
             return courseParseCourseGroups(nameList, course_obj_dict)
         # non course group case
         else:
-            return [createCourseSection(item.upper(), course_obj_dict) for item in nameList]
+            return [createCourseSection(item.upper().strip(), course_obj_dict) for item in nameList]
     #single course
     else:
         return createCourseSection(nameList[0].upper(), course_obj_dict)
@@ -299,7 +299,7 @@ def courseParseCourseGroups(nameList, course_obj_dict):
         courseList = strippedCourses.split("or")
         courseGroupList = []
         for course in courseList:
-            courseGroupList.append(createCourseSection(course.upper(), course_obj_dict))
+            courseGroupList.append(createCourseSection(course.upper().strip(), course_obj_dict))
         courseGroupList.append(courseGroupName)
         courseGroups.append(courseGroupList)
     return courseGroups

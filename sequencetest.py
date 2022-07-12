@@ -4,16 +4,31 @@ import courseparsing
 def test(input, course_obj_dict):
     return sequenceparsing.courseParse(input, course_obj_dict)
 
+def printDetails(section_obj):
+    print("Name: " + section_obj.name)
+    print("Sections: ")
+    for section in section_obj.sections:
+        print(section.name)
+
+
 def main():
-    courseObjDict = courseparsing.parseCourses("TimeTable.xls", "Sequencing.xls")
+    courseObjDict, seqDict = courseparsing.parseCourses("TimeTable.xls", "Sequencing.xls")
     while True:
         try:
+            print("Input test Excel cell")
             outputObject = test(input(), courseObjDict)
-            print(outputObject)  
-            # print("Name: " + outputObject.name)
-            # print("Sections: ")
-            # for section in outputObject.sections:
-            #     print(section.name)
+            if type(outputObject) == type([]):
+                for element in outputObject:
+                    if type(element) == type([]):
+                        i = 0
+                        while i < len(element) - 1:
+                            printDetails(element[i])
+                            i += 1
+                        print(element[i])
+                    else:
+                        printDetails(element)
+            else:
+                printDetails(outputObject)
         except ValueError:
             print("Value Error raised!")
 
