@@ -106,6 +106,7 @@ header {
 
 /* Plan header styling*/
 h3#planhead {
+    width: fit-content;
     font-size: 175%;
     position: relative;
     left: 50rem;
