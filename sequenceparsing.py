@@ -273,17 +273,6 @@ class CourseSectionWrapper:
     def addSection(self, section):
         self.sections.append(section)
 
-def createCourseSection(course, course_obj_dict, plainNameList):
-    if course not in plainNameList:
-        return None
-    fullNames = findFullNames(course_obj_dict, course)
-    wrapper = CourseSectionWrapper(course)
-    for fullName in fullNames:
-        curr_course = deepcopy(course_obj_dict[fullName])
-        wrapper.addSection(curr_course)
-    return wrapper
-
-
 def courseParse(name, course_obj_dict, plainNameList):
     name = name.strip().replace("  "," ")
     nameList = name.split("OR")
@@ -297,6 +286,38 @@ def courseParse(name, course_obj_dict, plainNameList):
     #single course
     else:
         return createCourseSection(nameList[0].upper(), course_obj_dict, plainNameList)
+
+def courseParseTest(name, course_obj_dict):
+    name = name.strip().replace("  "," ")
+    nameList = name.split("OR")
+    if len(nameList) > 1:
+        # course group case
+        if "{" in nameList[0]:
+            return courseParseCourseGroupsTest(nameList, course_obj_dict)
+        # non course group case
+        else:
+            return [createCourseSectionTest(item.upper().strip(), course_obj_dict) for item in nameList]
+    #single course
+    else:
+        return createCourseSectionTest(nameList[0].upper(), course_obj_dict)
+
+def createCourseSection(course, course_obj_dict, plainNameList):
+    if course not in plainNameList:
+        return None
+    fullNames = findFullNames(course_obj_dict, course)
+    wrapper = CourseSectionWrapper(course)
+    for fullName in fullNames:
+        curr_course = deepcopy(course_obj_dict[fullName])
+        wrapper.addSection(curr_course)
+    return wrapper
+
+def createCourseSectionTest(course, course_obj_dict):
+    fullNames = findFullNames(course_obj_dict, course)
+    wrapper = CourseSectionWrapper(course)
+    for fullName in fullNames:
+        curr_course = deepcopy(course_obj_dict[fullName])
+        wrapper.addSection(curr_course)
+    return wrapper
 
 def courseParseCourseGroups(nameList, course_obj_dict, plainNameList):
     courseGroups = []
@@ -314,6 +335,24 @@ def courseParseCourseGroups(nameList, course_obj_dict, plainNameList):
             if course.upper().strip() not in plainNameList:
                 continue
             courseGroupList.append(createCourseSection(course.upper().strip(), course_obj_dict, plainNameList))
+        courseGroupList.append(courseGroupName)
+        courseGroups.append(courseGroupList)
+    return courseGroups
+
+def courseParseCourseGroupsTest(nameList, course_obj_dict):
+    courseGroups = []
+    for name in nameList:
+        name = name.replace("{","").replace("}","")
+        courseGroupNameIndexStart = name.find("(")
+        courseGroupNameIndexEnd = name.find(")")
+        if courseGroupNameIndexEnd == -1 or courseGroupNameIndexStart == -1:
+            raise ValueError("Course group name inproperly formatted")
+        courseGroupName = name[courseGroupNameIndexStart+1:courseGroupNameIndexEnd]
+        strippedCourses = name[0:courseGroupNameIndexStart]
+        courseList = strippedCourses.split("or")
+        courseGroupList = []
+        for course in courseList:
+            courseGroupList.append(createCourseSectionTest(course.upper().strip(), course_obj_dict))
         courseGroupList.append(courseGroupName)
         courseGroups.append(courseGroupList)
     return courseGroups
