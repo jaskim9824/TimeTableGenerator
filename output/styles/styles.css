@@ -1,44 +1,437 @@
-.day {
+/*TO DO: adjust formatting of webpage */
+
+/* Set the <html> font size to 100%, ensures rem scaling is correct */
+:root {
+    font-size: 100%;
+}
+
+/*body style*/
+body {
+    margin: 0;
+    width: fit-content;
+    height: fit-content;
+}
+
+/* entire page style, scroll on overflow */
+html {
+    margin: 0;
+    width: fit-content;
+    height: fit-content;
+    overflow-x: scroll;
+    overflow-y: scroll;
+}
+
+/*Header style*/
+header {
+    padding: 8px 8px;
+    background-color: #275d38;
+    margin-bottom: 10px;
+    height: 60px;
+    min-width: 100vw;
+}
+
+/*Header link style */
+.header a {
+    padding: 15px;
+    text-decoration: none;
+    line-height: 1.5rem;
+    border-radius: 4px;
+    color: #f2cd00;
+    font-size: 100%;
+    font-family: inherit;
+    text-align: center;
+}
+
+/*Title style*/
+.header a.site-title {
+    width: fit-content;
+    font-size: 25px;
+    position: absolute;
+    left: 38rem;
+    top: 12px;
+    color: #F2CD00;
+}
+
+/*Image style*/
+.header img {
+    width: 183px;
+    height: 50px;
+    margin-right: 0;
     float: left;
-    margin-left: 5px;
+}
+
+/* at 500px align header left when the screen is 500px wide or less*/
+@media screen and (max-width: 840px) {
+    .header a {
+        float: none;
+        display: block;
+        text-align: center;
+        
+    }
+    .header img{
+        margin-right: 0;
+        float: left;
+        /* img needs to be re-aligned on narrow screens */
+        position: relative;
+        bottom: 10px;
+    }
+
+    .header a.site-title {
+        font-size: 15px;
+    }
+
+    /* Changing width of tooltip on narrow screens */
+    .coursecontainer .tooltip .tooltiptextleft, .coursecontainer .tooltip .tooltiptextright, 
+    .orcoursecontainer .tooltip .tooltiptextleft, .orcoursecontainer .tooltip .tooltiptextright,
+    .coursegroupcontainer .tooltip .tooltiptextleft, .coursegroupcontainer .tooltip .tooltiptextright {
+        width: 400px;
+    }
+
+    /* Smaller font on narrow screens */
+    .coursecontainer .tooltip .descriptiontitle, .orcoursecontainer .tooltip .descriptiontitle,
+    .coursegroupcontainer .tooltip .descriptiontitle {
+        font-size: 15px;
+    }
+
+    /* Smaller font on narrow screens */
+    .coursecontainer .descriptionalphahours, .coursecontainer .descriptionavailability, 
+    .coursecontainer .descriptioncredits, .coursecontainer .descriptionfeeindex, .coursecontainer .fulldescription,
+    .orcoursecontainer .descriptionalphahours, .orcoursecontainer .descriptionavailability, 
+    .orcoursecontainer .descriptioncredits, .orcoursecontainer .descriptionfeeindex, .orcoursecontainer .fulldescription,
+    .coursegroupcontainer .descriptionalphahours, .coursegroupcontainer .descriptionavailability, 
+    .coursegroupcontainer .descriptioncredits, .coursegroupcontainer .descriptionfeeindex, .coursegroupcontainer .fulldescription {
+        font-size: 12px;
+    }
+}
+
+/* Plan header styling*/
+h3#planhead {
+    font-size: 175%;
     position: relative;
-    width: 17%;
+    left: 50rem;
 }
 
-.label {
-    font-size: 2vw;
+#toprowcontainer {
+    display: flex;
+    flex-direction: row;
 }
 
-.content {
-    font-size: 1.5vw;
-}
-
-.daylabels {
-    float: left;
-    margin-left: 5px;
+#planlegend {
+    width: fit-content;
     position: relative;
+    left: 25rem;
 }
 
-.courseholder {
+#termlegend {
+    width: fit-content;
     position: relative;
-    width: 100%;
+    left: 37.5rem;
 }
 
+#optionlegend {
+    width: fit-content;
+    position: relative;
+    left: 58rem;
+}
 
-.course {
+/* Wrapper div for the term names and course boxes, the main content */
+#main {
+    height: fit-content;
+}
+
+#explainertext {
+    margin-left: 10px;
+}
+
+/* Plan diagram styling */
+.display {
+    width:fit-content;
+    height: fit-content;
+    position: relative;
+    right: 15px;
+}
+
+/* Term column styling */
+.term {
+    margin-left: 4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Term header styling */
+.termheader {
+    margin-bottom: 30px;
+    width: 125%;
+    text-align: center;
+    font-size: 115%;
+}
+
+/* Contains one (or two if an "or" option) course */
+.coursecontainer, .coursegroupcontainer {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 50px;
+}
+
+.orcoursecontainer {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 35px;
+    outline-color: #542a7e;
+    outline-width: 3px;
+    outline-style: dashed;
+    outline-offset: 3px;
+}
+
+.coursegroupcontainer {
+    outline-width: 3.5px;
+    outline-style: ridge;
+    outline-offset: 5px;
+    position: relative;
+    bottom: 16px;
+    padding: 1px;
+}
+
+.coursegroupcontainer .course {
+    margin-bottom: 49px;
+}
+
+.coursegrouptitle {
+    text-align: center;
+    margin: 0;
+    position: relative;
+    bottom: 28px;
+    background-color: #84e3f6;
+}
+
+/* Text within a course box styling*/
+.embed {
+    text-align: center;
+    position: relative;
+    bottom: 4px;
+}
+      
+/* Course box styling */
+.course, .orcourse {
     border-style: solid;
     border-color: black;
     border-width: 2px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    height: 50px;
+    width: 150px;
 }
 
-.course p{
-    text-align: center; 
+.coursegroupcontainer .lastcourseingroup {
+    margin-bottom: 0;
 }
 
-.day h3{
+/* two option with "or" between them, smaller margin */
+.orcourse {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* format of the word "OR" container */
+.ortext {
+    margin: 0;
+    padding: 0;
     text-align: center;
+    position: relative;
+    left: 40%;
+}
+
+/* format of the word "OR" */
+p.ortext {
+    width: 25px;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+    border-radius: 10px;
+}
+
+/* Complementray elective box, taller to fit text */
+.COMP, .COMP-highlighted {
+    height: 80px;
+}
+
+/* Program elective box, taller to fit text */
+.PROG, .PROG-highlighted {
+    height: 80px;
+}
+
+/* Fits better if text is scaled */
+.PROG .embed, .PROG-highlighted .embed {
+    font-size: 110%;
+}
+
+/* Default course hover */
+.course:hover, .orcourse:hover {
+    background-color: #f2cd00;
+    border-color:#f2cd00;
+}
+
+/* Default course selected */
+.course-highlighted {
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+    height: 50px;
+    width: 150px;
+    background-color: #f2cd00;
+}
+
+/* Makes sure margin of orcourse is unchanged */
+.orcourse-highlighted {
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+    height: 50px;
+    width: 150px;
+    margin-bottom: 8px;
+    background-color: #f2cd00;
+}
+
+/* Default highlighted hover */
+.course-highlighted:hover, .orcourse-highlighted:hover {
+    background-color: #f2cd00;
+    border-color:#f2cd00;
+}
+
+    
+/*This is for the Hover over course description*/
+.tooltip {
+    position: relative;
+    display: inline-block;            
+}
+ 
+/* Most properties taken from Calendar */
+/* Course on left of page, tooltip appears to the right of course */
+.tooltip .tooltiptextright, .tooltip .tooltiptextleft, .tooltiptextright-locked, .tooltiptextleft-locked {
+    visibility: hidden;
+    width: 46vw;
+    max-width: 900px;
+    padding: 0px 10px;
+    background-color: #EEEEEE;
+    border: 1px solid #444444;
+    color: #2B292A;
+    text-align: left;           
+    border-radius: 0px;
+    padding: 5px 10px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 100%;
+    font-weight: inherit;
+    font-style: inherit;
+    font-family: 'Roboto', sans-serif;
+    vertical-align: baseline;
+    white-space: normal;
+}
+
+.tooltip .tooltiptextright {
+    left: 50%;
+}
+
+.tooltip .tooltiptextleft {
+    right: 50%;
+}
+
+.tooltiptextright-locked {
+    visibility: visible;
+    opacity: 1;
+    left: 50%;
+}
+
+.tooltiptextleft-locked {
+    visibility: visible;
+    opacity: 1;
+    right: 50%;
+}
+
+/* After hovering, set content to empty */
+.tooltip .tooltiptextright::after, .tooltip .tooltiptextright-locked::after {
+    content: "";         
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #EEEEEE transparent transparent transparent;
+}
+
+/* After hovering, set content to empty */
+.tooltip .tooltiptextleft::after, .tooltip .tooltiptextleft-locked::after {
+    content: "";         
+    top: 100%;
+    right: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #EEEEEE transparent transparent transparent;
+}
+
+/* On hover, dsiplay course description */
+.tooltip:hover .tooltiptextright, .tooltip:hover .tooltiptextleft {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Title of description, format taken from Calendar */
+.descriptiontitle {
+    color: #2b292a;
+    font-size: 30px;
+    font-weight: 500;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Line between title and body of description */
+.descriptionline {
+    height: 0;
+    border: 0;
+    border-top: 1px solid #444444;
+    background: transparent;
+    display: block;
+    unicode-bidi: isolate;
+    margin: 4px;
+    overflow: hidden;
+    border-style: inset;
+    border-width: 1px;
+}
+
+/* Various components of description body */
+.descriptioncredits, .descriptionfeeindex, .descriptionavailability, .descriptionalphahours, .fulldescription {
+    display: inline;
+}
+
+/* footer formatting */
+footer {
+    padding: 8px 8px;
+    background-color: #275d38;
+    margin-top: 10px;
+    margin-bottom: 0;
+    height: 64px;
+    position: relative;
+    bottom: 0;
+    min-width: 100vw;
+}
+
+/* U of A logo */
+.footer img {
+    width: 183px;
+    height: 50px;
+    margin-right: 0;
+    position: relative;
+    left: 44rem;
+}
+
+/* copyright logo and text */
+#copyright {
+    position: relative;
+    left: 60rem;
+    color: #FFFFFF;
+    font-family: 'Roboto',sans-serif;
+    font-size: 75%;
 }

@@ -42,16 +42,19 @@
                 <li>To clear all selections, refresh the page.</li>
             </ul>
         </div>
-        <p>{{selectedPlan}}</p>
-        <p>{{selectedTerm}}</p>
-        <p>{{field2.group2}}</p>
-        <p>{{field3.group3}}</p>
-        <p>{{field4.group4}}</p>
-        <div id="planlegend">
-        </div>
-        <div id="termlegend" ng-switch="selectedPlan">
-        </div>
-        <div id="optionlegend" ng-switch="selectedPlan">
+        <p style="position:relative; left:50rem">{{selectedPlan}}</p>
+        <p style="position:relative; left:50rem">{{selectedTerm}}</p>
+        <p style="position:relative; left:50rem">{{field2.group2}}</p>
+        <p style="position:relative; left:50rem">{{field3.group3}}</p>
+        <p style="position:relative; left:50rem">{{field4.group4}}</p>
+        <h3 id="planhead">Plans</h3>
+        <div id="toprowcontainer">
+            <div id="planlegend">
+            </div>
+            <div id="termlegend" ng-switch="selectedPlan">
+            </div>
+            <div id="optionlegend" ng-switch="selectedPlan">
+            </div>
         </div>
     </div>
     <footer>
