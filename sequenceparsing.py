@@ -285,7 +285,7 @@ def courseParse(name, course_obj_dict, plainNameList):
             return [createCourseSection(item.upper().strip(), course_obj_dict, plainNameList) for item in nameList]
     #single course
     else:
-        return createCourseSection(nameList[0].upper(), course_obj_dict, plainNameList)
+        return [createCourseSection(nameList[0].upper(), course_obj_dict, plainNameList)]
 
 def courseParseTest(name, course_obj_dict):
     name = name.strip().replace("  "," ")
@@ -299,7 +299,7 @@ def courseParseTest(name, course_obj_dict):
             return [createCourseSectionTest(item.upper().strip(), course_obj_dict) for item in nameList]
     #single course
     else:
-        return createCourseSectionTest(nameList[0].upper(), course_obj_dict)
+        return [createCourseSectionTest(nameList[0].upper(), course_obj_dict)]
 
 def createCourseSection(course, course_obj_dict, plainNameList):
     if course not in plainNameList:

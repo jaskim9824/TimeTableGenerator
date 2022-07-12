@@ -259,120 +259,122 @@ def placeCourses(termTag, termList, soup, plan, termcounter, electiveCountWrappe
     courseGroupTitle = ""  # name of the course group (eg: "Course group 2A")
     courseOrList = []
     hexcolorlist= ["033dfc", "fc0303", "ef8c2b", "0ccb01", "bd43fa", "e8e123"]
-    for course in termList:
-        courseID = cleaner.cleanString(course.name)+cleaner.cleanString(plan)
-        orCase = False
-        lastOrCase = False
-        if (course.calendarPrint == "or") or (course.calendarPrint == "lastor"):
-            orCase = True
-        if (course.calendarPrint == "lastor"):
-            lastOrCase = True
-        
-        if course.courseGroup != "":
-            # add a wrapper container around course group
-            courseContDiv = soup.new_tag("div", attrs={"class":"coursegroupcontainer", "style":"outline-color:#" + hexcolorlist[int(course.courseGroup[0])]})
-            courseGroupTitle = soup.new_tag("p", attrs={"class":"coursegrouptitle"})
-            courseGroupTitle.append("Course Group " + course.courseGroup)
-        else:
-            # not in a course group
-            courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer"})
+    for courseWrapperList in termList:
+        for courseWrapper in courseWrapperList:
+            for course in courseWrapper.sections:
+                courseID = cleaner.cleanString(course.name)+cleaner.cleanString(plan)
+                orCase = False
+                lastOrCase = False
+                if (course.calendarPrint == "or") or (course.calendarPrint == "lastor"):
+                    orCase = True
+                if (course.calendarPrint == "lastor"):
+                    lastOrCase = True
+                
+                if course.courseGroup != "":
+                    # add a wrapper container around course group
+                    courseContDiv = soup.new_tag("div", attrs={"class":"coursegroupcontainer", "style":"outline-color:#" + hexcolorlist[int(course.courseGroup[0])]})
+                    courseGroupTitle = soup.new_tag("p", attrs={"class":"coursegrouptitle"})
+                    courseGroupTitle.append("Course Group " + course.courseGroup)
+                else:
+                    # not in a course group
+                    courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer"})
 
-        # Prevent tooltip from being off screen
-        courseDisc = pickTooltipSide(termcounter, courseID, soup)
+                # Prevent tooltip from being off screen
+                courseDisc = pickTooltipSide(termcounter, courseID, soup)
 
-        # Constructing course div, check for special cases
-        if course.name == "Complementary Elective":
-            # Class allows formatting so words fit in course box
-            courseID = courseID+str(electiveCountWrapper["COMP"])
-            courseDiv = createCourseDiv(soup, courseID, orCase)
-            # id must include which number elective it is (electiveName0, electiveName1, electiveName2, ...)
-            courseDisc["id"] = courseDisc["id"][:-4] + str(electiveCountWrapper["COMP"]) + "desc"
-            electiveCountWrapper["COMP"] += 1
-            formatCourseDescriptionForElective(soup, course, courseDisc)
-            # Adding link to list of electives DUMMY LINK FOR NOW
-            # linkTag = soup.new_tag("a", href=electiveLinkDict["COMP"], target="_blank")
-            # linkTag.append("List of electives")
-            # courseDisc.append(linkTag)
+                # Constructing course div, check for special cases
+                if course.name == "Complementary Elective":
+                    # Class allows formatting so words fit in course box
+                    courseID = courseID+str(electiveCountWrapper["COMP"])
+                    courseDiv = createCourseDiv(soup, courseID, orCase)
+                    # id must include which number elective it is (electiveName0, electiveName1, electiveName2, ...)
+                    courseDisc["id"] = courseDisc["id"][:-4] + str(electiveCountWrapper["COMP"]) + "desc"
+                    electiveCountWrapper["COMP"] += 1
+                    formatCourseDescriptionForElective(soup, course, courseDisc)
+                    # Adding link to list of electives DUMMY LINK FOR NOW
+                    # linkTag = soup.new_tag("a", href=electiveLinkDict["COMP"], target="_blank")
+                    # linkTag.append("List of electives")
+                    # courseDisc.append(linkTag)
 
-        elif course.name == "Program/Technical Elective":
-            # Class allows formatting so words fit in course box
-            courseID = courseID+str(electiveCountWrapper["PROG"])
-            courseDiv = createCourseDiv(soup, courseID, orCase)
-            # id must include which number elective it is (electiveName0, electiveName1, electiveName2, ...)
-            courseDisc["id"] = courseDisc["id"][:-4] + str(electiveCountWrapper["PROG"]) + "desc"
-            electiveCountWrapper["PROG"] += 1
-            formatCourseDescriptionForElective(soup, course, courseDisc)
-            # Adding link to list of electives DUMMY LINK FOR NOW
-            # linkTag = soup.new_tag("a", href=electiveLinkDict["PROG"], target="_blank")
-            # linkTag.append("List of electives")
-            # courseDisc.append(linkTag)
+                elif course.name == "Program/Technical Elective":
+                    # Class allows formatting so words fit in course box
+                    courseID = courseID+str(electiveCountWrapper["PROG"])
+                    courseDiv = createCourseDiv(soup, courseID, orCase)
+                    # id must include which number elective it is (electiveName0, electiveName1, electiveName2, ...)
+                    courseDisc["id"] = courseDisc["id"][:-4] + str(electiveCountWrapper["PROG"]) + "desc"
+                    electiveCountWrapper["PROG"] += 1
+                    formatCourseDescriptionForElective(soup, course, courseDisc)
+                    # Adding link to list of electives DUMMY LINK FOR NOW
+                    # linkTag = soup.new_tag("a", href=electiveLinkDict["PROG"], target="_blank")
+                    # linkTag.append("List of electives")
+                    # courseDisc.append(linkTag)
 
-        elif course.name == "ITS Elective":
-            courseID = courseID+str(electiveCountWrapper["ITS"])
-            # Class allows formatting so words fit in course box
-            courseDiv = createCourseDiv(soup, courseID, orCase)
-            # id must include which number elective it is (electiveName0, electiveName1, electiveName2, ...)
-            courseDisc["id"] = courseDisc["id"][:-4] + str(electiveCountWrapper["ITS"]) + "desc"
-            electiveCountWrapper["ITS"] += 1
-            formatCourseDescriptionForElective(soup, course, courseDisc)
-            # Adding link to list of electives DUMMY LINK FOR NOW
-            # linkTag = soup.new_tag("a", href=electiveLinkDict["ITS"], target="_blank")
-            # linkTag.append("List of electives")
-            # courseDisc.append(linkTag)
+                elif course.name == "ITS Elective":
+                    courseID = courseID+str(electiveCountWrapper["ITS"])
+                    # Class allows formatting so words fit in course box
+                    courseDiv = createCourseDiv(soup, courseID, orCase)
+                    # id must include which number elective it is (electiveName0, electiveName1, electiveName2, ...)
+                    courseDisc["id"] = courseDisc["id"][:-4] + str(electiveCountWrapper["ITS"]) + "desc"
+                    electiveCountWrapper["ITS"] += 1
+                    formatCourseDescriptionForElective(soup, course, courseDisc)
+                    # Adding link to list of electives DUMMY LINK FOR NOW
+                    # linkTag = soup.new_tag("a", href=electiveLinkDict["ITS"], target="_blank")
+                    # linkTag.append("List of electives")
+                    # courseDisc.append(linkTag)
 
-        else:
-            # This is a regular course. All information should be available
-            courseDiv = createCourseDiv(soup, 
-                                        courseID, 
-                                        orCase) 
-            formatCourseDescriptionForRegular(soup, course, courseDisc)
+                else:
+                    # This is a regular course. All information should be available
+                    courseDiv = createCourseDiv(soup, 
+                                                courseID, 
+                                                orCase) 
+                    formatCourseDescriptionForRegular(soup, course, courseDisc)
 
-        # text appearing in course box (eg: CHEM 103)
-        courseHeader = soup.new_tag("h3", attrs={"class":"embed"})
-        courseHeader.append(course.name)
+                # text appearing in course box (eg: CHEM 103)
+                courseHeader = soup.new_tag("h3", attrs={"class":"embed"})
+                courseHeader.append(course.name)
 
-        courseDiv.append(courseHeader)
-        courseDiv.append(courseDisc)
+                courseDiv.append(courseHeader)
+                courseDiv.append(courseDisc)
 
-        skipAddCourseFlag = False
+                skipAddCourseFlag = False
 
-        if orCase:
-            # If multiple course options, append the courseDiv to a list which we will append
-            # to the termTag after all options have been collected
-            courseOrList.append(courseDiv)
-            if termList.index(course) == (len(termList) - 1):
-                # last course in term is an OR course, need to append to termTag immediately
-                termTag, courseOrList, courseGroupList = addOrCourses(courseOrList, course.courseGroup, courseGroupList, termTag, soup)
-                skipAddCourseFlag = True
-            if not lastOrCase:
-                continue
-            if lastOrCase and (courseOrList != []):
-                # last option out of OR courses
-                termTag, courseOrList, courseGroupList = addOrCourses(courseOrList, course.courseGroup, courseGroupList, termTag, soup)
-                continue
+                if orCase:
+                    # If multiple course options, append the courseDiv to a list which we will append
+                    # to the termTag after all options have been collected
+                    courseOrList.append(courseDiv)
+                    if termList.index(course) == (len(termList) - 1):
+                        # last course in term is an OR course, need to append to termTag immediately
+                        termTag, courseOrList, courseGroupList = addOrCourses(courseOrList, course.courseGroup, courseGroupList, termTag, soup)
+                        skipAddCourseFlag = True
+                    if not lastOrCase:
+                        continue
+                    if lastOrCase and (courseOrList != []):
+                        # last option out of OR courses
+                        termTag, courseOrList, courseGroupList = addOrCourses(courseOrList, course.courseGroup, courseGroupList, termTag, soup)
+                        continue
 
-        if course.courseGroup != "":
-            # need to append to courseGroupList, different than check in orCase because
-            # this doesn't involve OR
-            courseGroupList.append(courseDiv)
-            continue
+                if course.courseGroup != "":
+                    # need to append to courseGroupList, different than check in orCase because
+                    # this doesn't involve OR
+                    courseGroupList.append(courseDiv)
+                    continue
 
-        if not skipAddCourseFlag:
-            courseContDiv.append(courseDiv) 
-            termTag.append(courseContDiv)
+                if not skipAddCourseFlag:
+                    courseContDiv.append(courseDiv) 
+                    termTag.append(courseContDiv)
 
-    if courseGroupTitle != "":
-        # Need to add course group title, outside of course group box so
-        # append directly to termTag
-        termTag.append(courseGroupTitle)
-    if courseGroupList != []:
-        # A course group is involved. Append each course to the coursegroupcontainer,
-        # then append this container to the termTag
-        for i in range(0, len(courseGroupList)):
-            if i == (len(courseGroupList) - 1):
-                courseGroupList[i]["class"].append("lastcourseingroup")  # last course has no bottom margin
-            courseContDiv.append(courseGroupList[i])
-        termTag.append(courseContDiv)
+            if courseGroupTitle != "":
+                # Need to add course group title, outside of course group box so
+                # append directly to termTag
+                termTag.append(courseGroupTitle)
+            if courseGroupList != []:
+                # A course group is involved. Append each course to the coursegroupcontainer,
+                # then append this container to the termTag
+                for i in range(0, len(courseGroupList)):
+                    if i == (len(courseGroupList) - 1):
+                        courseGroupList[i]["class"].append("lastcourseingroup")  # last course has no bottom margin
+                    courseContDiv.append(courseGroupList[i])
+                termTag.append(courseContDiv)
 
 def extractCourseCategories(course):
     catListString = cleaner.cleanString(course.main_category)
