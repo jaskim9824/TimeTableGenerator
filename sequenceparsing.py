@@ -45,56 +45,66 @@ def parseSeq(filename, course_obj_dict, plainNameList):
                     if name == "":
                         # Cell in Excel is empty, skip over this cell
                         continue
-                    if ("(" in name) and (")" in name):
-                        # course group is between opening and closing brackets
-                        open_bracket = name.find("(")
-                        close_bracket = name.find(")")
-                        course_group = name[open_bracket + 1:close_bracket]
-                        course_group.strip().replace(" ", "")
-                        if close_bracket == (len(name) - 1):
-                            # Case: course group is last thing in cell
-                            name = name[:open_bracket]
-                        else:
-                            # Case: some text after course group that is part of course name
-                            name = name[:open_bracket] + name[close_bracket + 1:]
+                    # if ("(" in name) and (")" in name):
+                    #     # course group is between opening and closing brackets
+                    #     open_bracket = name.find("(")
+                    #     close_bracket = name.find(")")
+                    #     course_group = name[open_bracket + 1:close_bracket]
+                    #     course_group.strip().replace(" ", "")
+                    #     if close_bracket == (len(name) - 1):
+                    #         # Case: course group is last thing in cell
+                    #         name = name[:open_bracket]
+                    #     else:
+                    #         # Case: some text after course group that is part of course name
+                    #         name = name[:open_bracket] + name[close_bracket + 1:]
 
-                    if "OR" in name:
-                        # If OR case, follow the same procedure but set calendar_print as "or" (or "lastor")
-                        namelist = name.split("OR")
-                        for orname in namelist:
-                            pureName = orname
-                            orname = orname.strip()
-                            if orname not in plainNameList:
-                                continue
-                            # course_obj_dict key has section number in key, orname doesn't; need to search for 
-                            # full name (with section number)
-                            fullOrNames = findFullNames(course_obj_dict, orname)
-                            for fullOrName in fullOrNames:
-                                orcourse = deepcopy(course_obj_dict[fullOrName])
-                                if namelist[-1] == pureName:
-                                    # last OR course (courses after this are not in this OR option, will be a different div)
-                                    orcourse.calendarPrint = "lastor"
-                                else:
-                                    orcourse.calendarPrint = "or"
-                                if course_group != "":
-                                    orcourse.courseGroup = course_group
-                                term_list.append(orcourse)
-                        plan_dict[term_name] = term_list
-                        row += 1
-                        continue
+                    # if "OR" in name:
+                    #     # If OR case, follow the same procedure but set calendar_print as "or" (or "lastor")
+                    #     namelist = name.split("OR")
+                    #     for orname in namelist:
+                    #         pureName = orname
+                    #         orname = orname.strip()
+                    #         if orname not in plainNameList:
+                    #             continue
+                    #         # course_obj_dict key has section number in key, orname doesn't; need to search for 
+                    #         # full name (with section number)
+                    #         fullOrNames = findFullNames(course_obj_dict, orname)
+                    #         for fullOrName in fullOrNames:
+                    #             orcourse = deepcopy(course_obj_dict[fullOrName])
+                    #             if namelist[-1] == pureName:
+                    #                 # last OR course (courses after this are not in this OR option, will be a different div)
+                    #                 orcourse.calendarPrint = "lastor"
+                    #             else:
+                    #                 orcourse.calendarPrint = "or"
+                    #             if course_group != "":
+                    #                 orcourse.courseGroup = course_group
+                    #             term_list.append(orcourse)
+                    #     plan_dict[term_name] = term_list
+                    #     row += 1
+                    #     continue
 
-                    if name not in plainNameList:
-                        continue
+                    # if name not in plainNameList:
+                    #     continue
 
                     # course_obj_dict key has section number in key, name doesn't; need to search for 
-                    # full name (with section number)
-                    fullNames = findFullNames(course_obj_dict, name)
-                    for fullName in fullNames:
-                        # deepcopy since sequencing leads to prereqs and coreqs not being the same between different plans
-                        curr_course = deepcopy(course_obj_dict[fullName])
-                        if course_group != "":
-                            curr_course.courseGroup = course_group
-                        term_list.append(curr_course)  # store each course in a list
+                    # # full name (with section number)
+                    # fullNames = findFullNames(course_obj_dict, name)
+                    # for fullName in fullNames:
+                    #     # deepcopy since sequencing leads to prereqs and coreqs not being the same between different plans
+                    #     curr_course = deepcopy(course_obj_dict[fullName])
+                    #     if course_group != "":
+                    #         curr_course.courseGroup = course_group
+                    #     term_list.append(curr_course)  # store each course in a list
+                    parsedCourseObj = courseParse(name, course_obj_dict, plainNameList)
+                    if type(parsedCourseObj) == type([]):
+                        for obj in parsedCourseObj:
+                            if obj is None:
+                                parsedCourseObj.remove(obj)
+                    else:
+                        if parsedCourseObj is None:
+                            continue
+                    term_list.append(parsedCourseObj)
+            
                 plan_dict[term_name] = term_list  # store each list in a dict (key is term name)
                 col += 1
             course_seq[sheet.name] = plan_dict  # store each term dict in a plan dict (key is plan name (traditional, co-op plan 1, etc.))
@@ -263,7 +273,9 @@ class CourseSectionWrapper:
     def addSection(self, section):
         self.sections.append(section)
 
-def createCourseSection(course, course_obj_dict):
+def createCourseSection(course, course_obj_dict, plainNameList):
+    if course not in plainNameList:
+        return None
     fullNames = findFullNames(course_obj_dict, course)
     wrapper = CourseSectionWrapper(course)
     for fullName in fullNames:
@@ -272,21 +284,21 @@ def createCourseSection(course, course_obj_dict):
     return wrapper
 
 
-def courseParse(name, course_obj_dict):
+def courseParse(name, course_obj_dict, plainNameList):
     name = name.strip().replace("  "," ")
     nameList = name.split("OR")
     if len(nameList) > 1:
         # course group case
         if "{" in nameList[0]:
-            return courseParseCourseGroups(nameList, course_obj_dict)
+            return courseParseCourseGroups(nameList, course_obj_dict, plainNameList)
         # non course group case
         else:
-            return [createCourseSection(item.upper().strip(), course_obj_dict) for item in nameList]
+            return [createCourseSection(item.upper().strip(), course_obj_dict, plainNameList) for item in nameList]
     #single course
     else:
-        return createCourseSection(nameList[0].upper(), course_obj_dict)
+        return createCourseSection(nameList[0].upper(), course_obj_dict, plainNameList)
 
-def courseParseCourseGroups(nameList, course_obj_dict):
+def courseParseCourseGroups(nameList, course_obj_dict, plainNameList):
     courseGroups = []
     for name in nameList:
         name = name.replace("{","").replace("}","")
@@ -299,7 +311,9 @@ def courseParseCourseGroups(nameList, course_obj_dict):
         courseList = strippedCourses.split("or")
         courseGroupList = []
         for course in courseList:
-            courseGroupList.append(createCourseSection(course.upper().strip(), course_obj_dict))
+            if course.upper().strip() not in plainNameList:
+                continue
+            courseGroupList.append(createCourseSection(course.upper().strip(), course_obj_dict, plainNameList))
         courseGroupList.append(courseGroupName)
         courseGroups.append(courseGroupList)
     return courseGroups
