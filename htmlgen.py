@@ -244,6 +244,8 @@ def placeCourses(daysTagsDict, termList, soup, plan, termcounter, electiveCountW
         for courseWrapper in courseWrapperList:
             for course in courseWrapper.sections:
                 tagsList = []
+                minutesFromEight = calcMinutes(course.hrsFrom)
+                minutesLong = calcContainerHeight(course.hrsFrom, course.hrsTo)
                 if course.mon == 'Y':
                     tagsList.append(daysTagsDict["monday"])
                 if course.tues == 'Y':
@@ -270,7 +272,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, termcounter, electiveCountW
                     courseGroupTitle.append("Course Group " + course.courseGroup)
                 else:
                     # not in a course group
-                    courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer"})
+                    courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", "style":"position:absolute; top:" + str(50 + 3*minutesFromEight) + "px; height:" + str(minutesLong) + "px"})
 
                 # Prevent tooltip from being off screen
                 courseDisc = pickTooltipSide(termcounter, courseID, soup)
@@ -279,7 +281,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, termcounter, electiveCountW
                 if course.name == "Complementary Elective":
                     # Class allows formatting so words fit in course box
                     courseID = courseID+str(electiveCountWrapper["COMP"])
-                    courseDiv = createCourseDiv(soup, courseID, orCase)
+                    courseDiv = createCourseDiv(soup, courseID, orCase, minutesFromEight, minutesLong)
                     # id must include which number elective it is (electiveName0, electiveName1, electiveName2, ...)
                     courseDisc["id"] = courseDisc["id"][:-4] + str(electiveCountWrapper["COMP"]) + "desc"
                     electiveCountWrapper["COMP"] += 1
@@ -292,7 +294,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, termcounter, electiveCountW
                 elif course.name == "Program/Technical Elective":
                     # Class allows formatting so words fit in course box
                     courseID = courseID+str(electiveCountWrapper["PROG"])
-                    courseDiv = createCourseDiv(soup, courseID, orCase)
+                    courseDiv = createCourseDiv(soup, courseID, orCase, minutesFromEight, minutesLong)
                     # id must include which number elective it is (electiveName0, electiveName1, electiveName2, ...)
                     courseDisc["id"] = courseDisc["id"][:-4] + str(electiveCountWrapper["PROG"]) + "desc"
                     electiveCountWrapper["PROG"] += 1
@@ -305,7 +307,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, termcounter, electiveCountW
                 elif course.name == "ITS Elective":
                     courseID = courseID+str(electiveCountWrapper["ITS"])
                     # Class allows formatting so words fit in course box
-                    courseDiv = createCourseDiv(soup, courseID, orCase)
+                    courseDiv = createCourseDiv(soup, courseID, orCase, minutesFromEight, minutesLong)
                     # id must include which number elective it is (electiveName0, electiveName1, electiveName2, ...)
                     courseDisc["id"] = courseDisc["id"][:-4] + str(electiveCountWrapper["ITS"]) + "desc"
                     electiveCountWrapper["ITS"] += 1
@@ -319,7 +321,8 @@ def placeCourses(daysTagsDict, termList, soup, plan, termcounter, electiveCountW
                     # This is a regular course. All information should be available
                     courseDiv = createCourseDiv(soup, 
                                                 courseID, 
-                                                orCase) 
+                                                orCase,
+                                                minutesLong) 
                     formatCourseDescriptionForRegular(soup, course, courseDisc)
 
                 # text appearing in course box (eg: CHEM 103)
@@ -371,6 +374,30 @@ def placeCourses(daysTagsDict, termList, soup, plan, termcounter, electiveCountW
                     courseContDiv.append(courseGroupList[i])
                 for dayTag in tagsList:
                     dayTag.append(deepcopy(courseContDiv))
+
+
+def calcMinutes(startTime):
+    colonIndex = startTime.find(":")
+    assert colonIndex != -1, "Error in start time, ensure the Excel file is properly formatted in the Hrs From column"
+    hours = int(startTime[:colonIndex])
+    minutes = int(startTime[colonIndex + 1:])
+    return (hours*60 + minutes) - 8*60
+
+def calcContainerHeight(startTime, endTime):
+    startColonIndex = startTime.find(":")
+    endColonIndex = startTime.find(":")
+    assert startColonIndex != -1, "Error in start time, ensure the Excel file is properly formatted in the Hrs From column"
+    assert endColonIndex != -1, "Error in end time, ensure the Excel file is properly formatted in the Hrs To column"
+
+    startHours = int(startTime[:startColonIndex])
+    startMinutes = int(startTime[startColonIndex + 1:])
+    startTime = startHours*60 + startMinutes
+
+    endHours = int(endTime[:endColonIndex])
+    endMinutes = int(endTime[endColonIndex + 1:])
+    endTime = endHours*60 + endMinutes
+
+    return endTime - startTime
 
 def extractCourseCategories(course):
     catListString = cleaner.cleanString(course.main_category)
@@ -435,19 +462,21 @@ def pickTooltipSide(termcounter, courseID, soup):
 #   courseID - ID of the course being placed (str)
 #   category - category of course in question
 #   orBool - boolean flag for OR cases, true if course is an OR case
-def createCourseDiv(soup, courseID, orBool):
+def createCourseDiv(soup, courseID, orBool, minutesLong):
     if orBool:
         # course is an OR case
         return soup.new_tag("div", attrs={"class":"orcourse tooltip",
                                             "id": courseID,
                                             "ng-click":courseID+"Listener()",
-                                            "ng-right-click":courseID+"RCListener()"})
+                                            "ng-right-click":courseID+"RCListener()",
+                                            "style":"height:" + str(minutesLong) + "px"})
     else:
         # course is a regular (non-OR) case
         return soup.new_tag("div",attrs= {"class":"course tooltip", 
                                                 "id": courseID, 
                                                 "ng-click":courseID+"Listener()",
-                                                "ng-right-click":courseID+"RCListener()"})
+                                                "ng-right-click":courseID+"RCListener()",
+                                                "style":"height:" + str(minutesLong) + "px"})
 
 # Function that writes the flags and variables associated with specific
 # course in the JS

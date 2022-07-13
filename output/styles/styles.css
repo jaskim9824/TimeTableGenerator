@@ -115,6 +115,7 @@ h3#planhead {
 #toprowcontainer {
     display: flex;
     flex-direction: row;
+    margin-bottom: 25px;
 }
 
 #planlegend {
@@ -137,7 +138,8 @@ h3#planhead {
 
 /* Wrapper div for the term names and course boxes, the main content */
 #main {
-    height: fit-content;
+    height: 3200px;
+    width: fit-content;
 }
 
 #explainertext {
@@ -174,8 +176,7 @@ h3#planhead {
 }
 
 .monday, .tuesday, .wednesday, .thursday, .friday {
-    padding-left: 125px;
-    padding-right: 125px;
+    width: 325px;
     text-align: center;
     font-size: 120%;
 }
@@ -196,7 +197,7 @@ h3#planhead {
 .coursecontainer, .coursegroupcontainer {
     display: flex;
     flex-direction: column;
-    margin-bottom: 50px;
+    padding-left: 80px;
 }
 
 .orcoursecontainer {
@@ -235,6 +236,7 @@ h3#planhead {
     text-align: center;
     position: relative;
     bottom: 4px;
+    font-size: 95%;
 }
       
 /* Course box styling */

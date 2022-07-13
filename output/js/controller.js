@@ -495,12 +495,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.TraditionalPlan2A3A4AList.length; i++) {
           this.TraditionalPlan2A3A4AList[i][0].show(true);
       }
-      width = this.TraditionalPlan2A3A4ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.TraditionalPlan2A3A4AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.TraditionalPlan2A3A4AClicked.length; i++) {
           var element = document.getElementById(this.TraditionalPlan2A3A4AClicked[i][0]);
           this.highlightElement(element, this.TraditionalPlan2A3A4AClicked[i][1]);
@@ -510,12 +504,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.TraditionalPlan2A3A4AList.length; i++) {
           this.TraditionalPlan2A3A4AList[i][0].show(true);
       }
-      width = this.TraditionalPlan2A3A4ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.TraditionalPlan2A3A4AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.TraditionalPlan2A3A4AClicked.length; i++) {
           var element = document.getElementById(this.TraditionalPlan2A3A4AClicked[i][0]);
           this.highlightElement(element, this.TraditionalPlan2A3A4AClicked[i][1]);
@@ -525,12 +513,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.TraditionalPlan2A3A4AList.length; i++) {
           this.TraditionalPlan2A3A4AList[i][0].show(true);
       }
-      width = this.TraditionalPlan2A3A4ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.TraditionalPlan2A3A4AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.TraditionalPlan2A3A4AClicked.length; i++) {
           var element = document.getElementById(this.TraditionalPlan2A3A4AClicked[i][0]);
           this.highlightElement(element, this.TraditionalPlan2A3A4AClicked[i][1]);
@@ -540,12 +522,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.TraditionalPlan2A3A4AList.length; i++) {
           this.TraditionalPlan2A3A4AList[i][0].show(true);
       }
-      width = this.TraditionalPlan2A3A4ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.TraditionalPlan2A3A4AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.TraditionalPlan2A3A4AClicked.length; i++) {
           var element = document.getElementById(this.TraditionalPlan2A3A4AClicked[i][0]);
           this.highlightElement(element, this.TraditionalPlan2A3A4AClicked[i][1]);
@@ -555,12 +531,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.TraditionalPlan2A3A4AList.length; i++) {
           this.TraditionalPlan2A3A4AList[i][0].show(true);
       }
-      width = this.TraditionalPlan2A3A4ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.TraditionalPlan2A3A4AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.TraditionalPlan2A3A4AClicked.length; i++) {
           var element = document.getElementById(this.TraditionalPlan2A3A4AClicked[i][0]);
           this.highlightElement(element, this.TraditionalPlan2A3A4AClicked[i][1]);
@@ -570,12 +540,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.TraditionalPlan2A3A4AList.length; i++) {
           this.TraditionalPlan2A3A4AList[i][0].show(true);
       }
-      width = this.TraditionalPlan2A3A4ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.TraditionalPlan2A3A4AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.TraditionalPlan2A3A4AClicked.length; i++) {
           var element = document.getElementById(this.TraditionalPlan2A3A4AClicked[i][0]);
           this.highlightElement(element, this.TraditionalPlan2A3A4AClicked[i][1]);
@@ -585,12 +549,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.TraditionalPlan2A3A4AList.length; i++) {
           this.TraditionalPlan2A3A4AList[i][0].show(true);
       }
-      width = this.TraditionalPlan2A3A4ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.TraditionalPlan2A3A4AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.TraditionalPlan2A3A4AClicked.length; i++) {
           var element = document.getElementById(this.TraditionalPlan2A3A4AClicked[i][0]);
           this.highlightElement(element, this.TraditionalPlan2A3A4AClicked[i][1]);
@@ -600,12 +558,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.TraditionalPlan2A3A4AList.length; i++) {
           this.TraditionalPlan2A3A4AList[i][0].show(true);
       }
-      width = this.TraditionalPlan2A3A4ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.TraditionalPlan2A3A4AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.TraditionalPlan2A3A4AClicked.length; i++) {
           var element = document.getElementById(this.TraditionalPlan2A3A4AClicked[i][0]);
           this.highlightElement(element, this.TraditionalPlan2A3A4AClicked[i][1]);
@@ -615,12 +567,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.AlternatePlan3A4AList.length; i++) {
           this.AlternatePlan3A4AList[i][0].show(true);
       }
-      width = this.AlternatePlan3A4ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.AlternatePlan3A4AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.AlternatePlan3A4AClicked.length; i++) {
           var element = document.getElementById(this.AlternatePlan3A4AClicked[i][0]);
           this.highlightElement(element, this.AlternatePlan3A4AClicked[i][1]);
@@ -630,12 +576,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.AlternatePlan3A4AList.length; i++) {
           this.AlternatePlan3A4AList[i][0].show(true);
       }
-      width = this.AlternatePlan3A4ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.AlternatePlan3A4AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.AlternatePlan3A4AClicked.length; i++) {
           var element = document.getElementById(this.AlternatePlan3A4AClicked[i][0]);
           this.highlightElement(element, this.AlternatePlan3A4AClicked[i][1]);
@@ -645,12 +585,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.AlternatePlan3A4AList.length; i++) {
           this.AlternatePlan3A4AList[i][0].show(true);
       }
-      width = this.AlternatePlan3A4ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.AlternatePlan3A4AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.AlternatePlan3A4AClicked.length; i++) {
           var element = document.getElementById(this.AlternatePlan3A4AClicked[i][0]);
           this.highlightElement(element, this.AlternatePlan3A4AClicked[i][1]);
@@ -660,12 +594,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.AlternatePlan3A4AList.length; i++) {
           this.AlternatePlan3A4AList[i][0].show(true);
       }
-      width = this.AlternatePlan3A4ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.AlternatePlan3A4AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.AlternatePlan3A4AClicked.length; i++) {
           var element = document.getElementById(this.AlternatePlan3A4AClicked[i][0]);
           this.highlightElement(element, this.AlternatePlan3A4AClicked[i][1]);
@@ -675,12 +603,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.AlternatePlan3A4AList.length; i++) {
           this.AlternatePlan3A4AList[i][0].show(true);
       }
-      width = this.AlternatePlan3A4ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.AlternatePlan3A4AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.AlternatePlan3A4AClicked.length; i++) {
           var element = document.getElementById(this.AlternatePlan3A4AClicked[i][0]);
           this.highlightElement(element, this.AlternatePlan3A4AClicked[i][1]);
@@ -690,12 +612,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.AlternatePlan3A4AList.length; i++) {
           this.AlternatePlan3A4AList[i][0].show(true);
       }
-      width = this.AlternatePlan3A4ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.AlternatePlan3A4AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.AlternatePlan3A4AClicked.length; i++) {
           var element = document.getElementById(this.AlternatePlan3A4AClicked[i][0]);
           this.highlightElement(element, this.AlternatePlan3A4AClicked[i][1]);
@@ -705,12 +621,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.AlternatePlan3A4AList.length; i++) {
           this.AlternatePlan3A4AList[i][0].show(true);
       }
-      width = this.AlternatePlan3A4ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.AlternatePlan3A4AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.AlternatePlan3A4AClicked.length; i++) {
           var element = document.getElementById(this.AlternatePlan3A4AClicked[i][0]);
           this.highlightElement(element, this.AlternatePlan3A4AClicked[i][1]);
@@ -720,12 +630,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.AlternatePlan3A4AList.length; i++) {
           this.AlternatePlan3A4AList[i][0].show(true);
       }
-      width = this.AlternatePlan3A4ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.AlternatePlan3A4AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.AlternatePlan3A4AClicked.length; i++) {
           var element = document.getElementById(this.AlternatePlan3A4AClicked[i][0]);
           this.highlightElement(element, this.AlternatePlan3A4AClicked[i][1]);
@@ -735,12 +639,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.AlternatePlan3A4AList.length; i++) {
           this.AlternatePlan3A4AList[i][0].show(true);
       }
-      width = this.AlternatePlan3A4ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.AlternatePlan3A4AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.AlternatePlan3A4AClicked.length; i++) {
           var element = document.getElementById(this.AlternatePlan3A4AClicked[i][0]);
           this.highlightElement(element, this.AlternatePlan3A4AClicked[i][1]);
@@ -750,12 +648,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan13AList.length; i++) {
           this.CoopPlan13AList[i][0].show(true);
       }
-      width = this.CoopPlan13ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan13AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan13AClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan13AClicked[i][0]);
           this.highlightElement(element, this.CoopPlan13AClicked[i][1]);
@@ -765,12 +657,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan13AList.length; i++) {
           this.CoopPlan13AList[i][0].show(true);
       }
-      width = this.CoopPlan13ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan13AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan13AClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan13AClicked[i][0]);
           this.highlightElement(element, this.CoopPlan13AClicked[i][1]);
@@ -780,12 +666,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan13AList.length; i++) {
           this.CoopPlan13AList[i][0].show(true);
       }
-      width = this.CoopPlan13ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan13AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan13AClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan13AClicked[i][0]);
           this.highlightElement(element, this.CoopPlan13AClicked[i][1]);
@@ -795,12 +675,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan13AList.length; i++) {
           this.CoopPlan13AList[i][0].show(true);
       }
-      width = this.CoopPlan13ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan13AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan13AClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan13AClicked[i][0]);
           this.highlightElement(element, this.CoopPlan13AClicked[i][1]);
@@ -810,12 +684,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan13AList.length; i++) {
           this.CoopPlan13AList[i][0].show(true);
       }
-      width = this.CoopPlan13ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan13AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan13AClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan13AClicked[i][0]);
           this.highlightElement(element, this.CoopPlan13AClicked[i][1]);
@@ -825,12 +693,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan13AList.length; i++) {
           this.CoopPlan13AList[i][0].show(true);
       }
-      width = this.CoopPlan13ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan13AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan13AClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan13AClicked[i][0]);
           this.highlightElement(element, this.CoopPlan13AClicked[i][1]);
@@ -840,12 +702,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan13AList.length; i++) {
           this.CoopPlan13AList[i][0].show(true);
       }
-      width = this.CoopPlan13ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan13AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan13AClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan13AClicked[i][0]);
           this.highlightElement(element, this.CoopPlan13AClicked[i][1]);
@@ -855,12 +711,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan13AList.length; i++) {
           this.CoopPlan13AList[i][0].show(true);
       }
-      width = this.CoopPlan13ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan13AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan13AClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan13AClicked[i][0]);
           this.highlightElement(element, this.CoopPlan13AClicked[i][1]);
@@ -870,12 +720,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan13AList.length; i++) {
           this.CoopPlan13AList[i][0].show(true);
       }
-      width = this.CoopPlan13ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan13AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan13AClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan13AClicked[i][0]);
           this.highlightElement(element, this.CoopPlan13AClicked[i][1]);
@@ -885,12 +729,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan13AList.length; i++) {
           this.CoopPlan13AList[i][0].show(true);
       }
-      width = this.CoopPlan13ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan13AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan13AClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan13AClicked[i][0]);
           this.highlightElement(element, this.CoopPlan13AClicked[i][1]);
@@ -900,12 +738,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan13AList.length; i++) {
           this.CoopPlan13AList[i][0].show(true);
       }
-      width = this.CoopPlan13ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan13AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan13AClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan13AClicked[i][0]);
           this.highlightElement(element, this.CoopPlan13AClicked[i][1]);
@@ -915,12 +747,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan13AList.length; i++) {
           this.CoopPlan13AList[i][0].show(true);
       }
-      width = this.CoopPlan13ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan13AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan13AClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan13AClicked[i][0]);
           this.highlightElement(element, this.CoopPlan13AClicked[i][1]);
@@ -930,12 +756,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan13AList.length; i++) {
           this.CoopPlan13AList[i][0].show(true);
       }
-      width = this.CoopPlan13ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan13AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan13AClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan13AClicked[i][0]);
           this.highlightElement(element, this.CoopPlan13AClicked[i][1]);
@@ -945,12 +765,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan23AList.length; i++) {
           this.CoopPlan23AList[i][0].show(true);
       }
-      width = this.CoopPlan23ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan23AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan23AClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan23AClicked[i][0]);
           this.highlightElement(element, this.CoopPlan23AClicked[i][1]);
@@ -960,12 +774,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan23AList.length; i++) {
           this.CoopPlan23AList[i][0].show(true);
       }
-      width = this.CoopPlan23ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan23AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan23AClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan23AClicked[i][0]);
           this.highlightElement(element, this.CoopPlan23AClicked[i][1]);
@@ -975,12 +783,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan23AList.length; i++) {
           this.CoopPlan23AList[i][0].show(true);
       }
-      width = this.CoopPlan23ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan23AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan23AClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan23AClicked[i][0]);
           this.highlightElement(element, this.CoopPlan23AClicked[i][1]);
@@ -990,12 +792,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan23AList.length; i++) {
           this.CoopPlan23AList[i][0].show(true);
       }
-      width = this.CoopPlan23ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan23AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan23AClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan23AClicked[i][0]);
           this.highlightElement(element, this.CoopPlan23AClicked[i][1]);
@@ -1005,12 +801,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan23AList.length; i++) {
           this.CoopPlan23AList[i][0].show(true);
       }
-      width = this.CoopPlan23ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan23AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan23AClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan23AClicked[i][0]);
           this.highlightElement(element, this.CoopPlan23AClicked[i][1]);
@@ -1020,12 +810,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan23AList.length; i++) {
           this.CoopPlan23AList[i][0].show(true);
       }
-      width = this.CoopPlan23ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan23AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan23AClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan23AClicked[i][0]);
           this.highlightElement(element, this.CoopPlan23AClicked[i][1]);
@@ -1035,12 +819,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan23AList.length; i++) {
           this.CoopPlan23AList[i][0].show(true);
       }
-      width = this.CoopPlan23ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan23AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan23AClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan23AClicked[i][0]);
           this.highlightElement(element, this.CoopPlan23AClicked[i][1]);
@@ -1050,12 +828,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan23AList.length; i++) {
           this.CoopPlan23AList[i][0].show(true);
       }
-      width = this.CoopPlan23ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan23AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan23AClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan23AClicked[i][0]);
           this.highlightElement(element, this.CoopPlan23AClicked[i][1]);
@@ -1065,12 +837,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan23AList.length; i++) {
           this.CoopPlan23AList[i][0].show(true);
       }
-      width = this.CoopPlan23ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan23AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan23AClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan23AClicked[i][0]);
           this.highlightElement(element, this.CoopPlan23AClicked[i][1]);
@@ -1080,12 +846,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan23AList.length; i++) {
           this.CoopPlan23AList[i][0].show(true);
       }
-      width = this.CoopPlan23ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan23AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan23AClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan23AClicked[i][0]);
           this.highlightElement(element, this.CoopPlan23AClicked[i][1]);
@@ -1095,12 +855,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan23AList.length; i++) {
           this.CoopPlan23AList[i][0].show(true);
       }
-      width = this.CoopPlan23ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan23AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan23AClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan23AClicked[i][0]);
           this.highlightElement(element, this.CoopPlan23AClicked[i][1]);
@@ -1110,12 +864,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan23AList.length; i++) {
           this.CoopPlan23AList[i][0].show(true);
       }
-      width = this.CoopPlan23ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan23AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan23AClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan23AClicked[i][0]);
           this.highlightElement(element, this.CoopPlan23AClicked[i][1]);
@@ -1125,12 +873,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan23AList.length; i++) {
           this.CoopPlan23AList[i][0].show(true);
       }
-      width = this.CoopPlan23ATerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan23AMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan23AClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan23AClicked[i][0]);
           this.highlightElement(element, this.CoopPlan23AClicked[i][1]);
@@ -1140,12 +882,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan3BiomedicalList.length; i++) {
           this.CoopPlan3BiomedicalList[i][0].show(true);
       }
-      width = this.CoopPlan3BiomedicalTerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan3BiomedicalMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan3BiomedicalClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan3BiomedicalClicked[i][0]);
           this.highlightElement(element, this.CoopPlan3BiomedicalClicked[i][1]);
@@ -1155,12 +891,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan3BiomedicalList.length; i++) {
           this.CoopPlan3BiomedicalList[i][0].show(true);
       }
-      width = this.CoopPlan3BiomedicalTerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan3BiomedicalMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan3BiomedicalClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan3BiomedicalClicked[i][0]);
           this.highlightElement(element, this.CoopPlan3BiomedicalClicked[i][1]);
@@ -1170,12 +900,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan3BiomedicalList.length; i++) {
           this.CoopPlan3BiomedicalList[i][0].show(true);
       }
-      width = this.CoopPlan3BiomedicalTerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan3BiomedicalMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan3BiomedicalClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan3BiomedicalClicked[i][0]);
           this.highlightElement(element, this.CoopPlan3BiomedicalClicked[i][1]);
@@ -1185,12 +909,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan3BiomedicalList.length; i++) {
           this.CoopPlan3BiomedicalList[i][0].show(true);
       }
-      width = this.CoopPlan3BiomedicalTerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan3BiomedicalMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan3BiomedicalClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan3BiomedicalClicked[i][0]);
           this.highlightElement(element, this.CoopPlan3BiomedicalClicked[i][1]);
@@ -1200,12 +918,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan3BiomedicalList.length; i++) {
           this.CoopPlan3BiomedicalList[i][0].show(true);
       }
-      width = this.CoopPlan3BiomedicalTerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan3BiomedicalMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan3BiomedicalClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan3BiomedicalClicked[i][0]);
           this.highlightElement(element, this.CoopPlan3BiomedicalClicked[i][1]);
@@ -1215,12 +927,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan3BiomedicalList.length; i++) {
           this.CoopPlan3BiomedicalList[i][0].show(true);
       }
-      width = this.CoopPlan3BiomedicalTerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan3BiomedicalMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan3BiomedicalClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan3BiomedicalClicked[i][0]);
           this.highlightElement(element, this.CoopPlan3BiomedicalClicked[i][1]);
@@ -1230,12 +936,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan3BiomedicalList.length; i++) {
           this.CoopPlan3BiomedicalList[i][0].show(true);
       }
-      width = this.CoopPlan3BiomedicalTerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan3BiomedicalMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan3BiomedicalClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan3BiomedicalClicked[i][0]);
           this.highlightElement(element, this.CoopPlan3BiomedicalClicked[i][1]);
@@ -1245,12 +945,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan3BiomedicalList.length; i++) {
           this.CoopPlan3BiomedicalList[i][0].show(true);
       }
-      width = this.CoopPlan3BiomedicalTerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan3BiomedicalMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan3BiomedicalClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan3BiomedicalClicked[i][0]);
           this.highlightElement(element, this.CoopPlan3BiomedicalClicked[i][1]);
@@ -1260,12 +954,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan3BiomedicalList.length; i++) {
           this.CoopPlan3BiomedicalList[i][0].show(true);
       }
-      width = this.CoopPlan3BiomedicalTerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan3BiomedicalMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan3BiomedicalClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan3BiomedicalClicked[i][0]);
           this.highlightElement(element, this.CoopPlan3BiomedicalClicked[i][1]);
@@ -1275,12 +963,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan3BiomedicalList.length; i++) {
           this.CoopPlan3BiomedicalList[i][0].show(true);
       }
-      width = this.CoopPlan3BiomedicalTerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan3BiomedicalMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan3BiomedicalClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan3BiomedicalClicked[i][0]);
           this.highlightElement(element, this.CoopPlan3BiomedicalClicked[i][1]);
@@ -1290,12 +972,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan3BiomedicalList.length; i++) {
           this.CoopPlan3BiomedicalList[i][0].show(true);
       }
-      width = this.CoopPlan3BiomedicalTerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan3BiomedicalMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan3BiomedicalClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan3BiomedicalClicked[i][0]);
           this.highlightElement(element, this.CoopPlan3BiomedicalClicked[i][1]);
@@ -1305,12 +981,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan3BiomedicalList.length; i++) {
           this.CoopPlan3BiomedicalList[i][0].show(true);
       }
-      width = this.CoopPlan3BiomedicalTerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan3BiomedicalMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan3BiomedicalClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan3BiomedicalClicked[i][0]);
           this.highlightElement(element, this.CoopPlan3BiomedicalClicked[i][1]);
@@ -1320,12 +990,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan3BiomedicalList.length; i++) {
           this.CoopPlan3BiomedicalList[i][0].show(true);
       }
-      width = this.CoopPlan3BiomedicalTerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan3BiomedicalMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan3BiomedicalClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan3BiomedicalClicked[i][0]);
           this.highlightElement(element, this.CoopPlan3BiomedicalClicked[i][1]);
@@ -1335,12 +999,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan43BList.length; i++) {
           this.CoopPlan43BList[i][0].show(true);
       }
-      width = this.CoopPlan43BTerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan43BMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan43BClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan43BClicked[i][0]);
           this.highlightElement(element, this.CoopPlan43BClicked[i][1]);
@@ -1350,12 +1008,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan43BList.length; i++) {
           this.CoopPlan43BList[i][0].show(true);
       }
-      width = this.CoopPlan43BTerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan43BMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan43BClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan43BClicked[i][0]);
           this.highlightElement(element, this.CoopPlan43BClicked[i][1]);
@@ -1365,12 +1017,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan43BList.length; i++) {
           this.CoopPlan43BList[i][0].show(true);
       }
-      width = this.CoopPlan43BTerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan43BMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan43BClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan43BClicked[i][0]);
           this.highlightElement(element, this.CoopPlan43BClicked[i][1]);
@@ -1380,12 +1026,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan43BList.length; i++) {
           this.CoopPlan43BList[i][0].show(true);
       }
-      width = this.CoopPlan43BTerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan43BMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan43BClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan43BClicked[i][0]);
           this.highlightElement(element, this.CoopPlan43BClicked[i][1]);
@@ -1395,12 +1035,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan43BList.length; i++) {
           this.CoopPlan43BList[i][0].show(true);
       }
-      width = this.CoopPlan43BTerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan43BMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan43BClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan43BClicked[i][0]);
           this.highlightElement(element, this.CoopPlan43BClicked[i][1]);
@@ -1410,12 +1044,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan43BList.length; i++) {
           this.CoopPlan43BList[i][0].show(true);
       }
-      width = this.CoopPlan43BTerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan43BMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan43BClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan43BClicked[i][0]);
           this.highlightElement(element, this.CoopPlan43BClicked[i][1]);
@@ -1425,12 +1053,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan43BList.length; i++) {
           this.CoopPlan43BList[i][0].show(true);
       }
-      width = this.CoopPlan43BTerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan43BMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan43BClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan43BClicked[i][0]);
           this.highlightElement(element, this.CoopPlan43BClicked[i][1]);
@@ -1440,12 +1062,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan43BList.length; i++) {
           this.CoopPlan43BList[i][0].show(true);
       }
-      width = this.CoopPlan43BTerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan43BMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan43BClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan43BClicked[i][0]);
           this.highlightElement(element, this.CoopPlan43BClicked[i][1]);
@@ -1455,12 +1071,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan43BList.length; i++) {
           this.CoopPlan43BList[i][0].show(true);
       }
-      width = this.CoopPlan43BTerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan43BMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan43BClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan43BClicked[i][0]);
           this.highlightElement(element, this.CoopPlan43BClicked[i][1]);
@@ -1470,12 +1080,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan43BList.length; i++) {
           this.CoopPlan43BList[i][0].show(true);
       }
-      width = this.CoopPlan43BTerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan43BMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan43BClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan43BClicked[i][0]);
           this.highlightElement(element, this.CoopPlan43BClicked[i][1]);
@@ -1485,12 +1089,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan43BList.length; i++) {
           this.CoopPlan43BList[i][0].show(true);
       }
-      width = this.CoopPlan43BTerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan43BMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan43BClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan43BClicked[i][0]);
           this.highlightElement(element, this.CoopPlan43BClicked[i][1]);
@@ -1500,12 +1098,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan43BList.length; i++) {
           this.CoopPlan43BList[i][0].show(true);
       }
-      width = this.CoopPlan43BTerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan43BMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan43BClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan43BClicked[i][0]);
           this.highlightElement(element, this.CoopPlan43BClicked[i][1]);
@@ -1515,12 +1107,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan43BList.length; i++) {
           this.CoopPlan43BList[i][0].show(true);
       }
-      width = this.CoopPlan43BTerms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.CoopPlan43BMaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.CoopPlan43BClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan43BClicked[i][0]);
           this.highlightElement(element, this.CoopPlan43BClicked[i][1]);
