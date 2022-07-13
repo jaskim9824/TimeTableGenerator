@@ -309,7 +309,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, termcounter, electiveCountW
                     courseGroupTitle.append("Course Group " + course.courseGroup)
                 else:
                     # not in a course group
-                    courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", "style":"position:absolute; top:" + str(70 + 2*minutesFromEight) + "px; height:" + str((122/60)*minutesLong) + "px"})
+                    courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", "style":"position:absolute; top:" + str(38 + (135/60)*minutesFromEight) + "px; height:" + str((122/60)*minutesLong) + "px"})
 
                 # Prevent tooltip from being off screen
                 courseDisc = pickTooltipSide(termcounter, courseID, soup)
