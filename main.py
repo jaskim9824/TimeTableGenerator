@@ -37,13 +37,7 @@ def main():
 
             courseGroupTag = mainTag.find(id = "optionlegend")
 
-            htmlgen.placeRadioInputs(formTag, termTag, courseGroupTag, courseGroupDict, sequenceDict, soup)
-
-            # locating course group selector
-            # courseGroupSelectTag = soup.body.find("div", class_="coursegroupselector")
-
-            # placing submenu radio inputs
-            # htmlgen.placeCourseGroupRadioInputs(courseGroupSelectTag, soup, courseGroupDict)
+            htmlgen.placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, soup)
 
             displayTag = htmlgen.generateDisplayDiv(soup, courseGroupList)
 

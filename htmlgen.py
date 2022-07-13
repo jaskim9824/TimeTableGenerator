@@ -43,7 +43,7 @@ def switchTitle(titleTag, topTitleTag, deptName):
 #   courseGroupTag - div HTML tag where the course group radio inputs will be placed
 #   courseGroupDict - dict that maps the plans to the course groups in it
 #   soup - soup object, used to create HTML tags
-def placeRadioInputs(formTag, termTag, courseGroupTag, courseGroupDict, sequenceDict, soup):
+def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, soup):
     for plan in sequenceDict:
         # radio inputs for selecting plan, can ng-model directly to selectedPlan
         radioInput = soup.new_tag("input", attrs={"type":"radio", 
@@ -206,29 +206,70 @@ def placeCourseGroupRadioInputsForSubPlan(subPlanTag, soup, subPlanOptionList, s
 #   planTag - HTML tag representing the plan sequence in question
 #   planDict - dict that maps a course list to each term in the plan
 #   soup - soup object, used to create HTML tags
-#   indexJS - file handle for index.js, used to write to index.js
-#   controller - file handle for controller.js, used to write to controller.js
 #   plan - name of plan whose terms are being placed
-#   lineManager - line manager object, used to handle line placement and generation
+#   term - name of the term whose courses are being placed
 def placeTermDivs(planTag, planDict, soup, plan, term):
-    # wrapper that holds the number of each type of elective taken this plan
+    # wrapper that holds the number of each type of elective taken in this plan
     electiveCounterWrapper = {"ITS": 0, "PROG": 0, "COMP": 0}
-    # count of amount of term columns placed in the plan
-    termcounter = 0
+    termcounter = 0  # count of amount of term columns placed in the plan
 
-    termDiv = soup.new_tag("div", attrs={"class":"coursegrid"})
-    timeDiv = soup.new_tag("div", attrs={"class":"time"})
-    for i in range(8, 22):
+    termDiv = soup.new_tag("div", attrs={"class":"coursegrid"})  # grid of flexboxes that displays timetable
+
+    timeDiv = createTimeGridDivs(soup)  # writes text for each hour & draws horizontal dividing lines
+    termDiv.append(timeDiv)
+
+    # creating the flexboxes for each day of week
+    mondayDiv, tuesdayDiv, wednesdayDiv, thursdayDiv, fridayDiv, daysTagsDict = createDailyDivs(soup)
+
+    # placing courses on mondayDiv, tuesdayDiv, etc. then appending to termDiv
+    placeCourses(daysTagsDict, planDict[term], soup, plan, termcounter, electiveCounterWrapper)
+    termDiv.append(mondayDiv)
+    termDiv.append(tuesdayDiv)
+    termDiv.append(wednesdayDiv)
+    termDiv.append(thursdayDiv)
+    termDiv.append(fridayDiv)
+    planTag.append(termDiv)
+
+    termcounter += 1
+    # generating a list of all courses taken in this plan
+    courseList = []
+    for courses in planDict.values():
+        courseList += courses
+
+# Creates a div for the left of the webpage that has hours from 8:00 to 21:00
+# going down the side of the page.
+# Parameters:
+#   soup - soup object, used to create HTML tags
+# Returns:
+#   timeDiv - HTML div with the text for each hour in a subdiv
+def createTimeGridDivs(soup):
+    timeDiv = soup.new_tag("div", attrs={"class":"time"})  # leftmost flexbox with times running down left of page
+    for i in range(8, 22):  # for hours between 8am-9pm
         timeSlotDiv = soup.new_tag("div", attrs={"class":"timeslot"})
         timeSlotDiv.append(str(i) + ":00")
         timeDiv.append(soup.new_tag("hr", attrs={"class":"horizontaltimedivider"}))
         timeDiv.append(timeSlotDiv)
-    termDiv.append(timeDiv)
+    
+    return timeDiv
 
+# Creates the div for each day of the week. Each div will hold all of the courses taken during that day.
+# Also creates a horizontal dividing line running across the entire page at each hour to create a grid.
+# Parameters:
+#   soup - soup object, used to create HTML tags
+# Returns:
+#   mondayDiv - HTML div tag for monday. Holds horizontal dividing line
+#   tuesdayDiv - HTML div tag for tuesday
+#   wednesdayDiv - HTML div tag for wednesday
+#   thursdayDiv - HTML div tag for thursday
+#   fridayDiv - HTML div tag for friday
+#   daysTagsDict - dict mapping day of week ("monday", "tuesday", etc.) to the div
+#   for that day of the week. Useful to shortcut to the div one requires
+def createDailyDivs(soup):
     mondayDiv = soup.new_tag("div", attrs={"class":"monday"})
     mondayDiv.append("Monday")
-    mondayDiv.append(soup.new_tag("hr", attrs={"class":"horizontaltopdivider"}))
+    mondayDiv.append(soup.new_tag("hr", attrs={"class":"horizontaltopdivider"}))  # creating the horizontal dividing line
     for i in range(1, 14):
+        # placing the horizontal dividing line, position determined by ratio of px to hour
         mondayDiv.append(soup.new_tag("hr", attrs={"class":"horizontalcoursedivider", "style":"position:absolute; top:" + str(22.15+135.35*i) + "px"}))
     tuesdayDiv = soup.new_tag("div", attrs={"class":"tuesday"})
     tuesdayDiv.append("Tuesday")
@@ -249,27 +290,18 @@ def placeTermDivs(planTag, planDict, soup, plan, term):
     daysTagsDict["thursday"] = thursdayDiv
     daysTagsDict["friday"] = fridayDiv
 
-    placeCourses(daysTagsDict, planDict[term], soup, plan, termcounter, electiveCounterWrapper)
-    termDiv.append(mondayDiv)
-    termDiv.append(tuesdayDiv)
-    termDiv.append(wednesdayDiv)
-    termDiv.append(thursdayDiv)
-    termDiv.append(fridayDiv)
-    planTag.append(termDiv)
-    termcounter += 1
-    # generating a list of all courses taken in this plan
-    courseList = []
-    for courses in planDict.values():
-        courseList += courses
+    return mondayDiv, tuesdayDiv, wednesdayDiv, thursdayDiv, fridayDiv, daysTagsDict
 
 # Function that places the course divs within a certain term column of a certain plan
 # Parameters:
-#   termTag - HTML tag representing the specfic term column in question
+#   daysTagsDict - dict mapping day of week ("monday", "tuesday", etc.) to the div
+#   for that day of the week. Useful to shortcut to the div one requires
 #   termList - list of courses being taken that term
 #   soup - soup object, used to create HTML tags
-#   controller - file handle for controller.js, used to write to controller.js
 #   plan - name of plan whose terms are being placed
 #   termcounter - which term is currently being placed (int)
+#   electiveCountWrapper - dict mapping elective abbreviated name ("ITS", "PROG", "COMP")
+#   to count of current ocurrence of that elective
 # Returns:
 #   compcounter, progcounter, itscounter
 def placeCourses(daysTagsDict, termList, soup, plan, termcounter, electiveCountWrapper):
@@ -281,8 +313,9 @@ def placeCourses(daysTagsDict, termList, soup, plan, termcounter, electiveCountW
         for courseWrapper in courseWrapperList:
             for course in courseWrapper.sections:
                 tagsList = []
-                minutesFromEight = calcMinutes(course.hrsFrom)
-                minutesLong = calcContainerHeight(course.hrsFrom, course.hrsTo)
+                minutesFromEight = calcMinutes(course.hrsFrom)  # minutes from 8:00 to start of class
+                minutesLong = calcContainerHeight(course.hrsFrom, course.hrsTo)  # duration of class
+                # save the tags we will need to append to for later
                 if course.mon == 'Y':
                     tagsList.append(daysTagsDict["monday"])
                 if course.tues == 'Y':
@@ -311,8 +344,9 @@ def placeCourses(daysTagsDict, termList, soup, plan, termcounter, electiveCountW
                     # not in a course group
                     courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", "style":"position:absolute; top:" + str(38 + (135/60)*minutesFromEight) + "px; height:" + str((122/60)*minutesLong) + "px"})
 
-                # Prevent tooltip from being off screen
-                courseDisc = pickTooltipSide(termcounter, courseID, soup)
+                courseDisc = soup.new_tag("div", attrs={"id":courseID+"desc",
+                                                "class":"tooltiptextright",
+                                                "ng-click":"$event.stopPropagation()"})
 
                 # Constructing course div, check for special cases
                 if course.name == "Complementary Elective":
@@ -323,10 +357,6 @@ def placeCourses(daysTagsDict, termList, soup, plan, termcounter, electiveCountW
                     courseDisc["id"] = courseDisc["id"][:-4] + str(electiveCountWrapper["COMP"]) + "desc"
                     electiveCountWrapper["COMP"] += 1
                     formatCourseDescriptionForElective(soup, course, courseDisc)
-                    # Adding link to list of electives DUMMY LINK FOR NOW
-                    # linkTag = soup.new_tag("a", href=electiveLinkDict["COMP"], target="_blank")
-                    # linkTag.append("List of electives")
-                    # courseDisc.append(linkTag)
 
                 elif course.name == "Program/Technical Elective":
                     # Class allows formatting so words fit in course box
@@ -336,10 +366,6 @@ def placeCourses(daysTagsDict, termList, soup, plan, termcounter, electiveCountW
                     courseDisc["id"] = courseDisc["id"][:-4] + str(electiveCountWrapper["PROG"]) + "desc"
                     electiveCountWrapper["PROG"] += 1
                     formatCourseDescriptionForElective(soup, course, courseDisc)
-                    # Adding link to list of electives DUMMY LINK FOR NOW
-                    # linkTag = soup.new_tag("a", href=electiveLinkDict["PROG"], target="_blank")
-                    # linkTag.append("List of electives")
-                    # courseDisc.append(linkTag)
 
                 elif course.name == "ITS Elective":
                     courseID = courseID+str(electiveCountWrapper["ITS"])
@@ -349,10 +375,6 @@ def placeCourses(daysTagsDict, termList, soup, plan, termcounter, electiveCountW
                     courseDisc["id"] = courseDisc["id"][:-4] + str(electiveCountWrapper["ITS"]) + "desc"
                     electiveCountWrapper["ITS"] += 1
                     formatCourseDescriptionForElective(soup, course, courseDisc)
-                    # Adding link to list of electives DUMMY LINK FOR NOW
-                    # linkTag = soup.new_tag("a", href=electiveLinkDict["ITS"], target="_blank")
-                    # linkTag.append("List of electives")
-                    # courseDisc.append(linkTag)
 
                 else:
                     # This is a regular course. All information should be available
@@ -394,13 +416,17 @@ def placeCourses(daysTagsDict, termList, soup, plan, termcounter, electiveCountW
 
                 if not skipAddCourseFlag:
                     courseContDiv.append(courseDiv)
-                    for dayTag in tagsList: 
+                    for dayTag in tagsList:
+                        if dayTagInLateWeek(dayTag) and ("class=\"tooltiptextright\"") in str(courseContDiv):
+                            courseContDiv.find(class_="tooltiptextright")["class"] = "tooltiptextleft"
                         dayTag.append(deepcopy(courseContDiv))
 
             if courseGroupTitle != "":
                 for dayTag in tagsList:
                     # Need to add course group title, outside of course group box so
                     # append directly to termTag
+                    if dayTagInLateWeek(dayTag) and ("class=\"tooltiptextright\"") in str(courseContDiv):
+                        courseContDiv.find(class_="tooltiptextright")["class"] = "tooltiptextleft"
                     dayTag.append(deepcopy(courseGroupTitle))
             if courseGroupList != []:
                 # A course group is involved. Append each course to the coursegroupcontainer,
@@ -410,8 +436,9 @@ def placeCourses(daysTagsDict, termList, soup, plan, termcounter, electiveCountW
                         courseGroupList[i]["class"].append("lastcourseingroup")  # last course has no bottom margin
                     courseContDiv.append(courseGroupList[i])
                 for dayTag in tagsList:
+                    if dayTagInLateWeek(dayTag) and ("class=\"tooltiptextright\"") in str(courseContDiv):
+                        courseContDiv.find(class_="tooltiptextright")["class"] = "tooltiptextleft"
                     dayTag.append(deepcopy(courseContDiv))
-
 
 def calcMinutes(startTime):
     colonIndex = startTime.find(":")
@@ -467,31 +494,18 @@ def addOrCourses(courseOrList, courseGroup, courseGroupList, tagsList, soup):
     else:
         for dayTag in tagsList:
             # not in a course group, append directly to termTag
+            if dayTagInLateWeek(dayTag) and ("class=\"tooltiptextright\"" in str(courseOrContDiv)):
+                courseOrContDiv.find(class_="tooltiptextright")["class"] = "tooltiptextleft"
             dayTag.append(deepcopy(courseOrContDiv))
     courseOrList = []  # reset in case multiple OR cases in a term
 
-# Determines which side a tooltip should appear on based on the term position on the page.
-# If the term is near the left side, the tooltip appears on the right and vice versa.
-# Terms 1,2 and 3 have tooltips on the right, all others on the left.
-# Parameters:
-#   termcounter - which term is currently being placed (int)
-#   courseID - ID of the course being placed (str)
-#   soup - soup object, used to create HTML tags 
-# Returns:
-#   courseDisc - course disc HTML tag
-def pickTooltipSide(termcounter, courseID, soup):
-    if termcounter < 4:
-        # Term is on the left of the page, tooltip should be on right
-        courseDisc = soup.new_tag("div", attrs={"id":courseID+"desc",
-                                                "class":"tooltiptextright",
-                                                "ng-click":"$event.stopPropagation()"})
+def dayTagInLateWeek(dayTag):
+    if "class=\"thursday\"" in str(dayTag):
+        return True
+    elif "class=\"friday\"" in str(dayTag):
+        return True
     else:
-        # Term is on the right of the page, tooltip should be on left
-        courseDisc = soup.new_tag("div", attrs={"id":courseID+"desc",
-                                                "class":"tooltiptextleft",
-                                                "ng-click":"$event.stopPropagation()"})
-
-    return courseDisc
+        return False
 
 # Function that constructs a course div
 # Parameters:
