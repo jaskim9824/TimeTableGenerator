@@ -197,14 +197,19 @@ def placeTermDivs(planTag, planDict, soup, plan, term):
 
     mondayDiv = soup.new_tag("div", attrs={"class":"monday"})
     mondayDiv.append("Monday")
+    mondayDiv.append(soup.new_tag("hr", attrs={"class":"daytopline"}))
     tuesdayDiv = soup.new_tag("div", attrs={"class":"tuesday"})
     tuesdayDiv.append("Tuesday")
+    tuesdayDiv.append(soup.new_tag("hr", attrs={"class":"daytopline"}))
     wednesdayDiv = soup.new_tag("div", attrs={"class":"wednesday"})
     wednesdayDiv.append("Wednesday")
+    wednesdayDiv.append(soup.new_tag("hr", attrs={"class":"daytopline"}))
     thursdayDiv = soup.new_tag("div", attrs={"class":"thursday"})
     thursdayDiv.append("Thursday")
+    thursdayDiv.append(soup.new_tag("hr", attrs={"class":"daytopline"}))
     fridayDiv = soup.new_tag("div", attrs={"class":"friday"})
     fridayDiv.append("Friday")
+    fridayDiv.append(soup.new_tag("hr", attrs={"class":"daytopline"}))
     daysTagsDict = {}
     daysTagsDict["monday"] = mondayDiv
     daysTagsDict["tuesday"] = tuesdayDiv
@@ -272,7 +277,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, termcounter, electiveCountW
                     courseGroupTitle.append("Course Group " + course.courseGroup)
                 else:
                     # not in a course group
-                    courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", "style":"position:absolute; top:" + str(50 + 3*minutesFromEight) + "px; height:" + str(minutesLong) + "px"})
+                    courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", "style":"position:absolute; top:" + str(70 + 2*minutesFromEight) + "px; height:" + str((122/60)*minutesLong) + "px"})
 
                 # Prevent tooltip from being off screen
                 courseDisc = pickTooltipSide(termcounter, courseID, soup)
@@ -469,14 +474,14 @@ def createCourseDiv(soup, courseID, orBool, minutesLong):
                                             "id": courseID,
                                             "ng-click":courseID+"Listener()",
                                             "ng-right-click":courseID+"RCListener()",
-                                            "style":"height:" + str(minutesLong) + "px"})
+                                            "style":"height:" + str((122/60)*minutesLong) + "px"})
     else:
         # course is a regular (non-OR) case
         return soup.new_tag("div",attrs= {"class":"course tooltip", 
                                                 "id": courseID, 
                                                 "ng-click":courseID+"Listener()",
                                                 "ng-right-click":courseID+"RCListener()",
-                                                "style":"height:" + str(minutesLong) + "px"})
+                                                "style":"height:" + str((122/60)*minutesLong) + "px"})
 
 # Function that writes the flags and variables associated with specific
 # course in the JS
