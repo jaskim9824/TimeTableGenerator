@@ -129,7 +129,6 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, courseGroupDict, sequence
                                                                   "value":option[i],
                                                                   "id":option[i]})
                                 wrapDiv.append(radioInput)
-                    else:
                             
 
                             

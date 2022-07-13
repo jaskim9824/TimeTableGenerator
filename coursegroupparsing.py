@@ -113,7 +113,6 @@ def extractingListofOptions(sequenceDict):
             listOptionsDict[plan][term] = []
             optionsList = []
             for course in sequenceDict[plan][term]:
-                print(course)
                 if len(course) <= 1:
                     continue
                 if type(course[0]) == type([]):

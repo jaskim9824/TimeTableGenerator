@@ -474,387 +474,387 @@ this.enable = function(plan) {
       for (let i = 0; i < this.TraditionalPlanList.length; i++) {
           this.TraditionalPlanList[i][0].show(true);
       }
-      for (let i = 0; i < this.TraditionalPlan2A3A4AClicked.length; i++) {
-          var element = document.getElementById(this.TraditionalPlan2A3A4AClicked[i][0]);
-          this.highlightElement(element, this.TraditionalPlan2A3A4AClicked[i][1]);
+      for (let i = 0; i < this.TraditionalPlanClicked.length; i++) {
+          var element = document.getElementById(this.TraditionalPlanClicked[i][0]);
+          this.highlightElement(element, this.TraditionalPlanClicked[i][1]);
       }
       break; 
     case "TraditionalPlanWinterTerm2": 
       for (let i = 0; i < this.TraditionalPlanList.length; i++) {
           this.TraditionalPlanList[i][0].show(true);
       }
-      for (let i = 0; i < this.TraditionalPlan2A3A4AClicked.length; i++) {
-          var element = document.getElementById(this.TraditionalPlan2A3A4AClicked[i][0]);
-          this.highlightElement(element, this.TraditionalPlan2A3A4AClicked[i][1]);
+      for (let i = 0; i < this.TraditionalPlanClicked.length; i++) {
+          var element = document.getElementById(this.TraditionalPlanClicked[i][0]);
+          this.highlightElement(element, this.TraditionalPlanClicked[i][1]);
       }
       break; 
     case "TraditionalPlanFallTerm3": 
       for (let i = 0; i < this.TraditionalPlanList.length; i++) {
           this.TraditionalPlanList[i][0].show(true);
       }
-      for (let i = 0; i < this.TraditionalPlan2A3A4AClicked.length; i++) {
-          var element = document.getElementById(this.TraditionalPlan2A3A4AClicked[i][0]);
-          this.highlightElement(element, this.TraditionalPlan2A3A4AClicked[i][1]);
+      for (let i = 0; i < this.TraditionalPlanClicked.length; i++) {
+          var element = document.getElementById(this.TraditionalPlanClicked[i][0]);
+          this.highlightElement(element, this.TraditionalPlanClicked[i][1]);
       }
       break; 
     case "TraditionalPlanWinterTerm4": 
       for (let i = 0; i < this.TraditionalPlanList.length; i++) {
           this.TraditionalPlanList[i][0].show(true);
       }
-      for (let i = 0; i < this.TraditionalPlan2A3A4AClicked.length; i++) {
-          var element = document.getElementById(this.TraditionalPlan2A3A4AClicked[i][0]);
-          this.highlightElement(element, this.TraditionalPlan2A3A4AClicked[i][1]);
+      for (let i = 0; i < this.TraditionalPlanClicked.length; i++) {
+          var element = document.getElementById(this.TraditionalPlanClicked[i][0]);
+          this.highlightElement(element, this.TraditionalPlanClicked[i][1]);
       }
       break; 
     case "TraditionalPlanFallTerm5": 
       for (let i = 0; i < this.TraditionalPlanList.length; i++) {
           this.TraditionalPlanList[i][0].show(true);
       }
-      for (let i = 0; i < this.TraditionalPlan2A3A4AClicked.length; i++) {
-          var element = document.getElementById(this.TraditionalPlan2A3A4AClicked[i][0]);
-          this.highlightElement(element, this.TraditionalPlan2A3A4AClicked[i][1]);
+      for (let i = 0; i < this.TraditionalPlanClicked.length; i++) {
+          var element = document.getElementById(this.TraditionalPlanClicked[i][0]);
+          this.highlightElement(element, this.TraditionalPlanClicked[i][1]);
       }
       break; 
     case "TraditionalPlanWinterTerm6": 
       for (let i = 0; i < this.TraditionalPlanList.length; i++) {
           this.TraditionalPlanList[i][0].show(true);
       }
-      for (let i = 0; i < this.TraditionalPlan2A3A4AClicked.length; i++) {
-          var element = document.getElementById(this.TraditionalPlan2A3A4AClicked[i][0]);
-          this.highlightElement(element, this.TraditionalPlan2A3A4AClicked[i][1]);
+      for (let i = 0; i < this.TraditionalPlanClicked.length; i++) {
+          var element = document.getElementById(this.TraditionalPlanClicked[i][0]);
+          this.highlightElement(element, this.TraditionalPlanClicked[i][1]);
       }
       break; 
     case "TraditionalPlanFallTerm7": 
       for (let i = 0; i < this.TraditionalPlanList.length; i++) {
           this.TraditionalPlanList[i][0].show(true);
       }
-      for (let i = 0; i < this.TraditionalPlan2A3A4AClicked.length; i++) {
-          var element = document.getElementById(this.TraditionalPlan2A3A4AClicked[i][0]);
-          this.highlightElement(element, this.TraditionalPlan2A3A4AClicked[i][1]);
+      for (let i = 0; i < this.TraditionalPlanClicked.length; i++) {
+          var element = document.getElementById(this.TraditionalPlanClicked[i][0]);
+          this.highlightElement(element, this.TraditionalPlanClicked[i][1]);
       }
       break; 
     case "TraditionalPlanWinterTerm8": 
       for (let i = 0; i < this.TraditionalPlanList.length; i++) {
           this.TraditionalPlanList[i][0].show(true);
       }
-      for (let i = 0; i < this.TraditionalPlan2A3A4AClicked.length; i++) {
-          var element = document.getElementById(this.TraditionalPlan2A3A4AClicked[i][0]);
-          this.highlightElement(element, this.TraditionalPlan2A3A4AClicked[i][1]);
+      for (let i = 0; i < this.TraditionalPlanClicked.length; i++) {
+          var element = document.getElementById(this.TraditionalPlanClicked[i][0]);
+          this.highlightElement(element, this.TraditionalPlanClicked[i][1]);
       }
       break; 
     case "AlternatePlanFallTerm1": 
       for (let i = 0; i < this.AlternatePlanList.length; i++) {
           this.AlternatePlanList[i][0].show(true);
       }
-      for (let i = 0; i < this.AlternatePlan3A4AClicked.length; i++) {
-          var element = document.getElementById(this.AlternatePlan3A4AClicked[i][0]);
-          this.highlightElement(element, this.AlternatePlan3A4AClicked[i][1]);
+      for (let i = 0; i < this.AlternatePlanClicked.length; i++) {
+          var element = document.getElementById(this.AlternatePlanClicked[i][0]);
+          this.highlightElement(element, this.AlternatePlanClicked[i][1]);
       }
       break; 
     case "AlternatePlanWinterTerm2": 
       for (let i = 0; i < this.AlternatePlanList.length; i++) {
           this.AlternatePlanList[i][0].show(true);
       }
-      for (let i = 0; i < this.AlternatePlan3A4AClicked.length; i++) {
-          var element = document.getElementById(this.AlternatePlan3A4AClicked[i][0]);
-          this.highlightElement(element, this.AlternatePlan3A4AClicked[i][1]);
+      for (let i = 0; i < this.AlternatePlanClicked.length; i++) {
+          var element = document.getElementById(this.AlternatePlanClicked[i][0]);
+          this.highlightElement(element, this.AlternatePlanClicked[i][1]);
       }
       break; 
     case "AlternatePlanFallTerm3": 
       for (let i = 0; i < this.AlternatePlanList.length; i++) {
           this.AlternatePlanList[i][0].show(true);
       }
-      for (let i = 0; i < this.AlternatePlan3A4AClicked.length; i++) {
-          var element = document.getElementById(this.AlternatePlan3A4AClicked[i][0]);
-          this.highlightElement(element, this.AlternatePlan3A4AClicked[i][1]);
+      for (let i = 0; i < this.AlternatePlanClicked.length; i++) {
+          var element = document.getElementById(this.AlternatePlanClicked[i][0]);
+          this.highlightElement(element, this.AlternatePlanClicked[i][1]);
       }
       break; 
     case "AlternatePlanWinterTerm4": 
       for (let i = 0; i < this.AlternatePlanList.length; i++) {
           this.AlternatePlanList[i][0].show(true);
       }
-      for (let i = 0; i < this.AlternatePlan3A4AClicked.length; i++) {
-          var element = document.getElementById(this.AlternatePlan3A4AClicked[i][0]);
-          this.highlightElement(element, this.AlternatePlan3A4AClicked[i][1]);
+      for (let i = 0; i < this.AlternatePlanClicked.length; i++) {
+          var element = document.getElementById(this.AlternatePlanClicked[i][0]);
+          this.highlightElement(element, this.AlternatePlanClicked[i][1]);
       }
       break; 
     case "AlternatePlanSummerTerm5": 
       for (let i = 0; i < this.AlternatePlanList.length; i++) {
           this.AlternatePlanList[i][0].show(true);
       }
-      for (let i = 0; i < this.AlternatePlan3A4AClicked.length; i++) {
-          var element = document.getElementById(this.AlternatePlan3A4AClicked[i][0]);
-          this.highlightElement(element, this.AlternatePlan3A4AClicked[i][1]);
+      for (let i = 0; i < this.AlternatePlanClicked.length; i++) {
+          var element = document.getElementById(this.AlternatePlanClicked[i][0]);
+          this.highlightElement(element, this.AlternatePlanClicked[i][1]);
       }
       break; 
     case "AlternatePlanFallTerm6": 
       for (let i = 0; i < this.AlternatePlanList.length; i++) {
           this.AlternatePlanList[i][0].show(true);
       }
-      for (let i = 0; i < this.AlternatePlan3A4AClicked.length; i++) {
-          var element = document.getElementById(this.AlternatePlan3A4AClicked[i][0]);
-          this.highlightElement(element, this.AlternatePlan3A4AClicked[i][1]);
+      for (let i = 0; i < this.AlternatePlanClicked.length; i++) {
+          var element = document.getElementById(this.AlternatePlanClicked[i][0]);
+          this.highlightElement(element, this.AlternatePlanClicked[i][1]);
       }
       break; 
     case "AlternatePlanWinterTerm7": 
       for (let i = 0; i < this.AlternatePlanList.length; i++) {
           this.AlternatePlanList[i][0].show(true);
       }
-      for (let i = 0; i < this.AlternatePlan3A4AClicked.length; i++) {
-          var element = document.getElementById(this.AlternatePlan3A4AClicked[i][0]);
-          this.highlightElement(element, this.AlternatePlan3A4AClicked[i][1]);
+      for (let i = 0; i < this.AlternatePlanClicked.length; i++) {
+          var element = document.getElementById(this.AlternatePlanClicked[i][0]);
+          this.highlightElement(element, this.AlternatePlanClicked[i][1]);
       }
       break; 
     case "AlternatePlanSummerTerm8": 
       for (let i = 0; i < this.AlternatePlanList.length; i++) {
           this.AlternatePlanList[i][0].show(true);
       }
-      for (let i = 0; i < this.AlternatePlan3A4AClicked.length; i++) {
-          var element = document.getElementById(this.AlternatePlan3A4AClicked[i][0]);
-          this.highlightElement(element, this.AlternatePlan3A4AClicked[i][1]);
+      for (let i = 0; i < this.AlternatePlanClicked.length; i++) {
+          var element = document.getElementById(this.AlternatePlanClicked[i][0]);
+          this.highlightElement(element, this.AlternatePlanClicked[i][1]);
       }
       break; 
     case "AlternatePlanFallTerm9": 
       for (let i = 0; i < this.AlternatePlanList.length; i++) {
           this.AlternatePlanList[i][0].show(true);
       }
-      for (let i = 0; i < this.AlternatePlan3A4AClicked.length; i++) {
-          var element = document.getElementById(this.AlternatePlan3A4AClicked[i][0]);
-          this.highlightElement(element, this.AlternatePlan3A4AClicked[i][1]);
+      for (let i = 0; i < this.AlternatePlanClicked.length; i++) {
+          var element = document.getElementById(this.AlternatePlanClicked[i][0]);
+          this.highlightElement(element, this.AlternatePlanClicked[i][1]);
       }
       break; 
     case "CoopPlan1FallTerm1": 
       for (let i = 0; i < this.CoopPlan1List.length; i++) {
           this.CoopPlan1List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan13AClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan13AClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan13AClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan1Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan1Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan1Clicked[i][1]);
       }
       break; 
     case "CoopPlan1WinterTerm2": 
       for (let i = 0; i < this.CoopPlan1List.length; i++) {
           this.CoopPlan1List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan13AClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan13AClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan13AClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan1Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan1Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan1Clicked[i][1]);
       }
       break; 
     case "CoopPlan1FallTerm3": 
       for (let i = 0; i < this.CoopPlan1List.length; i++) {
           this.CoopPlan1List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan13AClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan13AClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan13AClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan1Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan1Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan1Clicked[i][1]);
       }
       break; 
     case "CoopPlan1WinterTerm4": 
       for (let i = 0; i < this.CoopPlan1List.length; i++) {
           this.CoopPlan1List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan13AClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan13AClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan13AClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan1Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan1Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan1Clicked[i][1]);
       }
       break; 
     case "CoopPlan1SummerCoopTerm1": 
       for (let i = 0; i < this.CoopPlan1List.length; i++) {
           this.CoopPlan1List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan13AClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan13AClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan13AClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan1Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan1Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan1Clicked[i][1]);
       }
       break; 
     case "CoopPlan1FallCoopTerm2": 
       for (let i = 0; i < this.CoopPlan1List.length; i++) {
           this.CoopPlan1List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan13AClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan13AClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan13AClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan1Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan1Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan1Clicked[i][1]);
       }
       break; 
     case "CoopPlan1WinterTerm5": 
       for (let i = 0; i < this.CoopPlan1List.length; i++) {
           this.CoopPlan1List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan13AClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan13AClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan13AClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan1Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan1Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan1Clicked[i][1]);
       }
       break; 
     case "CoopPlan1SummerCoopTerm3": 
       for (let i = 0; i < this.CoopPlan1List.length; i++) {
           this.CoopPlan1List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan13AClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan13AClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan13AClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan1Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan1Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan1Clicked[i][1]);
       }
       break; 
     case "CoopPlan1FallCoopTerm4": 
       for (let i = 0; i < this.CoopPlan1List.length; i++) {
           this.CoopPlan1List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan13AClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan13AClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan13AClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan1Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan1Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan1Clicked[i][1]);
       }
       break; 
     case "CoopPlan1WinterTerm6": 
       for (let i = 0; i < this.CoopPlan1List.length; i++) {
           this.CoopPlan1List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan13AClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan13AClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan13AClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan1Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan1Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan1Clicked[i][1]);
       }
       break; 
     case "CoopPlan1SummerTerm7": 
       for (let i = 0; i < this.CoopPlan1List.length; i++) {
           this.CoopPlan1List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan13AClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan13AClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan13AClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan1Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan1Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan1Clicked[i][1]);
       }
       break; 
     case "CoopPlan1FallCoopTerm5": 
       for (let i = 0; i < this.CoopPlan1List.length; i++) {
           this.CoopPlan1List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan13AClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan13AClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan13AClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan1Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan1Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan1Clicked[i][1]);
       }
       break; 
     case "CoopPlan1WinterTerm8": 
       for (let i = 0; i < this.CoopPlan1List.length; i++) {
           this.CoopPlan1List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan13AClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan13AClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan13AClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan1Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan1Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan1Clicked[i][1]);
       }
       break; 
     case "CoopPlan2FallTerm1": 
       for (let i = 0; i < this.CoopPlan2List.length; i++) {
           this.CoopPlan2List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan23AClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan23AClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan23AClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan2Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan2Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan2Clicked[i][1]);
       }
       break; 
     case "CoopPlan2WinterTerm2": 
       for (let i = 0; i < this.CoopPlan2List.length; i++) {
           this.CoopPlan2List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan23AClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan23AClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan23AClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan2Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan2Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan2Clicked[i][1]);
       }
       break; 
     case "CoopPlan2FallTerm3": 
       for (let i = 0; i < this.CoopPlan2List.length; i++) {
           this.CoopPlan2List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan23AClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan23AClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan23AClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan2Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan2Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan2Clicked[i][1]);
       }
       break; 
     case "CoopPlan2WinterCoopTerm1": 
       for (let i = 0; i < this.CoopPlan2List.length; i++) {
           this.CoopPlan2List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan23AClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan23AClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan23AClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan2Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan2Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan2Clicked[i][1]);
       }
       break; 
     case "CoopPlan2SummerTerm4": 
       for (let i = 0; i < this.CoopPlan2List.length; i++) {
           this.CoopPlan2List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan23AClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan23AClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan23AClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan2Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan2Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan2Clicked[i][1]);
       }
       break; 
     case "CoopPlan2FallTerm5": 
       for (let i = 0; i < this.CoopPlan2List.length; i++) {
           this.CoopPlan2List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan23AClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan23AClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan23AClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan2Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan2Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan2Clicked[i][1]);
       }
       break; 
     case "CoopPlan2WinterCoopTerm2": 
       for (let i = 0; i < this.CoopPlan2List.length; i++) {
           this.CoopPlan2List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan23AClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan23AClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan23AClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan2Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan2Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan2Clicked[i][1]);
       }
       break; 
     case "CoopPlan2SummerCoopTerm3": 
       for (let i = 0; i < this.CoopPlan2List.length; i++) {
           this.CoopPlan2List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan23AClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan23AClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan23AClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan2Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan2Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan2Clicked[i][1]);
       }
       break; 
     case "CoopPlan2FallTerm6": 
       for (let i = 0; i < this.CoopPlan2List.length; i++) {
           this.CoopPlan2List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan23AClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan23AClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan23AClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan2Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan2Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan2Clicked[i][1]);
       }
       break; 
     case "CoopPlan2WinterCoopTerm4": 
       for (let i = 0; i < this.CoopPlan2List.length; i++) {
           this.CoopPlan2List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan23AClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan23AClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan23AClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan2Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan2Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan2Clicked[i][1]);
       }
       break; 
     case "CoopPlan2SummerTerm7": 
       for (let i = 0; i < this.CoopPlan2List.length; i++) {
           this.CoopPlan2List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan23AClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan23AClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan23AClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan2Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan2Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan2Clicked[i][1]);
       }
       break; 
     case "CoopPlan2FallCoopTerm5": 
       for (let i = 0; i < this.CoopPlan2List.length; i++) {
           this.CoopPlan2List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan23AClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan23AClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan23AClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan2Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan2Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan2Clicked[i][1]);
       }
       break; 
     case "CoopPlan2WinterTerm8": 
       for (let i = 0; i < this.CoopPlan2List.length; i++) {
           this.CoopPlan2List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan23AClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan23AClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan23AClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan2Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan2Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan2Clicked[i][1]);
       }
       break; 
     case "CoopPlan3BiomedicalFallTerm1": 
@@ -978,117 +978,117 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan4List.length; i++) {
           this.CoopPlan4List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan43BClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan43BClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan43BClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan4Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan4Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan4Clicked[i][1]);
       }
       break; 
     case "CoopPlan4WinterTerm2": 
       for (let i = 0; i < this.CoopPlan4List.length; i++) {
           this.CoopPlan4List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan43BClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan43BClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan43BClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan4Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan4Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan4Clicked[i][1]);
       }
       break; 
     case "CoopPlan4FallTerm3": 
       for (let i = 0; i < this.CoopPlan4List.length; i++) {
           this.CoopPlan4List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan43BClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan43BClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan43BClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan4Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan4Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan4Clicked[i][1]);
       }
       break; 
     case "CoopPlan4WinterTerm4": 
       for (let i = 0; i < this.CoopPlan4List.length; i++) {
           this.CoopPlan4List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan43BClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan43BClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan43BClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan4Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan4Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan4Clicked[i][1]);
       }
       break; 
     case "CoopPlan4SummerTerm5": 
       for (let i = 0; i < this.CoopPlan4List.length; i++) {
           this.CoopPlan4List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan43BClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan43BClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan43BClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan4Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan4Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan4Clicked[i][1]);
       }
       break; 
     case "CoopPlan4FallCoopTerm1": 
       for (let i = 0; i < this.CoopPlan4List.length; i++) {
           this.CoopPlan4List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan43BClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan43BClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan43BClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan4Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan4Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan4Clicked[i][1]);
       }
       break; 
     case "CoopPlan4WinterCoopTerm2": 
       for (let i = 0; i < this.CoopPlan4List.length; i++) {
           this.CoopPlan4List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan43BClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan43BClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan43BClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan4Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan4Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan4Clicked[i][1]);
       }
       break; 
     case "CoopPlan4SummerTerm6": 
       for (let i = 0; i < this.CoopPlan4List.length; i++) {
           this.CoopPlan4List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan43BClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan43BClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan43BClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan4Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan4Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan4Clicked[i][1]);
       }
       break; 
     case "CoopPlan4FallCoopTerm3": 
       for (let i = 0; i < this.CoopPlan4List.length; i++) {
           this.CoopPlan4List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan43BClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan43BClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan43BClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan4Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan4Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan4Clicked[i][1]);
       }
       break; 
     case "CoopPlan4WinterCoopTerm4": 
       for (let i = 0; i < this.CoopPlan4List.length; i++) {
           this.CoopPlan4List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan43BClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan43BClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan43BClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan4Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan4Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan4Clicked[i][1]);
       }
       break; 
     case "CoopPlan4SummerCoopTerm5": 
       for (let i = 0; i < this.CoopPlan4List.length; i++) {
           this.CoopPlan4List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan43BClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan43BClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan43BClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan4Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan4Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan4Clicked[i][1]);
       }
       break; 
     case "CoopPlan4FallTerm7": 
       for (let i = 0; i < this.CoopPlan4List.length; i++) {
           this.CoopPlan4List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan43BClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan43BClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan43BClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan4Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan4Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan4Clicked[i][1]);
       }
       break; 
     case "CoopPlan4WinterTerm8": 
       for (let i = 0; i < this.CoopPlan4List.length; i++) {
           this.CoopPlan4List[i][0].show(true);
       }
-      for (let i = 0; i < this.CoopPlan43BClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan43BClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan43BClicked[i][1]);
+      for (let i = 0; i < this.CoopPlan4Clicked.length; i++) {
+          var element = document.getElementById(this.CoopPlan4Clicked[i][0]);
+          this.highlightElement(element, this.CoopPlan4Clicked[i][1]);
       }
       break; 
     default:

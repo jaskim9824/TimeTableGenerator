@@ -20,6 +20,7 @@ def cleanPrint(seqDict):
         for term in seqDict[plan]:
             print(term)
             for course in seqDict[plan][term]:
+                print("--------")
                 for element in course:
                     if type(element) == type([]):
                         i = 0
@@ -45,6 +46,7 @@ def main():
             try:
                 print("Input test Excel cell")
                 outputObject = testSeqStringParse(input(), courseObjDict)
+                print(outputObject)
                 print("Output: ")
                 for element in outputObject:
                     if type(element) == type([]):
