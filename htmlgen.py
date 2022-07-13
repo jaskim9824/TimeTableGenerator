@@ -192,24 +192,27 @@ def placeTermDivs(planTag, planDict, soup, plan, term):
     for i in range(8, 22):
         timeSlotDiv = soup.new_tag("div", attrs={"class":"timeslot"})
         timeSlotDiv.append(str(i) + ":00")
+        timeDiv.append(soup.new_tag("hr", attrs={"class":"horizontaltimedivider"}))
         timeDiv.append(timeSlotDiv)
     termDiv.append(timeDiv)
 
     mondayDiv = soup.new_tag("div", attrs={"class":"monday"})
     mondayDiv.append("Monday")
-    mondayDiv.append(soup.new_tag("hr", attrs={"class":"daytopline"}))
+    mondayDiv.append(soup.new_tag("hr", attrs={"class":"horizontaltopdivider"}))
+    for i in range(1, 14):
+        mondayDiv.append(soup.new_tag("hr", attrs={"class":"horizontalcoursedivider", "style":"position:absolute; top:" + str(22.15+135.35*i) + "px"}))
     tuesdayDiv = soup.new_tag("div", attrs={"class":"tuesday"})
     tuesdayDiv.append("Tuesday")
-    tuesdayDiv.append(soup.new_tag("hr", attrs={"class":"daytopline"}))
+    tuesdayDiv.append(soup.new_tag("hr", attrs={"class":"horizontaltopdivider"}))
     wednesdayDiv = soup.new_tag("div", attrs={"class":"wednesday"})
     wednesdayDiv.append("Wednesday")
-    wednesdayDiv.append(soup.new_tag("hr", attrs={"class":"daytopline"}))
+    wednesdayDiv.append(soup.new_tag("hr", attrs={"class":"horizontaltopdivider"}))
     thursdayDiv = soup.new_tag("div", attrs={"class":"thursday"})
     thursdayDiv.append("Thursday")
-    thursdayDiv.append(soup.new_tag("hr", attrs={"class":"daytopline"}))
+    thursdayDiv.append(soup.new_tag("hr", attrs={"class":"horizontaltopdivider"}))
     fridayDiv = soup.new_tag("div", attrs={"class":"friday"})
     fridayDiv.append("Friday")
-    fridayDiv.append(soup.new_tag("hr", attrs={"class":"daytopline"}))
+    fridayDiv.append(soup.new_tag("hr", attrs={"class":"horizontaltopdivider"}))
     daysTagsDict = {}
     daysTagsDict["monday"] = mondayDiv
     daysTagsDict["tuesday"] = tuesdayDiv

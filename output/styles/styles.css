@@ -138,7 +138,7 @@ h3#planhead {
 
 /* Wrapper div for the term names and course boxes, the main content */
 #main {
-    height: 2400px;
+    height: 2600px;
     width: fit-content;
 }
 
@@ -182,21 +182,30 @@ h3#planhead {
     border-right: 2px solid black;
 }
 
-.daytopline {
+.horizontaltopdivider {
     border: 2px solid black;
+}
+
+.horizontaltimedivider {
+    border: 2px solid black;
+    width: 100%;
+}
+
+.horizontalcoursedivider {
+    border: 2px solid black;
+    width: 100%;
 }
 
 .time {
     padding-left: 20px;
-    padding-right: 20px;
+    padding-top: 22px;
     text-align: center;
     font-size: 120%;
     border-right: 2px solid black;
 }
 
 .timeslot {
-    padding-top: 50px;
-    padding-bottom: 50px;
+    margin-bottom: 100px;
 }
 
 /* Contains one (or two if an "or" option) course */
@@ -252,6 +261,7 @@ h3#planhead {
     border-width: 2px;
     height: 50px;
     width: 320px;
+    background-color: white;
 }
 
 .coursegroupcontainer .lastcourseingroup {
