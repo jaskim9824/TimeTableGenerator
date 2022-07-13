@@ -33,18 +33,6 @@ def switchTitle(titleTag, topTitleTag, deptName):
     titleTag.append(deptName + " Program Plan Visualizer")
     topTitleTag.append(deptName + " Visualizer")
 
-# Places the legend for the categories of courses (math, basic sciences, design, etc.)
-# Pulls the categories and colors from sequenceDict, which has these values as two of
-# its attributes
-# Parameters:
-#   legendTag - HTML tag representing div which holds the category color legend
-#   categoryDict - dict mapping category to colour
-#   soup - soup object, used to create HTML tags
-def placeLegend(legendTag, categoryDict, soup):
-    placeLegendDescription(soup, legendTag)
-    placeLegendButtons(soup, legendTag, categoryDict)
-
-
 # Function that places the radio inputs into the form which controls
 # which plan is currently selected on the webpage
 # Parameters:
@@ -145,41 +133,6 @@ def placePlanDivs(displayTag, sequenceDict, soup):
             placeTermDivs(switchInput, sequenceDict[plan], soup, plan, term)
             displayTag.append(switchInput)
 
-# Function that places the legend description tag
-# Parameters:
-#   soup - soup object, used to create HTML tags
-#   legendTag - HTML tag used to hold legend
-def placeLegendDescription(soup, legendTag):
-    legendDescription = soup.new_tag("b", attrs={"class":"legenddescription"})
-    legendDescription.append("Click on a Category Below to Highlight all Courses in that Category")
-    legendTag.append(legendDescription)
-
-# Function that places the legend buttons
-# Parameters:
-#   soup - soup object, used to create HTML tags
-#   legendTag - HTML tag used to hold legend
-#   categoryDict - dict that maps categories to plan dicts containing courses
-#   with that category
-def placeLegendButtons(soup, legendTag, categoryDict):
-    legendBoxes = soup.new_tag("div", attrs={"class":"legendboxes"})
-    for category in categoryDict:
-        coursecat = placeLegendButton(soup, cleaner.cleanString(category), categoryDict[category][1])
-        coursecat.append(category)
-        legendBoxes.append(coursecat)
-    legendTag.append(legendBoxes)
-
-# Function that generates a button for the legend
-# Parameters:
-#   soup - soup object, used to create HTML tags
-#   category - category for button
-#   colour - colour of button
-# Returns: HTML tag representing button
-def placeLegendButton(soup, category, colour):
-    return soup.new_tag("div", attrs={"ng-click":category+ "clickListener()", 
-                                        "class":"legendbutton",
-                                        "id": cleaner.cleanString(category),
-                                        "style":"background-color:#" + colour})
-
 # Function that places the course group froms for the course group selection 
 # radio inputs for a specific plan
 # Parameters:
@@ -233,10 +186,30 @@ def placeTermDivs(planTag, planDict, soup, plan, term):
     # count of amount of term columns placed in the plan
     termcounter = 0
 
-    termDiv = soup.new_tag("div", attrs={"class":"term"})
-    termHeader = soup.new_tag("h3", attrs={"class":"termheader"})
-    termHeader.append(term)
-    termDiv.append(termHeader)
+    termDiv = soup.new_tag("div", attrs={"class":"coursegrid"})
+    timeDiv = soup.new_tag("div", attrs={"class":"time"})
+    for i in range(8, 22):
+        timeSlotDiv = soup.new_tag("div", attrs={"class":"timeslot"})
+        timeSlotDiv.append(str(i) + ":00")
+        timeDiv.append(timeSlotDiv)
+    termDiv.append(timeDiv)
+
+    mondayDiv = soup.new_tag("div", attrs={"class":"monday"})
+    mondayDiv.append("Monday")
+    tuesdayDiv = soup.new_tag("div", attrs={"class":"tuesday"})
+    tuesdayDiv.append("Tuesday")
+    wednesdayDiv = soup.new_tag("div", attrs={"class":"wednesday"})
+    wednesdayDiv.append("Wednesday")
+    thursdayDiv = soup.new_tag("div", attrs={"class":"thursday"})
+    thursdayDiv.append("Thursday")
+    fridayDiv = soup.new_tag("div", attrs={"class":"friday"})
+    fridayDiv.append("Friday")
+    termDiv.append(mondayDiv)
+    termDiv.append(tuesdayDiv)
+    termDiv.append(wednesdayDiv)
+    termDiv.append(thursdayDiv)
+    termDiv.append(fridayDiv)
+
     placeCourses(termDiv, planDict[term], soup, plan, termcounter, electiveCounterWrapper)
     planTag.append(termDiv)
     termcounter += 1
