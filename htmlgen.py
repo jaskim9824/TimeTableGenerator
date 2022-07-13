@@ -596,6 +596,22 @@ def formatCourseDescriptionForRegular(soup, course, courseDisc):
     courseDescription = soup.new_tag("p", attrs={"class":"fulldescription"})
     courseDescription.append(course.calendarDescr)
 
+    # adding instructor
+    courseInstructor = soup.new_tag("p", attrs={"class":"instructor"})
+    courseInstructor.append("Name: " + course.instructorName + "    Email: " + course.email)
+
+    # adding location
+    courseLocation = soup.new_tag("p", attrs={"class":"location"})
+    courseLocation.append("Location: " + course.location + "    Building: " + course.place)
+
+    # adding time
+    courseTime = soup.new_tag("p", attrs={"class":"courseTime"})
+    courseTime.append("From: " + course.hrsFrom + "    To: " + course.hrsTo)
+
+    # adding enrolled info
+    courseEnrolled = soup.new_tag("p", attrs={"class":"enrolled"})
+    courseEnrolled.append(course.totEnrl + " enrolled out of " + course.capEnrl + " total spots available")
+
     # appending info to disc tag
     courseDisc.append(courseTitle)
     courseDisc.append(courseLine)
@@ -604,3 +620,7 @@ def formatCourseDescriptionForRegular(soup, course, courseDisc):
     # courseDisc.append(courseTermAvail)
     courseDisc.append(courseAlphaHours)
     courseDisc.append(courseDescription)
+    courseDisc.append(courseInstructor)
+    courseDisc.append(courseLocation)
+    courseDisc.append(courseTime)
+    courseDisc.append(courseEnrolled)
