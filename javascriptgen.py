@@ -273,8 +273,7 @@ def generateEnableSwitchStatement(sequenceDict, controller):
     formattedFunctionStatement = """this.{functionName} = function(plan) {{
   switch(plan) {{\n"""
 
-    # layout: for each plan, show/display every course box in that plan,
-    # then adjust the webpage width and height, then (for loop #1) restore all courses
+    # For loop #1: restore all courses
     # that were clicked to their clicked state (highlighted with arrows drawn).
     # For loop #2: Restore all courses that were highlighted with the legend buttons
     # to their highlighted state and restore legend buttons to their pressed state.
@@ -282,12 +281,6 @@ def generateEnableSwitchStatement(sequenceDict, controller):
       for (let i = 0; i < this.{planName}List.length; i++) {{
           this.{planName}List[i][0].{actionName}(true);
       }}
-      width = this.{planName}Terms*220 + 20;
-      widthstr = width.toString() + "px";
-      document.getElementById("main").style.width = widthstr;
-      height = this.{planName}MaxCourses*100 + 690;
-      heightstr = height.toString() + "px";
-      document.getElementById("main").style.height = heightstr;
       for (let i = 0; i < this.{planName}Clicked.length; i++) {{
           var element = document.getElementById(this.{planName}Clicked[i][0]);
           this.highlightElement(element, this.{planName}Clicked[i][1]);

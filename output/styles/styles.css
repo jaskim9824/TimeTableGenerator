@@ -115,6 +115,7 @@ h3#planhead {
 #toprowcontainer {
     display: flex;
     flex-direction: row;
+    margin-bottom: 25px;
 }
 
 #planlegend {
@@ -137,7 +138,8 @@ h3#planhead {
 
 /* Wrapper div for the term names and course boxes, the main content */
 #main {
-    height: fit-content;
+    height: 2600px;
+    width: fit-content;
 }
 
 #explainertext {
@@ -153,7 +155,7 @@ h3#planhead {
 }
 
 /* Term column styling */
-.term {
+#coursegrid {
     margin-left: 4rem;
     display: flex;
     flex-direction: column;
@@ -168,11 +170,49 @@ h3#planhead {
     font-size: 115%;
 }
 
+.coursegrid {
+    display: flex;
+    flex-direction: row;
+}
+
+.monday, .tuesday, .wednesday, .thursday, .friday {
+    width: 325px;
+    text-align: center;
+    font-size: 120%;
+    border-right: 2px solid black;
+}
+
+.horizontaltopdivider {
+    border: 2px solid black;
+}
+
+.horizontaltimedivider {
+    border: 2px solid black;
+    width: 100%;
+}
+
+.horizontalcoursedivider {
+    border: 2px solid black;
+    width: 100%;
+}
+
+.time {
+    padding-left: 20px;
+    padding-top: 22px;
+    text-align: center;
+    font-size: 120%;
+    border-right: 2px solid black;
+}
+
+.timeslot {
+    margin-bottom: 100px;
+}
+
 /* Contains one (or two if an "or" option) course */
 .coursecontainer, .coursegroupcontainer {
     display: flex;
     flex-direction: column;
-    margin-bottom: 50px;
+    padding-left: 1px;
 }
 
 .orcoursecontainer {
@@ -211,6 +251,7 @@ h3#planhead {
     text-align: center;
     position: relative;
     bottom: 4px;
+    font-size: 95%;
 }
       
 /* Course box styling */
@@ -219,7 +260,8 @@ h3#planhead {
     border-color: black;
     border-width: 2px;
     height: 50px;
-    width: 150px;
+    width: 320px;
+    background-color: white;
 }
 
 .coursegroupcontainer .lastcourseingroup {
