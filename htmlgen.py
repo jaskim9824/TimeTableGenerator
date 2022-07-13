@@ -9,6 +9,7 @@
 
 import cleaner
 import html
+from copy import deepcopy
 
 # Function that generates the display div which holds the plan diagram
 # Parameters:
@@ -354,13 +355,13 @@ def placeCourses(daysTagsDict, termList, soup, plan, termcounter, electiveCountW
                 if not skipAddCourseFlag:
                     courseContDiv.append(courseDiv)
                     for dayTag in tagsList: 
-                        dayTag.append(courseContDiv)
+                        dayTag.append(deepcopy(courseContDiv))
 
             if courseGroupTitle != "":
                 for dayTag in tagsList:
                     # Need to add course group title, outside of course group box so
                     # append directly to termTag
-                    dayTag.append(courseGroupTitle)
+                    dayTag.append(deepcopy(courseGroupTitle))
             if courseGroupList != []:
                 # A course group is involved. Append each course to the coursegroupcontainer,
                 # then append this container to the termTag
@@ -369,7 +370,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, termcounter, electiveCountW
                         courseGroupList[i]["class"].append("lastcourseingroup")  # last course has no bottom margin
                     courseContDiv.append(courseGroupList[i])
                 for dayTag in tagsList:
-                    dayTag.append(courseContDiv)
+                    dayTag.append(deepcopy(courseContDiv))
 
 def extractCourseCategories(course):
     catListString = cleaner.cleanString(course.main_category)
@@ -402,7 +403,7 @@ def addOrCourses(courseOrList, courseGroup, courseGroupList, tagsList, soup):
     else:
         for dayTag in tagsList:
             # not in a course group, append directly to termTag
-            dayTag.append(courseOrContDiv)
+            dayTag.append(deepcopy(courseOrContDiv))
     courseOrList = []  # reset in case multiple OR cases in a term
 
 # Determines which side a tooltip should appear on based on the term position on the page.
