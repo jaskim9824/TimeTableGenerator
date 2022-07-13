@@ -204,13 +204,19 @@ def placeTermDivs(planTag, planDict, soup, plan, term):
     thursdayDiv.append("Thursday")
     fridayDiv = soup.new_tag("div", attrs={"class":"friday"})
     fridayDiv.append("Friday")
+    daysTagsDict = {}
+    daysTagsDict["monday"] = mondayDiv
+    daysTagsDict["tuesday"] = tuesdayDiv
+    daysTagsDict["wednesday"] = wednesdayDiv
+    daysTagsDict["thursday"] = thursdayDiv
+    daysTagsDict["friday"] = fridayDiv
+
+    placeCourses(daysTagsDict, planDict[term], soup, plan, termcounter, electiveCounterWrapper)
     termDiv.append(mondayDiv)
     termDiv.append(tuesdayDiv)
     termDiv.append(wednesdayDiv)
     termDiv.append(thursdayDiv)
     termDiv.append(fridayDiv)
-
-    placeCourses(termDiv, planDict[term], soup, plan, termcounter, electiveCounterWrapper)
     planTag.append(termDiv)
     termcounter += 1
     # generating a list of all courses taken in this plan
@@ -228,7 +234,7 @@ def placeTermDivs(planTag, planDict, soup, plan, term):
 #   termcounter - which term is currently being placed (int)
 # Returns:
 #   compcounter, progcounter, itscounter
-def placeCourses(termTag, termList, soup, plan, termcounter, electiveCountWrapper):
+def placeCourses(daysTagsDict, termList, soup, plan, termcounter, electiveCountWrapper):
     courseGroupList = []  # list of courses (course objects) in a course group
     courseGroupTitle = ""  # name of the course group (eg: "Course group 2A")
     courseOrList = []
@@ -236,6 +242,18 @@ def placeCourses(termTag, termList, soup, plan, termcounter, electiveCountWrappe
     for courseWrapperList in termList:
         for courseWrapper in courseWrapperList:
             for course in courseWrapper.sections:
+                tagsList = []
+                if course.mon == 'Y':
+                    tagsList.append(daysTagsDict["monday"])
+                if course.tues == 'Y':
+                    tagsList.append(daysTagsDict["tuesday"])
+                if course.wed == 'Y':
+                    tagsList.append(daysTagsDict["wednesday"])
+                if course.thurs == 'Y':
+                    tagsList.append(daysTagsDict["thursday"])
+                if course.fri == 'Y':
+                    tagsList.append(daysTagsDict["friday"])
+
                 courseID = cleaner.cleanString(course.name)+cleaner.cleanString(plan)
                 orCase = False
                 lastOrCase = False
@@ -318,13 +336,13 @@ def placeCourses(termTag, termList, soup, plan, termcounter, electiveCountWrappe
                     courseOrList.append(courseDiv)
                     if termList.index(course) == (len(termList) - 1):
                         # last course in term is an OR course, need to append to termTag immediately
-                        termTag, courseOrList, courseGroupList = addOrCourses(courseOrList, course.courseGroup, courseGroupList, termTag, soup)
+                        addOrCourses(courseOrList, course.courseGroup, courseGroupList, tagsList, soup)
                         skipAddCourseFlag = True
                     if not lastOrCase:
                         continue
                     if lastOrCase and (courseOrList != []):
                         # last option out of OR courses
-                        termTag, courseOrList, courseGroupList = addOrCourses(courseOrList, course.courseGroup, courseGroupList, termTag, soup)
+                        addOrCourses(courseOrList, course.courseGroup, courseGroupList, tagsList, soup)
                         continue
 
                 if course.courseGroup != "":
@@ -334,13 +352,15 @@ def placeCourses(termTag, termList, soup, plan, termcounter, electiveCountWrappe
                     continue
 
                 if not skipAddCourseFlag:
-                    courseContDiv.append(courseDiv) 
-                    termTag.append(courseContDiv)
+                    courseContDiv.append(courseDiv)
+                    for dayTag in tagsList: 
+                        dayTag.append(courseContDiv)
 
             if courseGroupTitle != "":
-                # Need to add course group title, outside of course group box so
-                # append directly to termTag
-                termTag.append(courseGroupTitle)
+                for dayTag in tagsList:
+                    # Need to add course group title, outside of course group box so
+                    # append directly to termTag
+                    dayTag.append(courseGroupTitle)
             if courseGroupList != []:
                 # A course group is involved. Append each course to the coursegroupcontainer,
                 # then append this container to the termTag
@@ -348,7 +368,8 @@ def placeCourses(termTag, termList, soup, plan, termcounter, electiveCountWrappe
                     if i == (len(courseGroupList) - 1):
                         courseGroupList[i]["class"].append("lastcourseingroup")  # last course has no bottom margin
                     courseContDiv.append(courseGroupList[i])
-                termTag.append(courseContDiv)
+                for dayTag in tagsList:
+                    dayTag.append(courseContDiv)
 
 def extractCourseCategories(course):
     catListString = cleaner.cleanString(course.main_category)
@@ -365,7 +386,7 @@ def extractCourseCategories(course):
 #   termTag - HTML tag representing the specfic term column in question
 #   soup - soup object, used to create HTML tags
 # Returns: termTag, courseOrList (cleared to be empty), courseGroupList
-def addOrCourses(courseOrList, courseGroup, courseGroupList, termTag, soup):
+def addOrCourses(courseOrList, courseGroup, courseGroupList, tagsList, soup):
     courseOrContDiv = soup.new_tag("div", attrs={"class":"orcoursecontainer"})  # container for all OR courses
     for i in range(0, len(courseOrList)):
         courseOrContDiv.append(courseOrList[i])  # append each OR course
@@ -379,11 +400,10 @@ def addOrCourses(courseOrList, courseGroup, courseGroupList, termTag, soup):
         # which will in turn be appended to termTag later
         courseGroupList.append(courseOrContDiv)
     else:
-        # not in a course group, append directly to termTag
-        termTag.append(courseOrContDiv)
+        for dayTag in tagsList:
+            # not in a course group, append directly to termTag
+            dayTag.append(courseOrContDiv)
     courseOrList = []  # reset in case multiple OR cases in a term
-
-    return termTag, courseOrList, courseGroupList
 
 # Determines which side a tooltip should appear on based on the term position on the page.
 # If the term is near the left side, the tooltip appears on the right and vice versa.
