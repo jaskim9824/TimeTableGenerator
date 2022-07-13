@@ -80,3 +80,53 @@ def extractCourseGroupListFromString(planName):
         return []
     endIndex = planName.find("}")
     return planName[index+1:endIndex].split()
+
+class Option:
+    def __init__(self):
+        self.options = []
+    
+    def __init__(self, options):
+        self.options = options
+    
+    def addOption(self, addedOption):
+        self.options.append(addedOption)
+
+class ORCourseOption(Option):
+    def __init__(self, isWithinCourseGroup, parentCourseGroup):
+        super().__init__()
+        self.isWithinCourseGroup = isWithinCourseGroup
+        self.parentCourseGroup = parentCourseGroup
+
+    def __init__(self, options, isWithinCourseGroup, parentCourseGroup):
+        super().__init__(options)
+        self.isWithinCourseGroup = isWithinCourseGroup
+        self.parentCourseGroup = parentCourseGroup
+
+class CourseGroupOption(Option):
+    pass
+                
+def extractingListofOptions(sequenceDict):
+    listOptionsDict = {}
+    for plan in sequenceDict:
+        listOptionsDict[plan] = {}
+        for term in sequenceDict[plan]:
+            listOptionsDict[plan][term] = []
+            optionsList = []
+            for course in sequenceDict[plan][term]:
+                print(course)
+                if len(course) <= 1:
+                    continue
+                if type(course[0]) == type([]):
+                    courseGroupOpt = CourseGroupOption()
+                    for option in course:
+                        if len(option) > 2:
+                            optionsList.append(ORCourseOption(option[:-1], True, option[-1]))
+                        courseGroupOpt.addOption(option[-1])
+                        optionsList.append(courseGroupOpt)                        
+                else:
+                    ORCourseOption = ORCourseOption(False, "")
+                    for option in course:
+                        ORCourseOption.addOption(option)
+            listOptionsDict[plan][term] = optionsList
+    return listOptionsDict
+                

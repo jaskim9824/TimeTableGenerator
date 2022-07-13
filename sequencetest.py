@@ -1,4 +1,3 @@
-from re import L
 import sequenceparsing
 import courseparsing
 
@@ -21,18 +20,15 @@ def cleanPrint(seqDict):
         for term in seqDict[plan]:
             print(term)
             for course in seqDict[plan][term]:
-                if type(course) == type([]):
-                    for element in course:
-                        if type(element) == type([]):
-                            i = 0
-                            while i < len(element) - 1:
-                                printDetails(element[i])
-                                i += 1
-                            print(element[i])
-                        else:
+                for element in course:
+                    if type(element) == type([]):
+                        i = 0
+                        while i < len(element) - 1:
+                            printDetails(element[i])
+                            i += 1
+                        print(element[i])
+                    else:
                             printDetails(element)
-                else:
-                    printDetails(course)
             print("\n")
         print("\n")
 
@@ -50,18 +46,15 @@ def main():
                 print("Input test Excel cell")
                 outputObject = testSeqStringParse(input(), courseObjDict)
                 print("Output: ")
-                if type(outputObject) == type([]):
-                    for element in outputObject:
-                        if type(element) == type([]):
-                            i = 0
-                            while i < len(element) - 1:
-                                printDetails(element[i])
-                                i += 1
-                            print(element[i])
-                        else:
-                            printDetails(element)
-                else:
-                    printDetails(outputObject)
+                for element in outputObject:
+                    if type(element) == type([]):
+                        i = 0
+                        while i < len(element) - 1:
+                            printDetails(element[i])
+                            i += 1
+                        print(element[i])
+                    else:
+                        printDetails(element)
             except ValueError:
                 print("Value Error raised!")
         else:
