@@ -1389,3 +1389,25 @@ switch($scope.selectedPlan+$scope.selectedTerm) {
     console.log("shouldn't be here");
     }
 };
+});
+app.directive('ngRightClick', function($parse) {
+    return function(scope, element, attrs) {
+        var fn = $parse(attrs.ngRightClick);
+        element.bind('contextmenu', function(event) {
+            scope.$apply(function() {
+                event.preventDefault();
+                fn(scope, {$event:event});
+            });
+        });
+    };
+    });app.directive('ngChangeRadio', function($parse) {
+    return function(scope, element, attrs) {
+        var fn = $parse(attrs.ngChangeRadio);
+        element.bind('change', function(event) {
+            scope.$apply(function() {
+                event.preventDefault();
+                fn(scope, {$event:event});
+            });
+        });
+    };
+    });
