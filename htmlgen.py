@@ -323,7 +323,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
             for course in courseWrapper.sections:
                 tagsList = []
                 minutesFromEight = calcMinutes(course.hrsFrom)  # minutes from 8:00 to start of class
-                minutesLong = calcContainerHeight(course.hrsFrom, course.hrsTo)  # duration of class
+                minutesLong = calcClassDuration(course.hrsFrom, course.hrsTo)  # duration of class
                 # save the tags we will need to append to for later
                 if course.mon == 'Y':
                     tagsList.append(daysTagsDict["monday"])
@@ -351,7 +351,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
                     courseGroupTitle.append("Course Group " + course.courseGroup)
                 else:
                     # not in a course group
-                    courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", "style":"position:absolute; top:" + str(38 + (135/60)*minutesFromEight) + "px; height:" + str((135.35/60)*minutesLong) + "px"})
+                    courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", "style":"position:absolute; top:" + str(33 + (135.35/60)*minutesFromEight) + "px; height:" + str((135.35/60)*minutesLong) + "px"})
 
                 courseDisc = soup.new_tag("div", attrs={"id":courseID+"desc",
                                                 "class":"tooltiptextright",
@@ -456,7 +456,7 @@ def calcMinutes(startTime):
     minutes = int(startTime[colonIndex + 1:])
     return (hours*60 + minutes) - 8*60
 
-def calcContainerHeight(startTime, endTime):
+def calcClassDuration(startTime, endTime):
     startColonIndex = startTime.find(":")
     endColonIndex = startTime.find(":")
     assert startColonIndex != -1, "Error in start time, ensure the Excel file is properly formatted in the Hrs From column"
@@ -470,7 +470,13 @@ def calcContainerHeight(startTime, endTime):
     endMinutes = int(endTime[endColonIndex + 1:])
     endTime = endHours*60 + endMinutes
 
-    return endTime - startTime
+    actualTime = endTime - startTime
+    if actualTime % 30 > 15:
+        roundedTime = actualTime + (30 - (actualTime % 30))
+    else:
+        roundedTime = actualTime - (actualTime % 30)
+
+    return roundedTime
 
 def extractCourseCategories(course):
     catListString = cleaner.cleanString(course.main_category)
@@ -606,19 +612,34 @@ def formatCourseDescriptionForRegular(soup, course, courseDisc):
     courseDescription.append(course.calendarDescr)
 
     # adding instructor
-    courseInstructor = soup.new_tag("p", attrs={"class":"instructor"})
-    courseInstructor.append("Name: " + course.instructorName + "    Email: " + course.email)
+    courseInstructor = soup.new_tag("div", attrs={"class":"instructor"})
+    courseInstructorName = soup.new_tag("span", attrs={"class":"instructorname"})
+    courseInstructorName.append("Instructor name: " + course.instructorName)
+    courseInstructorEmail = soup.new_tag("span", attrs={"class":"instructoremail"})
+    courseInstructorEmail.append("Instructor email: " + course.email)
+    courseInstructor.append(courseInstructorName)
+    courseInstructor.append(courseInstructorEmail)
 
     # adding location
-    courseLocation = soup.new_tag("p", attrs={"class":"location"})
-    courseLocation.append("Location: " + course.location + "    Building: " + course.place)
+    courseLocation = soup.new_tag("div", attrs={"class":"location"})
+    coursePlace = soup.new_tag("span", attrs={"class":"place"})
+    coursePlace.append("Location: " + course.location)
+    courseBuilding = soup.new_tag("span", attrs={"class":"building"})
+    courseBuilding.append("Building: " + course.place)
+    courseLocation.append(coursePlace)
+    courseLocation.append(courseBuilding)
 
     # adding time
-    courseTime = soup.new_tag("p", attrs={"class":"courseTime"})
-    courseTime.append("From: " + course.hrsFrom + "    To: " + course.hrsTo)
+    courseTime = soup.new_tag("div", attrs={"class":"courseTime"})
+    courseStart = soup.new_tag("span", attrs={"class":"startTime"})
+    courseStart.append("From: " + course.hrsFrom)
+    courseEnd = soup.new_tag("span", attrs={"class":"endTime"})
+    courseEnd.append("To: " + course.hrsTo)
+    courseTime.append(courseStart)
+    courseTime.append(courseEnd)
 
     # adding enrolled info
-    courseEnrolled = soup.new_tag("p", attrs={"class":"enrolled"})
+    courseEnrolled = soup.new_tag("div", attrs={"class":"enrolled"})
     courseEnrolled.append(course.totEnrl + " enrolled out of " + course.capEnrl + " total seats")
 
     # appending info to disc tag

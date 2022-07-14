@@ -203,7 +203,6 @@ h3#planhead {
 .coursecontainer, .coursegroupcontainer {
     display: flex;
     flex-direction: column;
-    padding-left: 1px;
 }
 
 .orcoursecontainer {
@@ -251,7 +250,7 @@ h3#planhead {
     border-color: black;
     border-width: 2px;
     height: 50px;
-    width: 320px;
+    width: 322px;
     background-color: #eec89a;
 }
 
@@ -362,7 +361,7 @@ p.ortext {
     font-style: inherit;
     font-family: 'Roboto', sans-serif;
     vertical-align: baseline;
-    white-space: normal;
+    white-space: pre-wrap;
 }
 
 .tooltip .tooltiptextright {
@@ -438,6 +437,11 @@ p.ortext {
 /* Various components of description body */
 .descriptioncredits, .descriptionfeeindex, .descriptionavailability, .descriptionalphahours, .fulldescription {
     display: inline;
+}
+
+.instructoremail, .building, .endTime {
+    position: absolute;
+    left: 50%;
 }
 
 /* footer formatting */
