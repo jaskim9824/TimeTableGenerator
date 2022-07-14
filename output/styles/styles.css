@@ -106,7 +106,7 @@ header {
     }
 }
 
-/* Plan header styling*/
+/* Plan header styling */
 h3#planhead {
     width: fit-content;
     font-size: 175%;
@@ -114,24 +114,28 @@ h3#planhead {
     left: 50rem;
 }
 
+/* Container for radio input selectors */
 #toprowcontainer {
     display: flex;
     flex-direction: row;
     margin-bottom: 25px;
 }
 
+/* Container for plan radio inputs */
 #planlegend {
     width: fit-content;
     position: relative;
     left: 25rem;
 }
 
+/* Container for term radio inputs */
 #termlegend {
     width: fit-content;
     position: relative;
     left: 37.5rem;
 }
 
+/* Container for course group radio inputs */
 #optionlegend {
     width: fit-content;
     position: relative;
@@ -144,6 +148,7 @@ h3#planhead {
     width: fit-content;
 }
 
+/* Text just below header giving user some info */
 #explainertext {
     margin-left: 10px;
 }
@@ -172,11 +177,13 @@ h3#planhead {
     font-size: 115%;
 }
 
+/* Main content, grid of times/days */
 .coursegrid {
     display: flex;
     flex-direction: row;
 }
 
+/* Flexboxes for each day of the week */
 .monday, .tuesday, .wednesday, .thursday, .friday {
     width: 320px;
     text-align: center;
@@ -186,12 +193,14 @@ h3#planhead {
     border-bottom: 3px solid black;
 }
 
+/* All of the horizontal lines in the grid */
 .horizontaldivider {
     box-sizing: border-box;
     border-top: 3px solid black;
     width: inherit;
 }
 
+/* Container for the times along left of page */ 
 .time {
     width: 100px;
     margin-left: 20px;
@@ -201,6 +210,7 @@ h3#planhead {
     border: 3px solid black;
 }
 
+/* Individual time text */
 .timeslot {
     margin-bottom: 113.6px;
 }

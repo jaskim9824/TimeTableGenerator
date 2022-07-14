@@ -49,9 +49,6 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, soup):
 
         planWrapper = soup.new_tag("div", attrs={"ng-switch-when": cleaner.cleanString(plan)})
         for term in sequenceDict[plan]:
-            # the terms are the same regardless of course groups so any savedPlan that matched fullPlan would
-            # have worked
-
             # ng-change used to update $scope.selectedTerm
             radioInput = soup.new_tag("input", attrs={"type":"radio", 
                                                   "name":cleaner.cleanString(plan) + "termselector", 
