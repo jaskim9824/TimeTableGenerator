@@ -176,27 +176,30 @@ h3#planhead {
 }
 
 .monday, .tuesday, .wednesday, .thursday, .friday {
-    width: 325px;
+    width: 320px;
     text-align: center;
     font-size: 120%;
-    border-right: 2px solid black;
+    border-right: 3px solid black;
+    border-top: 3px solid black;
+    border-bottom: 3px solid black;
 }
 
 .horizontaldivider {
-    border: 2px solid black;
+    border-top: 3px solid black;
     width: inherit;
 }
 
 .time {
-    padding-left: 20px;
-    padding-top: 22px;
+    width: 100px;
+    margin-left: 20px;
+    padding-top: 35px;
     text-align: center;
     font-size: 120%;
-    border-right: 2px solid black;
+    border: 3px solid black;
 }
 
 .timeslot {
-    margin-bottom: 100px;
+    margin-bottom: 113.6px;
 }
 
 /* Contains one (or two if an "or" option) course */
@@ -246,11 +249,12 @@ h3#planhead {
       
 /* Course box styling */
 .course, .orcourse {
+    box-sizing: border-box;
     border-style: solid;
     border-color: black;
     border-width: 2px;
     height: 50px;
-    width: 322px;
+    width: 321px;
     background-color: #eec89a;
 }
 
@@ -439,9 +443,17 @@ p.ortext {
     display: inline;
 }
 
-.instructoremail, .building, .endTime {
+.instructorname {
+    margin: 10px 0px 0px 0px;
+}
+
+.instructoremail {
+    margin: 0;
+}
+
+.building, .endTime {
     position: absolute;
-    left: 50%;
+    left: 25%;
 }
 
 /* footer formatting */
