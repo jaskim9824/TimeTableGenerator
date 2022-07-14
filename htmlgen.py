@@ -210,12 +210,14 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, soup):
 # Parameters:
 #   soup - soup object, used to create HTML tags
 #   courseGroupList - list of all possible course groups taken in this program
+# Returns:
+#   displayTag - HTML tag for the display tag (container for the timetable grid)
 def generateDisplayDiv(soup, courseGroupList):
-    switchVariable = "selectedPlan"
-    formattedCourseGroupVar="field{number}.group{number}"
+    switchVariable = "selectedPlan"  # switch on plan selection
+    formattedCourseGroupVar="field{number}.group{number}"  # switch on course group selection
     for element in courseGroupList:
         switchVariable += "+" + formattedCourseGroupVar.format(number=element)
-    switchVariable += "+selectedTerm"
+    switchVariable += "+selectedTerm"  # switch on term selection
     return soup.new_tag("div", attrs={"class":"display",
                                       "ng-switch":switchVariable})
 
@@ -269,7 +271,7 @@ def placeCourseGroupRadioInputsForSubPlan(subPlanTag, soup, subPlanOptionList, s
         breakTag = soup.new_tag("br")
         subPlanTag.append(breakTag)
 
-# Function that places the outer divs representing each plan
+# Function that places the outer divs representing each plan and each term
 # Parameters:
 #   displayTag - HTML tag representing outer display div where the different plan sequences are placed
 #   sequenceDict - dict that maps plan name to a dict that represents the plan sequence
@@ -352,7 +354,7 @@ def createDailyDivs(soup):
         currentDiv.append(dayHeaderDiv)
         currentDiv.append(soup.new_tag("hr", attrs={"class":"horizontaldivider"}))
         for i in range(1, 14):
-            # placing the horizontal dividing lines, 1 hr = 135.35 px, 22.15 is to align to rest of the grid
+            # placing the horizontal dividing lines, 1 hr = 135.35 px, 22.15 is to align to the rest of the grid
             currentDiv.append(soup.new_tag("hr", attrs={"class":"horizontaldivider", 
                                                     "style":"position:absolute; top:" + str(22.15+135.35*i) + "px"}))
             daysTagsDict[day.lower()] = currentDiv
@@ -360,6 +362,7 @@ def createDailyDivs(soup):
     return daysTagsDict
 
 # Function that places the course divs within a certain term column of a certain plan
+# This is the main function in htmlgen as it places each course on the page
 # Parameters:
 #   daysTagsDict - dict mapping day of week ("monday", "tuesday", etc.) to the div
 #   for that day of the week. Useful to shortcut to the div one requires
@@ -368,8 +371,6 @@ def createDailyDivs(soup):
 #   plan - name of plan whose terms are being placed
 #   electiveCountWrapper - dict mapping elective abbreviated name ("ITS", "PROG", "COMP")
 #   to count of current ocurrence of that elective
-# Returns:
-#   compcounter, progcounter, itscounter
 def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
     courseGroupList = []  # list of courses (course objects) in a course group
     courseGroupTitle = ""  # name of the course group (eg: "Course group 2A")
@@ -486,19 +487,24 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
                 if not skipAddCourseFlag:
                     # the flag telling us to skip appending this course is not set, so append it
                     courseContDiv.append(courseDiv)
-                    appendToEachDay(tagsList, courseContDiv)
+                    appendToEachDay(tagsList, courseContDiv)  # course may occur on multiple days, need to append to each day
 
             if courseGroupTitle != "":
                 appendToEachDay(tagsList, courseContDiv)
             if courseGroupList != []:
-                # A course group is involved. Append each course to the coursegroupcontainer,
-                # then append this container to the termTag
+                # A course group is involved. Append each course to the courseContDiv, then
+                # append courseContDiv to any days for which that course occurs
                 for i in range(0, len(courseGroupList)):
                     if i == (len(courseGroupList) - 1):
                         courseGroupList[i]["class"].append("lastcourseingroup")  # last course has no bottom margin
                     courseContDiv.append(courseGroupList[i])
                 appendToEachDay(tagsList, courseContDiv)
 
+# Calculates the amount of minutes from 8:00am to the start time of a class
+# Parameters:
+#   startTime - time the class starts. String in 24 hour clock notation (eg: "18:34")
+# Returns:
+#   minutesFromEight - amount of minutes from 8:00am to startTime
 def calcMinutes(startTime):
     colonIndex = startTime.find(":")
     assert colonIndex != -1, "Error in start time, ensure the Excel file is properly formatted in the Hrs From column"
@@ -506,6 +512,12 @@ def calcMinutes(startTime):
     minutes = int(startTime[colonIndex + 1:])
     return (hours*60 + minutes) - 8*60
 
+# Calculates the amount of minutes long a class is, rounded to the nearest 30 minutes
+# Parameters:
+#   startTime - time the class starts. String in 24 hour clock notation (eg: "8:00")
+#   endTime - time the class starts. String in 24 hour clock notation (eg: "21:04")
+# Returns:
+#   roundedTime - amount of minutes from startTime to endTime, rounded to the nearest 30 minutes
 def calcClassDuration(startTime, endTime):
     startColonIndex = startTime.find(":")
     endColonIndex = startTime.find(":")
@@ -521,9 +533,13 @@ def calcClassDuration(startTime, endTime):
     endTime = endHours*60 + endMinutes
 
     actualTime = endTime - startTime
-    if actualTime % 30 > 15:
+
+    # rounding actualTime to the nerest 30 minutes
+    if actualTime % 30 >= 15:
+        # round up
         roundedTime = actualTime + (30 - (actualTime % 30))
     else:
+        # round down
         roundedTime = actualTime - (actualTime % 30)
 
     return roundedTime
@@ -532,9 +548,13 @@ def calcClassDuration(startTime, endTime):
 # Parameters:
 #   soup - soup object, used to create HTML tags 
 #   courseID - ID of the course being placed (str)
-#   category - category of course in question
 #   orBool - boolean flag for OR cases, true if course is an OR case
+#   minutesFromEight - minutes from 8:00am to start of class
+#   minutesLong - length in minutes of class, rounded to the nearest 30 minutes
+# Returns:
+#   courseDiv - HTML tag for the container of the course
 def createCourseDiv(soup, courseID, orBool, minutesFromEight, minutesLong):
+    # adjustmentFactor helps format vertical position of courses starting at 8:00am
     adjustmentFactor = 0
     if minutesFromEight == 0:
         adjustmentFactor = -3
@@ -556,8 +576,8 @@ def createCourseDiv(soup, courseID, orBool, minutesFromEight, minutesLong):
 # Function that consturcts the course description tooltip for an elective
 # Parameters:
 #   soup - soup object used to create HTML tags
-#   course- course object 
-#   courseDisc - course disc HTML tag
+#   course - course object 
+#   courseDisc - course disc (description box) HTML tag
 def formatCourseDescriptionForElective(soup, course, courseDisc):
     # formatting title in course description
     courseTitle = soup.new_tag("b", attrs={"class":"descriptiontitle"})
@@ -572,7 +592,7 @@ def formatCourseDescriptionForElective(soup, course, courseDisc):
     courseDisc.append(courseLine)
     courseDisc.append(courseDescription)
 
-# Function that consturcts the course description tooltip for a regular course
+# Function that constructs the course description tooltip for a regular course
 # Parameters:
 #   soup - soup object used to create HTML tags
 #   course - course object 
@@ -599,7 +619,7 @@ def formatCourseDescriptionForRegular(soup, course, courseDisc):
 
     # adding alpha hours
     courseAlphaHours = soup.new_tag("p", attrs={"class":"descriptionalphahours"})
-    courseAlphaHours.append(course.approvedHrs + ")" + " ")
+    courseAlphaHours.append("( " + course.approvedHrs + ")" + " ")
 
     # adding desc
     courseDescription = soup.new_tag("p", attrs={"class":"fulldescription"})
@@ -670,9 +690,14 @@ def addOrCourses(courseOrList, courseGroup, courseGroupList, tagsList, soup):
         # which will in turn be appended to termTag later
         courseGroupList.append(courseOrContDiv)
     else:
-        appendToEachDay(tagsList, courseOrContDiv)
+        appendToEachDay(tagsList, courseOrContDiv)  # append to courseOrContDiv to each day it occurs on
     courseOrList = []  # reset in case multiple OR cases in a term
 
+# Appends courseContDiv to all of the days that course occurs on
+# Parameters:
+#   tagsList - list of HTML tags of days we need to append to. Every day the course
+#   occurs on, that day's tag will appear in this list
+#   courseContDiv - container for an entire course, everything to do with one course is in this div
 def appendToEachDay(tagsList, courseContDiv):
     for dayTag in tagsList:
         # if the course occurs on multiple days, append to each dayDiv (mondayDiv, tuesdayDiv, etc.)
@@ -681,6 +706,11 @@ def appendToEachDay(tagsList, courseContDiv):
             courseContDiv.find(class_="tooltiptextright")["class"] = "tooltiptextleft"
         dayTag.append(deepcopy(courseContDiv))
 
+# Checks if a day is late in the week (thursday or friday)
+# Parameters:
+#   dayTag - HTML tag for a day
+# Returns:
+#   boolean - True if dayTag is for thursday or friday, False otherwise
 def dayTagInLateWeek(dayTag):
     if "class=\"thursday\"" in str(dayTag):
         return True
@@ -688,18 +718,3 @@ def dayTagInLateWeek(dayTag):
         return True
     else:
         return False
-
-# Function that writes the flags and variables associated with specific
-# course in the JS
-# Parameters:
-#   controller - file handle to controller.js
-#   courseID - ID for course
-def writeFlagsAndVariables(controller, courseID, plan):
-    controller.write("  var " + 
-                         courseID +
-                         "flag = false;\n")
-    controller.write("  var " + 
-                         courseID +
-                         "rflag = false;\n")
-    controller.write(" var " + courseID + "Time = new Date().getTime();\n")
-    controller.write("this."+plan+"ClickedMap.set(\""+courseID+"\", []);\n")
