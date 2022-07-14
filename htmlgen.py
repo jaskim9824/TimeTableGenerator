@@ -14,19 +14,6 @@ from copy import deepcopy
 
 from coursegroupparsing import CourseGroupOption
 
-# Function that generates the display div which holds the plan diagram
-# Parameters:
-#   soup - soup object, used to create HTML tags
-#   courseGroupList - list of all possible course groups taken in this program
-def generateDisplayDiv(soup, courseGroupList):
-    switchVariable = "selectedPlan"
-    formattedCourseGroupVar="field{number}.group{number}"
-    for element in courseGroupList:
-        switchVariable += "+" + formattedCourseGroupVar.format(number=element)
-    switchVariable += "+selectedTerm"
-    return soup.new_tag("div", attrs={"class":"display",
-                                      "ng-switch":switchVariable})
-
 # Changes the header title to include deptName, which is pulled
 # from Sequncing Excel file
 # Parameters:
@@ -206,7 +193,7 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, soup):
                                                                                "obj."+
                                                                                course.getOptionName()+
                                                                                option.name,
-                                                                            "value": section.name
+                                                                            "value": section.name,
                                                                             "id": section.name})
                                 labelTag = soup.new_tag("label", attrs={"for":section.name})
                                 labelTag.append(section.name)
@@ -218,6 +205,19 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, soup):
                             optionWrapper.append(labelTag)
                         wrapperDiv.append(optionWrapper)
             courseGroupTag.append(wrapperDiv)
+
+# Function that generates the display div which holds the plan diagram
+# Parameters:
+#   soup - soup object, used to create HTML tags
+#   courseGroupList - list of all possible course groups taken in this program
+def generateDisplayDiv(soup, courseGroupList):
+    switchVariable = "selectedPlan"
+    formattedCourseGroupVar="field{number}.group{number}"
+    for element in courseGroupList:
+        switchVariable += "+" + formattedCourseGroupVar.format(number=element)
+    switchVariable += "+selectedTerm"
+    return soup.new_tag("div", attrs={"class":"display",
+                                      "ng-switch":switchVariable})
 
 # Function that places the outer divs for the course group selection 
 # radio inputs for each plan
@@ -232,22 +232,7 @@ def placeCourseGroupRadioInputs(courseGroupSelectTag, soup, courseGroupDict):
         placeCourseGroupRadioInputsForPlan(planCourseGroupsTag, soup, courseGroupDict[plan])
         courseGroupSelectTag.append(planCourseGroupsTag)
 
-# Function that places the outer divs representing each plan
-# Parameters:
-#   displayTag - HTML tag representing outer display div where the different plan sequences are placed
-#   sequenceDict - dict that maps plan name to a dict that represents the plan sequence
-#   soup - soup object, used to create HTML tags
-def placePlanDivs(displayTag, sequenceDict, soup):
-    for plan in sequenceDict:
-        for term in sequenceDict[plan]:
-            switchInput = soup.new_tag("div", attrs={"id":cleaner.cleanString(plan) + cleaner.cleanString(term),
-                                                    "ng-switch-when":cleaner.cleanString(plan) + cleaner.cleanString(term),
-                                                    "style":"height:fit-content; display:flex; flex-direction:row; flex-wrap:column;"})
-            placeTermDivs(switchInput, sequenceDict[plan], soup, plan, term)
-            displayTag.append(switchInput)
-
-# Function that places the course group froms for the course group selection 
-# radio inputs for a specific plan
+# Function that places the course group radio inputs for a specific plan
 # Parameters:
 #   planCourseGroupsTag - HTML tag representing div that holds the group selection menu for that plan
 #   soup - soup object, used to create HTML tags
@@ -283,6 +268,20 @@ def placeCourseGroupRadioInputsForSubPlan(subPlanTag, soup, subPlanOptionList, s
         subPlanTag.append(labelTag)
         breakTag = soup.new_tag("br")
         subPlanTag.append(breakTag)
+
+# Function that places the outer divs representing each plan
+# Parameters:
+#   displayTag - HTML tag representing outer display div where the different plan sequences are placed
+#   sequenceDict - dict that maps plan name to a dict that represents the plan sequence
+#   soup - soup object, used to create HTML tags
+def placePlanDivs(displayTag, sequenceDict, soup):
+    for plan in sequenceDict:
+        for term in sequenceDict[plan]:
+            switchInput = soup.new_tag("div", attrs={"id":cleaner.cleanString(plan) + cleaner.cleanString(term),
+                                                    "ng-switch-when":cleaner.cleanString(plan) + cleaner.cleanString(term),
+                                                    "style":"height:fit-content; display:flex; flex-direction:row; flex-wrap:column;"})
+            placeTermDivs(switchInput, sequenceDict[plan], soup, plan, term)
+            displayTag.append(switchInput)
 
 # Function that places the column divs which represent the terms within a certain plan
 # Parameters:
@@ -328,13 +327,15 @@ def createTimeGridDivs(soup):
             adjustmentFactor = -2
         timeSlotDiv = soup.new_tag("div", attrs={"class":"timeslot"})
         timeSlotDiv.append(str(i) + ":00")
-        timeDiv.append(soup.new_tag("hr", attrs={"class":"horizontaldivider", "style":"position:absolute; top:" + str(24.5+135.35*(i - 8) + adjustmentFactor) + "px"}))
+        # 1 hour = 135.35 pixels. Initial value 24.5 aligns times to the rest of the grid
+        timeDiv.append(soup.new_tag("hr", attrs={"class":"horizontaldivider", 
+                                "style":"position:absolute; top:" + str(24.5+135.35*(i - 8) + adjustmentFactor) + "px"}))
         timeDiv.append(timeSlotDiv)
     
     return timeDiv
 
 # Creates the div for each day of the week. Each div will hold all of the courses taken during that day.
-# Also creates a horizontal dividing line running across the entire page at each hour to create a grid.
+# Also creates a horizontal dividing line running across the entire page at each hour.
 # Parameters:
 #   soup - soup object, used to create HTML tags
 # Returns:
@@ -344,15 +345,16 @@ def createDailyDivs(soup):
     daysTagsDict = {}
     daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
     for day in daysOfWeek:
-        # create a column-oriented flexbox for each day of the week, add horizontal dividers
+        # create a column-oriented flexbox for each day of the week, add first horizontal divider
         currentDiv = soup.new_tag("div", attrs={"class":day.lower()})
         dayHeaderDiv = soup.new_tag("div", attrs={"class":"dayheader"})
         dayHeaderDiv.append(day)
         currentDiv.append(dayHeaderDiv)
         currentDiv.append(soup.new_tag("hr", attrs={"class":"horizontaldivider"}))
         for i in range(1, 14):
-            # placing the horizontal dividing line, position determined by ratio of px to hour
-            currentDiv.append(soup.new_tag("hr", attrs={"class":"horizontaldivider", "style":"position:absolute; top:" + str(22.15+135.35*i) + "px"}))
+            # placing the horizontal dividing lines, 1 hr = 135.35 px, 22.15 is to align to rest of the grid
+            currentDiv.append(soup.new_tag("hr", attrs={"class":"horizontaldivider", 
+                                                    "style":"position:absolute; top:" + str(22.15+135.35*i) + "px"}))
             daysTagsDict[day.lower()] = currentDiv
 
     return daysTagsDict
@@ -459,7 +461,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
                 courseDiv.append(courseHeader)
                 courseDiv.append(courseDisc)
 
-                skipAddCourseFlag = False
+                skipAddCourseFlag = False  # if true, do not append course yet, we will get it on the next pass
 
                 if orCase:
                     # If multiple course options, append the courseDiv to a list which we will append
@@ -468,7 +470,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
                     if termList.index(course) == (len(termList) - 1):
                         # last course in term is an OR course, need to append to termTag immediately
                         addOrCourses(courseOrList, course.courseGroup, courseGroupList, tagsList, soup)
-                        skipAddCourseFlag = True
+                        skipAddCourseFlag = True  # we will append this course on the next pass since it is the 1st of 2 OR courses
                     if not lastOrCase:
                         continue
                     if lastOrCase and (courseOrList != []):
@@ -477,25 +479,17 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
                         continue
 
                 if course.courseGroup != "":
-                    # need to append to courseGroupList, different than check in orCase because
-                    # this doesn't involve OR
+                    # course is in a course group, need to append to courseGroupList
                     courseGroupList.append(courseDiv)
                     continue
 
                 if not skipAddCourseFlag:
+                    # the flag telling us to skip appending this course is not set, so append it
                     courseContDiv.append(courseDiv)
-                    for dayTag in tagsList:
-                        if dayTagInLateWeek(dayTag) and ("class=\"tooltiptextright\"") in str(courseContDiv):
-                            courseContDiv.find(class_="tooltiptextright")["class"] = "tooltiptextleft"
-                        dayTag.append(deepcopy(courseContDiv))
+                    appendToEachDay(tagsList, courseContDiv)
 
             if courseGroupTitle != "":
-                for dayTag in tagsList:
-                    # Need to add course group title, outside of course group box so
-                    # append directly to termTag
-                    if dayTagInLateWeek(dayTag) and ("class=\"tooltiptextright\"") in str(courseContDiv):
-                        courseContDiv.find(class_="tooltiptextright")["class"] = "tooltiptextleft"
-                    dayTag.append(deepcopy(courseGroupTitle))
+                appendToEachDay(tagsList, courseContDiv)
             if courseGroupList != []:
                 # A course group is involved. Append each course to the coursegroupcontainer,
                 # then append this container to the termTag
@@ -503,10 +497,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
                     if i == (len(courseGroupList) - 1):
                         courseGroupList[i]["class"].append("lastcourseingroup")  # last course has no bottom margin
                     courseContDiv.append(courseGroupList[i])
-                for dayTag in tagsList:
-                    if dayTagInLateWeek(dayTag) and ("class=\"tooltiptextright\"") in str(courseContDiv):
-                        courseContDiv.find(class_="tooltiptextright")["class"] = "tooltiptextleft"
-                    dayTag.append(deepcopy(courseContDiv))
+                appendToEachDay(tagsList, courseContDiv)
 
 def calcMinutes(startTime):
     colonIndex = startTime.find(":")
@@ -537,50 +528,6 @@ def calcClassDuration(startTime, endTime):
 
     return roundedTime
 
-def extractCourseCategories(course):
-    catListString = cleaner.cleanString(course.main_category)
-    for subcat in course.sub_categories:
-        catListString += " " + cleaner.cleanString(subcat)
-    return catListString
-
-# Appends all courses in courseOrList to either termTag (if not in a course group) or to 
-# courseGroupList (if in a course group)
-# Parameters:
-#   courseOrList - list of courseDivs of all courses to go into orcoursecontainer
-#   courseGroup - course group of the current (last in OR case) course
-#   courseGroupList - list of courseDivs to go into coursegroupcontainer
-#   termTag - HTML tag representing the specfic term column in question
-#   soup - soup object, used to create HTML tags
-# Returns: termTag, courseOrList (cleared to be empty), courseGroupList
-def addOrCourses(courseOrList, courseGroup, courseGroupList, tagsList, soup):
-    courseOrContDiv = soup.new_tag("div", attrs={"class":"orcoursecontainer"})  # container for all OR courses
-    for i in range(0, len(courseOrList)):
-        courseOrContDiv.append(courseOrList[i])  # append each OR course
-        if i < (len(courseOrList) - 1):
-            # Add the word "or" between courses (except not after the last option)
-            courseOr = soup.new_tag("p", attrs={"class":"ortext"})
-            courseOr.append("OR")  # add the word or between course boxes
-            courseOrContDiv.append(courseOr)
-    if courseGroup:
-        # if the OR courses were in a course group, append them to courseGroupList
-        # which will in turn be appended to termTag later
-        courseGroupList.append(courseOrContDiv)
-    else:
-        for dayTag in tagsList:
-            # not in a course group, append directly to termTag
-            if dayTagInLateWeek(dayTag) and ("class=\"tooltiptextright\"" in str(courseOrContDiv)):
-                courseOrContDiv.find(class_="tooltiptextright")["class"] = "tooltiptextleft"
-            dayTag.append(deepcopy(courseOrContDiv))
-    courseOrList = []  # reset in case multiple OR cases in a term
-
-def dayTagInLateWeek(dayTag):
-    if "class=\"thursday\"" in str(dayTag):
-        return True
-    elif "class=\"friday\"" in str(dayTag):
-        return True
-    else:
-        return False
-
 # Function that constructs a course div
 # Parameters:
 #   soup - soup object, used to create HTML tags 
@@ -605,21 +552,6 @@ def createCourseDiv(soup, courseID, orBool, minutesFromEight, minutesLong):
                                                 "ng-click":courseID+"Listener()",
                                                 "ng-right-click":courseID+"RCListener()",
                                                 "style":"height:" + str((135.35/60)*minutesLong - 2 + adjustmentFactor) + "px"})
-
-# Function that writes the flags and variables associated with specific
-# course in the JS
-# Parameters:
-#   controller - file handle to controller.js
-#   courseID - ID for course
-def writeFlagsAndVariables(controller, courseID, plan):
-    controller.write("  var " + 
-                         courseID +
-                         "flag = false;\n")
-    controller.write("  var " + 
-                         courseID +
-                         "rflag = false;\n")
-    controller.write(" var " + courseID + "Time = new Date().getTime();\n")
-    controller.write("this."+plan+"ClickedMap.set(\""+courseID+"\", []);\n")
 
 # Function that consturcts the course description tooltip for an elective
 # Parameters:
@@ -714,3 +646,60 @@ def formatCourseDescriptionForRegular(soup, course, courseDisc):
     courseDisc.append(courseLocation)
     courseDisc.append(courseTime)
     courseDisc.append(courseEnrolled)
+
+# Appends all courses in courseOrList to either termTag (if not in a course group) or to 
+# courseGroupList (if in a course group)
+# Parameters:
+#   courseOrList - list of courseDivs of all courses to go into orcoursecontainer
+#   courseGroup - course group of the current (last in OR case) course
+#   courseGroupList - list of courseDivs to go into coursegroupcontainer
+#   termTag - HTML tag representing the specfic term column in question
+#   soup - soup object, used to create HTML tags
+# Returns: termTag, courseOrList (cleared to be empty), courseGroupList
+def addOrCourses(courseOrList, courseGroup, courseGroupList, tagsList, soup):
+    courseOrContDiv = soup.new_tag("div", attrs={"class":"orcoursecontainer"})  # container for all OR courses
+    for i in range(0, len(courseOrList)):
+        courseOrContDiv.append(courseOrList[i])  # append each OR course
+        if i < (len(courseOrList) - 1):
+            # Add the word "or" between courses (except not after the last option)
+            courseOr = soup.new_tag("p", attrs={"class":"ortext"})
+            courseOr.append("OR")  # add the word or between course boxes
+            courseOrContDiv.append(courseOr)
+    if courseGroup:
+        # if the OR courses were in a course group, append them to courseGroupList
+        # which will in turn be appended to termTag later
+        courseGroupList.append(courseOrContDiv)
+    else:
+        appendToEachDay(tagsList, courseOrContDiv)
+    courseOrList = []  # reset in case multiple OR cases in a term
+
+def appendToEachDay(tagsList, courseContDiv):
+    for dayTag in tagsList:
+        # if the course occurs on multiple days, append to each dayDiv (mondayDiv, tuesdayDiv, etc.)
+        if dayTagInLateWeek(dayTag) and ("class=\"tooltiptextright\"") in str(courseContDiv):
+            # if course on thursday or friday, move tooltip to left of course (so not off page)
+            courseContDiv.find(class_="tooltiptextright")["class"] = "tooltiptextleft"
+        dayTag.append(deepcopy(courseContDiv))
+
+def dayTagInLateWeek(dayTag):
+    if "class=\"thursday\"" in str(dayTag):
+        return True
+    elif "class=\"friday\"" in str(dayTag):
+        return True
+    else:
+        return False
+
+# Function that writes the flags and variables associated with specific
+# course in the JS
+# Parameters:
+#   controller - file handle to controller.js
+#   courseID - ID for course
+def writeFlagsAndVariables(controller, courseID, plan):
+    controller.write("  var " + 
+                         courseID +
+                         "flag = false;\n")
+    controller.write("  var " + 
+                         courseID +
+                         "rflag = false;\n")
+    controller.write(" var " + courseID + "Time = new Date().getTime();\n")
+    controller.write("this."+plan+"ClickedMap.set(\""+courseID+"\", []);\n")
