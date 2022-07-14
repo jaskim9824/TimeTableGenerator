@@ -310,7 +310,9 @@ def createDailyDivs(soup):
     for day in daysOfWeek:
         # create a column-oriented flexbox for each day of the week, add horizontal dividers
         currentDiv = soup.new_tag("div", attrs={"class":day.lower()})
-        currentDiv.append(day)
+        dayHeaderDiv = soup.new_tag("div", attrs={"class":"dayheader"})
+        dayHeaderDiv.append(day)
+        currentDiv.append(dayHeaderDiv)
         currentDiv.append(soup.new_tag("hr", attrs={"class":"horizontaldivider"}))
         for i in range(1, 14):
             # placing the horizontal dividing line, position determined by ratio of px to hour
@@ -637,9 +639,9 @@ def formatCourseDescriptionForRegular(soup, course, courseDisc):
 
     # adding instructor
     courseInstructorName = soup.new_tag("p", attrs={"class":"instructorname"})
-    courseInstructorName.append("Instructor name: " + course.instructorName)
+    courseInstructorName.append("Instructor Name: " + course.instructorName)
     courseInstructorEmail = soup.new_tag("p", attrs={"class":"instructoremail"})
-    courseInstructorEmail.append("Instructor email: " + course.email)
+    courseInstructorEmail.append("Instructor Email: " + course.email)
 
     # adding location
     courseLocation = soup.new_tag("div", attrs={"class":"location"})

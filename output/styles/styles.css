@@ -185,6 +185,7 @@ h3#planhead {
 }
 
 .horizontaldivider {
+    box-sizing: border-box;
     border-top: 3px solid black;
     width: inherit;
 }
