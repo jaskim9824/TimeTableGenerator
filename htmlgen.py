@@ -99,6 +99,7 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, soup):
         #         courseGroupWrapper.append(radioInput)
         #         courseGroupWrapper.append(labelTag)
         #         wrapperDiv.append(courseGroupWrapper)
+            courseSectionWrapper = soup.new_tag("div")
             for course in sequenceDict[plan][term]:
                 if type(course) == type(CourseGroupOption()):
                     # append to coursegroup form
@@ -121,8 +122,7 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, soup):
                     wrapperDiv.append(courseGroupWrapper)
                             
                 else:
-                    # is an option
-                    
+                    # is an OR course option
                     if course.isWithCourseGroup:
                         # this OR course is bound to a course group
                         optionOutsideWrapper = soup.new_tag("div", attrs={"ng-switch":cleaner.cleanString(plan) + 
@@ -140,10 +140,24 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, soup):
                                                                                cleaner.cleanString(term) +
                                                                                "obj."+
                                                                                course.getOptionName(),
-                                                                    "value": option,
-                                                                    "id": option})
-                            labelTag = soup.new_tag("label", attrs={"for":option})
-                            labelTag.append(option)
+                                                                    "value": option.name,
+                                                                    "id": option.name})
+                            labelTag = soup.new_tag("label", attrs={"for":option.name})
+                            sectionWrapper = soup.new_tag("div", attrs={"ng-if":"(" + cleaner.cleanString(plan) + 
+                                                                               cleaner.cleanString(term) +
+                                                                               "obj."+
+                                                                               course.parentCourseGroup[0] + "=="
+                                                                               + course.parentCourseGroup + ")" + 
+                                                                               "& (" +
+                                                                               cleaner.cleanString(plan) + 
+                                                                               cleaner.cleanString(term) +
+                                                                               "obj."+
+                                                                               course.getOptionName() + "==" + 
+                                                                               option.name + ")"})
+                            sectionWrapper.append(option.name)
+                            # for section in option.sections:
+                            #     # add radio inputs for each section
+                            labelTag.append(option.name)
                             optionWrapper.append(optionRadio)
                             optionWrapper.append(labelTag)
                         wrapperDiv.append(optionOutsideWrapper)
@@ -160,10 +174,10 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, soup):
                                                                                cleaner.cleanString(term) +
                                                                                "obj."+
                                                                                course.getOptionName(),
-                                                                    "value": option,
-                                                                    "id": option})
-                            labelTag = soup.new_tag("label", attrs={"for":option})
-                            labelTag.append(option)
+                                                                    "value": option.name,
+                                                                    "id": option.name})
+                            labelTag = soup.new_tag("label", attrs={"for":option.name})
+                            labelTag.append(option.name)
                             optionWrapper.append(optionRadio)
                             optionWrapper.append(labelTag)
                         wrapperDiv.append(optionWrapper)
