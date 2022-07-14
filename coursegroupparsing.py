@@ -91,6 +91,9 @@ class Option:
     def addOption(self, addedOption):
         self.options.append(addedOption)
 
+    def isequal(self, option):
+        return self.options == option.options
+
 class ORCourseOption(Option):
     def __init__(self, isWithinCourseGroup, parentCourseGroup):
         super().__init__()
@@ -101,9 +104,20 @@ class ORCourseOption(Option):
         super().__init__(options)
         self.isWithinCourseGroup = isWithinCourseGroup
         self.parentCourseGroup = parentCourseGroup
+    
+    def getOptionName(self):
+        outputStr = ""
+        for option in self.options:
+            outputStr += option.name
 
 class CourseGroupOption(Option):
-    pass
+    def __init__(self, courseGroupName):
+        super().__init__()
+        self.courseGroupName = courseGroupName
+
+    def getOptionName(self):
+        return self.courseGroupName
+
                 
 def extractingListofOptions(sequenceDict):
     listOptionsDict = {}
@@ -116,12 +130,19 @@ def extractingListofOptions(sequenceDict):
                 if len(course) <= 1:
                     continue
                 if type(course[0]) == type([]):
-                    courseGroupOpt = CourseGroupOption()
+                    courseGroupOpt = CourseGroupOption(option[-1][0])
                     for option in course:
                         if len(option) > 2:
                             optionsList.append(ORCourseOption(option[:-1], True, option[-1]))
                         courseGroupOpt.addOption(option[-1])
-                        optionsList.append(courseGroupOpt)                        
+                    dup = False
+                    for optionWrap in optionsList:
+                        if courseGroupOpt.isequal(optionWrap):
+                            dup = True
+                            break
+                    if dup:
+                        continue
+                    optionsList.append(courseGroupOpt)                        
                 else:
                     ORCourseOption = ORCourseOption(False, "")
                     for option in course:

@@ -12,6 +12,8 @@ import cleaner
 import html
 from copy import deepcopy
 
+from coursegroupparsing import CourseGroupOption
+
 # Function that generates the display div which holds the plan diagram
 # Parameters:
 #   soup - soup object, used to create HTML tags
@@ -98,42 +100,73 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, courseGroupDict, sequence
         #         courseGroupWrapper.append(labelTag)
         #         wrapperDiv.append(courseGroupWrapper)
             for course in sequenceDict[plan][term]:
-                if len(course) == 1:
-                    continue
-                for option in course:
-                    # course group case!
-                    if type(option) == type([]):
-                        courseGroupOptionName = option[-1]
-                        courseGroupNum = option[-1][0]
-                        radioInput = soup.new_tag("input", attrs={"type":"radio",
-                                                                  "name":cleaner.cleanString(plan) + 
-                                                                  cleaner.cleanString(term) + 
-                                                                  "courseGroup" + courseGroupNum + "select",
-                                                                  "ng-model": cleaner.cleanString(plan) + 
-                                                                  cleaner.cleanString(term) + "obj." + courseGroupNum,
-                                                                  "value":courseGroupOptionName,
-                                                                  "id":courseGroupOptionName})
-                        # this means there is an OR case within the course group
-                        if len(option) > 2:
-                            wrapDiv = soup.new_tag("div", attrs={"ng-switch-when":courseGroupNum})
-                            i = 0
-                            for element in option:
-                                concName += element
-                            while i < len(option) - 1:
-                                radioInput = soup.new_tag("input", attrs={"type":"radio",
-                                                                  "name":cleaner.cleanString(plan) + 
-                                                                  cleaner.cleanString(term) + 
-                                                                  concName + "select",
-                                                                  "ng-model": cleaner.cleanString(plan) + 
-                                                                  cleaner.cleanString(term) + "obj." + concName,
-                                                                  "value":option[i],
-                                                                  "id":option[i]})
-                                wrapDiv.append(radioInput)
+                if type(course) == type(CourseGroupOption()):
+                    # append to coursegroup form
+                    courseGroupWrapper = soup.new_tag("div", attrs={"id":course.getOptionName()})
+                    for option in course.options:
+                        courseGroupRadio = soup.new_tag("input", attrs={"type":"radio",
+                                                                    "name":cleaner.cleanString(plan) + 
+                                                                           cleaner.cleanString(term) + 
+                                                                           course.getOptionName(),
+                                                                    "ng-model":cleaner.cleanString(plan) + 
+                                                                               cleaner.cleanString(term) +
+                                                                               "obj."+
+                                                                               course.getOptionName(),
+                                                                    "value": option,
+                                                                    "id": option})
+                        labelTag = soup.new_tag("label", attrs={"for":option})
+                        labelTag.append(option)
+                        courseGroupWrapper.append(courseGroupRadio)
+                        courseGroupWrapper.append(labelTag)
+                    wrapperDiv.append(courseGroupWrapper)
                             
-
+                else:
+                    # is an option
+                    
+                    if course.isWithCourseGroup:
+                        # this OR course is bound to a course group
+                        optionOutsideWrapper = soup.new_tag("div", attrs={"ng-switch":cleaner.cleanString(plan) + 
+                                                                               cleaner.cleanString(term) +
+                                                                               "obj."+
+                                                                               course.parentCourseGroup[0]})
+                        optionWrapper = soup.new_tag("div", attrs={"ng-switch-when":course.parentCourseGroup})
+                        optionOutsideWrapper.append(optionWrapper)
+                        for option in course.options:
+                            optionRadio = soup.new_tag("input", attrs={"type":"radio",
+                                                                    "name":cleaner.cleanString(plan) + 
+                                                                           cleaner.cleanString(term) + 
+                                                                           course.getOptionName(),
+                                                                    "ng-model":cleaner.cleanString(plan) + 
+                                                                               cleaner.cleanString(term) +
+                                                                               "obj."+
+                                                                               course.getOptionName(),
+                                                                    "value": option,
+                                                                    "id": option})
+                            labelTag = soup.new_tag("label", attrs={"for":option})
+                            labelTag.append(option)
+                            optionWrapper.append(optionRadio)
+                            optionWrapper.append(labelTag)
+                        wrapperDiv.append(optionOutsideWrapper)
                             
-                        
-
+                    else:
+                        # this OR course is indep of a course group
+                        optionWrapper = soup.new_tag("div", attrs={"id":course.getOptionName()})
+                        for option in course.options:
+                            optionRadio = soup.new_tag("input", attrs={"type":"radio",
+                                                                    "name":cleaner.cleanString(plan) + 
+                                                                           cleaner.cleanString(term) + 
+                                                                           course.getOptionName(),
+                                                                    "ng-model":cleaner.cleanString(plan) + 
+                                                                               cleaner.cleanString(term) +
+                                                                               "obj."+
+                                                                               course.getOptionName(),
+                                                                    "value": option,
+                                                                    "id": option})
+                            labelTag = soup.new_tag("label", attrs={"for":option})
+                            labelTag.append(option)
+                            optionWrapper.append(optionRadio)
+                            optionWrapper.append(labelTag)
+                        wrapperDiv.append(optionWrapper)
             courseGroupTag.append(wrapperDiv)
 
 # Function that places the outer divs for the course group selection 
