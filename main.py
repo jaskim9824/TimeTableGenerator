@@ -16,6 +16,7 @@ def main():
             courseGroupDict = coursegroupparsing.extractPlanCourseGroupDict(sequenceDict)
             courseGroupList = coursegroupparsing.findListofAllCourseGroups(courseGroupDict)
             intitalCourseGroupVals = coursegroupparsing.findIntitalValuesofCourseGroups(courseGroupDict, courseGroupList)
+            optionDict = coursegroupparsing.extractingListofOptions(sequenceDict)
 
             javascriptgen.intializeControllerJavaScript(sequenceDict, 
                                                         intitalCourseGroupVals,
@@ -37,7 +38,7 @@ def main():
 
             courseGroupTag = mainTag.find(id = "optionlegend")
 
-            htmlgen.placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, soup)
+            htmlgen.placeRadioInputs(formTag, termTag, courseGroupTag, optionDict, soup)
 
             displayTag = htmlgen.generateDisplayDiv(soup, courseGroupList)
 
