@@ -182,18 +182,9 @@ h3#planhead {
     border-right: 2px solid black;
 }
 
-.horizontaltopdivider {
+.horizontaldivider {
     border: 2px solid black;
-}
-
-.horizontaltimedivider {
-    border: 2px solid black;
-    width: 100%;
-}
-
-.horizontalcoursedivider {
-    border: 2px solid black;
-    width: 100%;
+    width: inherit;
 }
 
 .time {
@@ -261,7 +252,7 @@ h3#planhead {
     border-width: 2px;
     height: 50px;
     width: 320px;
-    background-color: white;
+    background-color: #eec89a;
 }
 
 .coursegroupcontainer .lastcourseingroup {
