@@ -619,7 +619,7 @@ def formatCourseDescriptionForRegular(soup, course, courseDisc):
 
     # adding alpha hours
     courseAlphaHours = soup.new_tag("p", attrs={"class":"descriptionalphahours"})
-    courseAlphaHours.append("( " + course.approvedHrs + ")" + " ")
+    courseAlphaHours.append("(" + course.approvedHrs + ")" + " ")
 
     # adding desc
     courseDescription = soup.new_tag("p", attrs={"class":"fulldescription"})
@@ -641,10 +641,10 @@ def formatCourseDescriptionForRegular(soup, course, courseDisc):
     courseLocation.append(courseBuilding)
 
     # adding time
-    courseTime = soup.new_tag("div", attrs={"class":"courseTime"})
-    courseStart = soup.new_tag("span", attrs={"class":"startTime"})
+    courseTime = soup.new_tag("div", attrs={"class":"coursetime"})
+    courseStart = soup.new_tag("span", attrs={"class":"starttime"})
     courseStart.append("From: " + course.hrsFrom)
-    courseEnd = soup.new_tag("span", attrs={"class":"endTime"})
+    courseEnd = soup.new_tag("span", attrs={"class":"endtime"})
     courseEnd.append("To: " + course.hrsTo)
     courseTime.append(courseStart)
     courseTime.append(courseEnd)

@@ -99,7 +99,9 @@ header {
     .orcoursecontainer .descriptionalphahours, .orcoursecontainer .descriptionavailability, 
     .orcoursecontainer .descriptioncredits, .orcoursecontainer .descriptionfeeindex, .orcoursecontainer .fulldescription,
     .coursegroupcontainer .descriptionalphahours, .coursegroupcontainer .descriptionavailability, 
-    .coursegroupcontainer .descriptioncredits, .coursegroupcontainer .descriptionfeeindex, .coursegroupcontainer .fulldescription {
+    .coursegroupcontainer .descriptioncredits, .coursegroupcontainer .descriptionfeeindex, .coursegroupcontainer .fulldescription,
+    .coursecontainer .instructorname, .coursecontainer .instructoremail, .coursecontainer .location, .coursecontainer .coursetime,
+    .coursecontainer .enrolled {
         font-size: 12px;
     }
 }
@@ -243,9 +245,7 @@ h3#planhead {
 /* Text within a course box styling*/
 .embed {
     text-align: center;
-    position: relative;
-    bottom: 4px;
-    font-size: 95%;
+    font-size: 110%;
 }
       
 /* Course box styling */
@@ -452,7 +452,7 @@ p.ortext {
     margin: 0;
 }
 
-.building, .endTime {
+.building, .endtime {
     position: absolute;
     left: 25%;
 }
