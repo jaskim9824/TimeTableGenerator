@@ -273,9 +273,12 @@ def placeTermDivs(planTag, planDict, soup, plan, term):
 def createTimeGridDivs(soup):
     timeDiv = soup.new_tag("div", attrs={"class":"time"})  # leftmost flexbox with times running down left of page
     for i in range(8, 22):  # for hours between 8am-9pm
+        adjustmentFactor = 0
+        if i > 8:
+            adjustmentFactor = -2
         timeSlotDiv = soup.new_tag("div", attrs={"class":"timeslot"})
         timeSlotDiv.append(str(i) + ":00")
-        timeDiv.append(soup.new_tag("hr", attrs={"class":"horizontaldivider"}))
+        timeDiv.append(soup.new_tag("hr", attrs={"class":"horizontaldivider", "style":"position:absolute; top:" + str(24.5+135.35*(i - 8) + adjustmentFactor) + "px"}))
         timeDiv.append(timeSlotDiv)
     
     return timeDiv
@@ -351,7 +354,10 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
                     courseGroupTitle.append("Course Group " + course.courseGroup)
                 else:
                     # not in a course group
-                    courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", "style":"position:absolute; top:" + str(33 + (135.35/60)*minutesFromEight) + "px; height:" + str((135.35/60)*minutesLong) + "px"})
+                    adjustmentFactor = 0
+                    if minutesFromEight != 0:
+                        adjustmentFactor = -3
+                    courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", "style":"position:absolute; top:" + str(37 + (135.35/60)*minutesFromEight + adjustmentFactor) + "px; height:" + str((135.35/60)*minutesLong - 2) + "px"})
 
                 courseDisc = soup.new_tag("div", attrs={"id":courseID+"desc",
                                                 "class":"tooltiptextright",
@@ -390,6 +396,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
                     courseDiv = createCourseDiv(soup, 
                                                 courseID, 
                                                 orCase,
+                                                minutesFromEight,
                                                 minutesLong) 
                     formatCourseDescriptionForRegular(soup, course, courseDisc)
 
@@ -528,21 +535,24 @@ def dayTagInLateWeek(dayTag):
 #   courseID - ID of the course being placed (str)
 #   category - category of course in question
 #   orBool - boolean flag for OR cases, true if course is an OR case
-def createCourseDiv(soup, courseID, orBool, minutesLong):
+def createCourseDiv(soup, courseID, orBool, minutesFromEight, minutesLong):
+    adjustmentFactor = 0
+    if minutesFromEight == 0:
+        adjustmentFactor = -3
     if orBool:
         # course is an OR case
         return soup.new_tag("div", attrs={"class":"orcourse tooltip",
                                             "id": courseID,
                                             "ng-click":courseID+"Listener()",
                                             "ng-right-click":courseID+"RCListener()",
-                                            "style":"height:" + str((135.35/60)*minutesLong) + "px"})
+                                            "style":"height:" + str((135.35/60)*minutesLong - 2 + adjustmentFactor) + "px"})
     else:
         # course is a regular (non-OR) case
         return soup.new_tag("div",attrs= {"class":"course tooltip", 
                                                 "id": courseID, 
                                                 "ng-click":courseID+"Listener()",
                                                 "ng-right-click":courseID+"RCListener()",
-                                                "style":"height:" + str((135.35/60)*minutesLong) + "px"})
+                                                "style":"height:" + str((135.35/60)*minutesLong - 2 + adjustmentFactor) + "px"})
 
 # Function that writes the flags and variables associated with specific
 # course in the JS
@@ -612,13 +622,10 @@ def formatCourseDescriptionForRegular(soup, course, courseDisc):
     courseDescription.append(course.calendarDescr)
 
     # adding instructor
-    courseInstructor = soup.new_tag("div", attrs={"class":"instructor"})
-    courseInstructorName = soup.new_tag("span", attrs={"class":"instructorname"})
+    courseInstructorName = soup.new_tag("p", attrs={"class":"instructorname"})
     courseInstructorName.append("Instructor name: " + course.instructorName)
-    courseInstructorEmail = soup.new_tag("span", attrs={"class":"instructoremail"})
+    courseInstructorEmail = soup.new_tag("p", attrs={"class":"instructoremail"})
     courseInstructorEmail.append("Instructor email: " + course.email)
-    courseInstructor.append(courseInstructorName)
-    courseInstructor.append(courseInstructorEmail)
 
     # adding location
     courseLocation = soup.new_tag("div", attrs={"class":"location"})
@@ -650,7 +657,8 @@ def formatCourseDescriptionForRegular(soup, course, courseDisc):
     # courseDisc.append(courseTermAvail)
     courseDisc.append(courseAlphaHours)
     courseDisc.append(courseDescription)
-    courseDisc.append(courseInstructor)
+    courseDisc.append(courseInstructorName)
+    courseDisc.append(courseInstructorEmail)
     courseDisc.append(courseLocation)
     courseDisc.append(courseTime)
     courseDisc.append(courseEnrolled)
