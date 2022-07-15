@@ -264,7 +264,10 @@ def extractCourseFromTerm(planDict, term):
         term_course_names.append(course_name)
     return term_course_names
 
-
+# Class that wraps the list of sections for a specfic course
+# Fields:
+#   name - name of course
+#   section - list of sections
 class CourseSectionWrapper:
     def __init__(self, name = ""):
         self.name = name
@@ -273,6 +276,15 @@ class CourseSectionWrapper:
     def addSection(self, section):
         self.sections.append(section)
 
+# Function that reads the text in the Excel sheet and returns the respective list that 
+# gets placed in the sequenceDict
+# If the cell contains a single course name, what is returned is a list with a single
+# CourseSectionWrapper object
+# If the cell contains mutiple courses sepearted by OR, what is returned is a list of
+#  CourseSectionWrapper objects
+# If the cell contains a course group desigination, what is returned is a list of lists,
+# with each list contains CourseSectionWrapper object(s) and the name of the course group
+# as the last item
 def courseParse(name, course_obj_dict, plainNameList):
     name = name.strip().replace("  "," ")
     nameList = name.split("OR")

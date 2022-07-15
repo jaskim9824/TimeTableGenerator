@@ -81,6 +81,9 @@ def extractCourseGroupListFromString(planName):
     endIndex = planName.find("}")
     return planName[index+1:endIndex].split()
 
+# Base class for the wrapper object storing different options groups
+# Fields:
+#   options - list of options in the option group
 class Option:  
     def __init__(self, options=None):
         if options is None:
@@ -94,6 +97,12 @@ class Option:
     def isequal(self, option):
         return self.options == option.options
 
+# Class that extends from Option to wrap OR course options (wraps list of course section objects)
+# Fields:
+#   isWithinCourseGroup - boolean flag that indicates whether the OR course group 
+#   is within a course group
+#   parentCourseGroup - name of parent course group of OR course group, empty if not
+#   not within a course group
 class ORCourseOption(Option):
     def __init__(self, options=None, isWithinCourseGroup=False, parentCourseGroup=""):
         super().__init__(options)
@@ -105,6 +114,9 @@ class ORCourseOption(Option):
         for option in self.options:
             outputStr += option.name
 
+# Class that extends from Option to wrap course group options (wraps list of course groups names)
+# Fields:
+#   courseGroupName - name for the set of course groups
 class CourseGroupOption(Option):
     def __init__(self, courseGroupName=""):
         super().__init__()
@@ -113,7 +125,8 @@ class CourseGroupOption(Option):
     def getOptionName(self):
         return self.courseGroupName
 
-                
+# Function that takes the program sequence dict and produces the dict that
+# detrimines a list of the different options sets for a certain plan and term
 def extractingListofOptions(sequenceDict):
     listOptionsDict = {}
     for plan in sequenceDict:
