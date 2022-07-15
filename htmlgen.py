@@ -21,8 +21,8 @@ from coursegroupparsing import CourseGroupOption
 #   topTitleTag - title appearing as name of tab
 #   deptName - department name pulled from Sequencing Excel file
 def switchTitle(titleTag, topTitleTag, deptName):
-    titleTag.append(deptName + " Program Plan Visualizer")
-    topTitleTag.append(deptName + " Visualizer")
+    titleTag.append(deptName + " Timetable")
+    topTitleTag.append(deptName + " Timetable")
 
 # Function that places the radio inputs into the form which controls
 # which plan is currently selected on the webpage

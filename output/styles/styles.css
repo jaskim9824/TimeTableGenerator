@@ -47,7 +47,7 @@ header {
     width: fit-content;
     font-size: 25px;
     position: absolute;
-    left: 38rem;
+    left: 750px;
     top: 12px;
     color: #F2CD00;
 }
@@ -78,6 +78,7 @@ header {
 
     .header a.site-title {
         font-size: 15px;
+        left: 800px;
     }
 
     /* Changing width of tooltip on narrow screens */
