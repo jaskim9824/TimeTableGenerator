@@ -100,7 +100,6 @@ def generatePlanBasedBlocksController(sequenceDict, initialCourseGroupVals, cour
     generateAddToClickSwitch(sequenceDict, courseGroupList, controller)
     generateDeleteFromClickSwitch(sequenceDict, courseGroupList, controller)
 
-
 # Function that appends the custom Angular directive used to handle right click
 # events to the end of the controller JS file
 # Parameters:
@@ -155,12 +154,6 @@ def generatePlanBasedInitalVariables(sequenceDict, initialCourseGroupVals, cours
         controller.write("this." + cleaner.cleanString(plan) + "ClickedMap = new Map();\n")
         numterms = len(sequenceDict[plan].keys())
         controller.write("this." + cleaner.cleanString(plan) + "Terms = " + str(numterms) + ";\n")
-        maxcourses = 0
-        for term in sequenceDict[plan]:
-            termcourses = len(sequenceDict[plan][term])
-            if termcourses > maxcourses:
-                maxcourses = termcourses
-        controller.write("this." + cleaner.cleanString(plan) + "MaxCourses = " + str(maxcourses) + ";\n")
     for courseGroup in initialCourseGroupVals:
         formattedCourseGroupVar = "$scope.field{number} = {{ group{number}: \"{val}\" }};\n"
         controller.write(formattedCourseGroupVar.format(number=courseGroup, 
@@ -170,7 +163,7 @@ def generatePlanBasedInitalVariables(sequenceDict, initialCourseGroupVals, cours
 
 # Function that writes the setDefaults function based on the plans and course groups.
 # The JS generated sets the default term and course group options for each plan. 
-# Reverts to these on switching between plans.
+# Reverts to these defaults when switching between plans.
 # Parameters:
 #   courseGroupDict - dict that maps plans to a dict that maps course groups to the 
 #   options avaiable in that course group
@@ -213,7 +206,7 @@ def generateHighlightElement(controller):
         element.classList.add(category + "-highlighted");
     };\n""")
 
-# Function that writes the unhighlightElement function that unhighlights a single element
+# Function that writes the unHighlightElement function that unhighlights a single element
 # by removing "-highlighted" from the element's class name
 # Parameters:
 #   controller - file handle to controller.js
@@ -273,8 +266,8 @@ def generateEnableSwitchStatement(sequenceDict, controller):
     formattedFunctionStatement = """this.{functionName} = function(plan) {{
   switch(plan) {{\n"""
 
-    # For loop #1: restore all courses
-    # that were clicked to their clicked state (highlighted with arrows drawn).
+    # For loop #1: restore all courses that were clicked to their clicked 
+    # state (highlighted with arrows drawn).
     # For loop #2: Restore all courses that were highlighted with the legend buttons
     # to their highlighted state and restore legend buttons to their pressed state.
     formattedSwitchStatement = """    case "{planName}{termName}": 
@@ -327,7 +320,6 @@ switch({planString}) {{ \n"""
     for plan in sequenceDict:
         controller.write(formattedAddLineSwitchStatement.format(planName=cleaner.cleanString(plan)))
     controller.write(switchEndString)
-
 
 # Function that generates the switch statement and function removeLine
 # Parameters:
