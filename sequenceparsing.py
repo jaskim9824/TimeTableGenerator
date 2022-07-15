@@ -285,6 +285,10 @@ class CourseSectionWrapper:
 # If the cell contains a course group desigination, what is returned is a list of lists,
 # with each list contains CourseSectionWrapper object(s) and the name of the course group
 # as the last item
+# Parameters:
+#   name - text within cell that is parsed
+#   course_obj_dict - dict containing course info
+#   plainNameList - list of all possible course names (including section names)
 def courseParse(name, course_obj_dict, plainNameList):
     name = name.strip().replace("  "," ")
     nameList = name.split("OR")
@@ -299,6 +303,18 @@ def courseParse(name, course_obj_dict, plainNameList):
     else:
         return [createCourseSection(nameList[0].upper(), course_obj_dict, plainNameList)]
 
+# Function that reads in text and returns the respective list that 
+# gets placed in the sequenceDict. Used for testing
+# If the cell contains a single course name, what is returned is a list with a single
+# CourseSectionWrapper object
+# If the cell contains mutiple courses sepearted by OR, what is returned is a list of
+#  CourseSectionWrapper objects
+# If the cell contains a course group desigination, what is returned is a list of lists,
+# with each list contains CourseSectionWrapper object(s) and the name of the course group
+# as the last item
+# Parameters:
+#   name - text within cell that is parsed
+#   course_obj_dict - dict containing course info
 def courseParseTest(name, course_obj_dict):
     name = name.strip().replace("  "," ")
     nameList = name.split("OR")
