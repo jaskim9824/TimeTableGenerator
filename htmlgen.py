@@ -375,6 +375,8 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
     hexcolorlist= ["033dfc", "fc0303", "ef8c2b", "0ccb01", "bd43fa", "e8e123"]
     for courseWrapperList in termList:
         for courseWrapper in courseWrapperList:
+            if type(courseWrapper) == type([]):
+                continue
             for course in courseWrapper.sections:
                 tagsList = []
                 minutesFromEight = calcMinutes(course.hrsFrom)  # minutes from 8:00 to start of class

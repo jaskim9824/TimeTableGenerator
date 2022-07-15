@@ -41,6 +41,7 @@ def main():
         if option == "1":
             print("Displaying generated sequence dict....")
             cleanPrint(seqDict)
+            # print(seqDict)
             print("\n")
         elif option == "2":
             try:
