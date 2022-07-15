@@ -411,7 +411,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
                     adjustmentFactor = 0
                     if minutesFromEight != 0:
                         adjustmentFactor = -3
-                    courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", "style":"position:absolute; top:" + str(37 + (135.35/60)*minutesFromEight + adjustmentFactor) + "px; height:" + str((135.35/60)*minutesLong - 2) + "px"})
+                    courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", "style":"position:absolute; top:" + str(37 + (135.35/60)*minutesFromEight + adjustmentFactor) + "px; height:" + str((135.35/60)*minutesLong) + "px"})
 
                 courseDisc = soup.new_tag("div", attrs={"id":courseID+"desc",
                                                 "class":"tooltiptextright",
@@ -553,24 +553,31 @@ def calcClassDuration(startTime, endTime):
 # Returns:
 #   courseDiv - HTML tag for the container of the course
 def createCourseDiv(soup, courseID, orBool, minutesFromEight, minutesLong):
-    # adjustmentFactor helps format vertical position of courses starting at 8:00am
-    adjustmentFactor = 0
+    # adjustmentFactor helps format vertical position of courses
+    adjustmentFactor = -2
     if minutesFromEight == 0:
-        adjustmentFactor = -3
+        # course starts at 8:00am
+        adjustmentFactor = -5
+    if (minutesFromEight % 60 == 30) and (minutesLong % 60 != 30):
+        # course starts at X:30 (8:30, 9:30, etc.) and is n hours long, i.e., it is an integer number of hours long
+        adjustmentFactor = 0
+    if (minutesFromEight % 60 == 0) and (minutesLong % 60 == 30):
+        # course starts at X:00 (8:00, 9:00, etc.) and is Y hours and 30 minutes long (1 hour & 30 mins, 2 hours & 30 mins, etc.)
+        adjustmentFactor = 2
     if orBool:
         # course is an OR case
         return soup.new_tag("div", attrs={"class":"orcourse tooltip",
                                             "id": courseID,
                                             "ng-click":courseID+"Listener()",
                                             "ng-right-click":courseID+"RCListener()",
-                                            "style":"height:" + str((135.35/60)*minutesLong - 2 + adjustmentFactor) + "px"})
+                                            "style":"height:" + str((135.35/60)*minutesLong + adjustmentFactor) + "px"})
     else:
         # course is a regular (non-OR) case
         return soup.new_tag("div",attrs= {"class":"course tooltip", 
                                                 "id": courseID, 
                                                 "ng-click":courseID+"Listener()",
                                                 "ng-right-click":courseID+"RCListener()",
-                                                "style":"height:" + str((135.35/60)*minutesLong - 2 + adjustmentFactor) + "px"})
+                                                "style":"height:" + str((135.35/60)*minutesLong + adjustmentFactor) + "px"})
 
 # Function that consturcts the course description tooltip for an elective
 # Parameters:
