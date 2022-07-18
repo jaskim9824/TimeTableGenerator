@@ -270,6 +270,28 @@ h3#planhead {
     background-color: #eec89a;
 }
 
+.leftcourse, .leftorcourse {
+    box-sizing: border-box;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+    height: 50px;
+    width: 160.5px;
+    background-color: #eec89a;
+}
+
+.rightcourse, .rightorcourse {
+    box-sizing: border-box;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+    height: 50px;
+    width: 160.5px;
+    position: relative;
+    left: 160.5px;
+    background-color: #eec89a;
+}
+
 .coursegroupcontainer .lastcourseingroup {
     margin-bottom: 0;
 }
@@ -314,13 +336,13 @@ p.ortext {
 }
 
 /* Default course hover */
-.course:hover, .orcourse:hover {
+.course:hover, .orcourse:hover, .leftcourse:hover, .rightcourse:hover, .leftorcourse:hover, .rightorcourse:hover {
     background-color: #f2cd00;
     border-color:#f2cd00;
 }
 
 /* Default course selected */
-.course-highlighted {
+.course-highlighted, .leftcourse-highlighted, .rightcourse-highlighted {
     border-style: solid;
     border-color: black;
     border-width: 2px;
@@ -330,7 +352,7 @@ p.ortext {
 }
 
 /* Makes sure margin of orcourse is unchanged */
-.orcourse-highlighted {
+.orcourse-highlighted, .leftorcourse-highlighted, .rightorcourse-highlighted {
     border-style: solid;
     border-color: black;
     border-width: 2px;
@@ -341,7 +363,8 @@ p.ortext {
 }
 
 /* Default highlighted hover */
-.course-highlighted:hover, .orcourse-highlighted:hover {
+.course-highlighted:hover, .leftcourse-highlighted:hover, .rightcourse-highlighted:hover, 
+.orcourse-highlighted:hover, .leftorcourse-highlighted:hover, .rightorcourse-highlighted:hover {
     background-color: #f2cd00;
     border-color:#f2cd00;
 }
@@ -368,7 +391,7 @@ p.ortext {
     padding: 5px 10px;
     position: absolute;
     z-index: 1;
-    bottom: 125%;
+    bottom: 110%;
     margin-left: -60px;
     opacity: 0;
     transition: opacity 0.3s;

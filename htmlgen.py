@@ -373,6 +373,9 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
     courseGroupTitle = ""  # name of the course group (eg: "Course group 2A")
     courseOrList = []
     hexcolorlist= ["033dfc", "fc0303", "ef8c2b", "0ccb01", "bd43fa", "e8e123"]
+
+    adjustOverlapping(termList)  # check for overlapping courses, set pushLeft/pushRight attrs if overlap
+
     for courseWrapperList in termList:
         for courseWrapper in courseWrapperList:
             if type(courseWrapper) == type([]):
@@ -421,7 +424,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
                 if course.name == "Complementary Elective":
                     # Class allows formatting so words fit in course box
                     courseID = courseID+str(electiveCountWrapper["COMP"])
-                    courseDiv = createCourseDiv(soup, courseID, orCase, minutesFromEight, minutesLong)
+                    courseDiv = createCourseDiv(soup, courseID, orCase, minutesFromEight, minutesLong, course.pushLeft, course.pushRight)
                     # id must include which number elective it is (electiveName0, electiveName1, electiveName2, ...)
                     courseDisc["id"] = courseDisc["id"][:-4] + str(electiveCountWrapper["COMP"]) + "desc"
                     electiveCountWrapper["COMP"] += 1
@@ -430,7 +433,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
                 elif course.name == "Program/Technical Elective":
                     # Class allows formatting so words fit in course box
                     courseID = courseID+str(electiveCountWrapper["PROG"])
-                    courseDiv = createCourseDiv(soup, courseID, orCase, minutesFromEight, minutesLong)
+                    courseDiv = createCourseDiv(soup, courseID, orCase, minutesFromEight, minutesLong, course.pushLeft, course.pushRight)
                     # id must include which number elective it is (electiveName0, electiveName1, electiveName2, ...)
                     courseDisc["id"] = courseDisc["id"][:-4] + str(electiveCountWrapper["PROG"]) + "desc"
                     electiveCountWrapper["PROG"] += 1
@@ -439,7 +442,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
                 elif course.name == "ITS Elective":
                     courseID = courseID+str(electiveCountWrapper["ITS"])
                     # Class allows formatting so words fit in course box
-                    courseDiv = createCourseDiv(soup, courseID, orCase, minutesFromEight, minutesLong)
+                    courseDiv = createCourseDiv(soup, courseID, orCase, minutesFromEight, minutesLong, course.pushLeft, course.pushRight)
                     # id must include which number elective it is (electiveName0, electiveName1, electiveName2, ...)
                     courseDisc["id"] = courseDisc["id"][:-4] + str(electiveCountWrapper["ITS"]) + "desc"
                     electiveCountWrapper["ITS"] += 1
@@ -451,7 +454,9 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
                                                 courseID, 
                                                 orCase,
                                                 minutesFromEight,
-                                                minutesLong) 
+                                                minutesLong,
+                                                course.pushLeft, 
+                                                course.pushRight) 
                     formatCourseDescriptionForRegular(soup, course, courseDisc)
 
                 # text appearing in course box (eg: CHEM 103)
@@ -498,6 +503,57 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
                         courseGroupList[i]["class"].append("lastcourseingroup")  # last course has no bottom margin
                     courseContDiv.append(courseGroupList[i])
                 appendToEachDay(tagsList, courseContDiv)
+
+# Checks termList for overlapping courses and update pushLeft/pushRight attributes
+# if there is a time overlap.
+# Parameters:
+#   termList - list of courses being taken that term
+# Returns:
+#   None. The pushLeft/pushRight attributes of Course objects are updated.
+def adjustOverlapping(termList):
+    courseTimes = {}  # dict of list of dicts. Inner dict stores Course object, start time, end time for one course
+    courseTimes["monday"] = []
+    courseTimes["tuesday"] = []
+    courseTimes["wednesday"] = []
+    courseTimes["thursday"] = []
+    courseTimes["friday"] = []
+    for courseWrapperList in termList:
+        for courseWrapper in courseWrapperList:
+            if type(courseWrapper) == type([]):
+                continue
+            for course in courseWrapper.sections:
+                minutesFromEight = calcMinutes(course.hrsFrom)  # minutes from 8:00 to start of class
+                minutesLong = calcClassDuration(course.hrsFrom, course.hrsTo)  # duration of class
+                timeDict = {}
+                timeDict["course"] = course
+                timeDict["start"] = minutesFromEight
+                timeDict["end"] = minutesFromEight + minutesLong
+                if course.mon == 'Y':
+                    courseTimes["monday"].append(timeDict)
+                if course.tues == 'Y':
+                    courseTimes["tuesday"].append(timeDict)
+                if course.wed == 'Y':
+                    courseTimes["wednesday"].append(timeDict)
+                if course.thurs == 'Y':
+                    courseTimes["thursday"].append(timeDict)
+                if course.fri == 'Y':
+                    courseTimes["friday"].append(timeDict)
+
+    # O(n^2) comparison between each of the courses
+    for day in courseTimes:
+        for courseTime in courseTimes[day]:
+            for compareTime in courseTimes[day]:
+                if courseTime != compareTime:
+                    # If compareTime starts before courseTime ends and compareTime starts after courseTime starts or
+                    # if compareTime ends after courseTime starts and compareTime starts before courseTime starts
+                    if (compareTime["start"] < courseTime["end"] and compareTime["start"] >= courseTime["start"]) \
+                    or (compareTime["end"] > courseTime["start"] and compareTime["start"] <= courseTime["start"]):
+                        # move courseTime left and compareTime right
+                        courseTime["course"].pushLeft = True
+                        compareTime["course"].pushLeft = False
+                        compareTime["course"].pushRight = True
+                        courseTime["course"].pushRight = False
+                        break
 
 # Calculates the amount of minutes from 8:00am to the start time of a class
 # Parameters:
@@ -552,7 +608,7 @@ def calcClassDuration(startTime, endTime):
 #   minutesLong - length in minutes of class, rounded to the nearest 30 minutes
 # Returns:
 #   courseDiv - HTML tag for the container of the course
-def createCourseDiv(soup, courseID, orBool, minutesFromEight, minutesLong):
+def createCourseDiv(soup, courseID, orBool, minutesFromEight, minutesLong, pushLeft, pushRight):
     # adjustmentFactor helps format vertical position of courses
     adjustmentFactor = -2
     if minutesFromEight == 0:
@@ -564,20 +620,22 @@ def createCourseDiv(soup, courseID, orBool, minutesFromEight, minutesLong):
     if (minutesFromEight % 60 == 0) and (minutesLong % 60 == 30):
         # course starts at X:00 (8:00, 9:00, etc.) and is Y hours and 30 minutes long (1 hour & 30 mins, 2 hours & 30 mins, etc.)
         adjustmentFactor = 2
+    classStr = ""
+    if pushLeft:
+        classStr += "left"
+    elif pushRight:
+        classStr += "right"
     if orBool:
-        # course is an OR case
-        return soup.new_tag("div", attrs={"class":"orcourse tooltip",
-                                            "id": courseID,
-                                            "ng-click":courseID+"Listener()",
-                                            "ng-right-click":courseID+"RCListener()",
-                                            "style":"height:" + str((135.35/60)*minutesLong + adjustmentFactor) + "px"})
+        classStr += "orcourse"
     else:
-        # course is a regular (non-OR) case
-        return soup.new_tag("div",attrs= {"class":"course tooltip", 
-                                                "id": courseID, 
-                                                "ng-click":courseID+"Listener()",
-                                                "ng-right-click":courseID+"RCListener()",
-                                                "style":"height:" + str((135.35/60)*minutesLong + adjustmentFactor) + "px"})
+        classStr += "course"
+    classStr += " tooltip"
+        # course is an OR case
+    return soup.new_tag("div", attrs={"class":classStr,
+                                        "id": courseID,
+                                        "ng-click":courseID+"Listener()",
+                                        "ng-right-click":courseID+"RCListener()",
+                                        "style":"height:" + str((135.35/60)*minutesLong + adjustmentFactor) + "px"})
 
 # Function that consturcts the course description tooltip for an elective
 # Parameters:

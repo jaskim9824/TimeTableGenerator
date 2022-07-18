@@ -21,7 +21,7 @@ class Course:
     classType = "", capEnrl = "", totEnrl = "", campus = "", location = "", 
     notesNbr = "", noteNbr = "", note = "", rqGroup = "", openTo = "", approvedHrs = "", 
     duration = "", career = "", consent = "", calendarDescr = "", maxUnits = "", calendarPrint = "",
-    courseGroup = ""):
+    courseGroup = "", pushLeft = False, pushRight = False):
 
         self.name = str(name)
         self.plainName = str(plainName)
@@ -71,6 +71,8 @@ class Course:
         self.maxUnits = str(maxUnits)
         self.calendarPrint = str(calendarPrint)
         self.courseGroup = str(courseGroup)
+        self.pushLeft = pushLeft
+        self.pushRight = pushRight
 
 # Main function for parsing information from list of courses Excel file.
 # Uses parseSeq to organize courses by plan and by term
