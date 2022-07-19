@@ -19,12 +19,13 @@ import cleaner
 #   controller - file handle for controller JS file
 def intializeControllerJavaScript(sequenceDict, initialCourseGroupVals, courseGroupDict, courseGroupList, planOptionDict, controller):
     generateInitialBlockController(courseGroupDict, courseGroupList, list(list(sequenceDict.values())[0].keys())[0], controller)
+    generateInitialOptionObjects(planOptionDict, controller)
     generatePlanBasedBlocksController(sequenceDict, 
                                       initialCourseGroupVals,
                                       courseGroupDict, 
                                       courseGroupList,
                                       controller)
-    generateInitialOptionObjects(planOptionDict, controller)
+    
 
 # Function that properly concludes and closes the controller JS
 # Parameters:

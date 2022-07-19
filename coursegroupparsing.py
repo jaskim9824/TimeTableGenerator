@@ -138,7 +138,7 @@ def extractingListofOptions(sequenceDict):
                 if len(course) <= 1:
                     continue
                 if type(course[0]) == type([]):
-                    courseGroupOpt = CourseGroupOption(course[0][-1][0])
+                    courseGroupOpt = CourseGroupOption("group" + course[0][-1][0])
                     for option in course:
                         if len(option) > 2:
                             optionsList.append(ORCourseOption(option[:-1], True, option[-1]))
