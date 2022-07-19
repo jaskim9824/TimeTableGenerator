@@ -17,13 +17,14 @@ import cleaner
 #   options avaiable in that course group 
 #   courseGroupList - list of course groups taken overall in the program
 #   controller - file handle for controller JS file
-def intializeControllerJavaScript(sequenceDict, initialCourseGroupVals, courseGroupDict, courseGroupList, controller):
+def intializeControllerJavaScript(sequenceDict, initialCourseGroupVals, courseGroupDict, courseGroupList, planOptionDict, controller):
     generateInitialBlockController(courseGroupDict, courseGroupList, list(list(sequenceDict.values())[0].keys())[0], controller)
     generatePlanBasedBlocksController(sequenceDict, 
                                       initialCourseGroupVals,
                                       courseGroupDict, 
                                       courseGroupList,
                                       controller)
+    generateInitialOptionObjects(planOptionDict, controller)
 
 # Function that properly concludes and closes the controller JS
 # Parameters:
@@ -633,5 +634,10 @@ def generateInitialOptionObjects(planOptionDict, controller):
     for plan in planOptionDict:
         for term in planOptionDict[plan]:
             controller.write("$scope."+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj = {")
-            for optionGroup in planOptionDict[plan][term]:
-                controller.write(optionGroup.getOptionName() + ": " + optionGroup.options[0])
+            for count, optionGroup in enumerate(planOptionDict[plan][term]):
+                controller.write(optionGroup.getOptionName() + ":\"" + optionGroup.options[0] + "\"")
+                if count != len(planOptionDict[plan][term]) - 1:
+                    controller.write(",")
+            controller.write("};\n")
+                
+            

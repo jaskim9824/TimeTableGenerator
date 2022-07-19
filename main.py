@@ -37,6 +37,7 @@ def main():
                                                         intitalCourseGroupVals,
                                                         courseGroupDict,
                                                         courseGroupList, 
+                                                        optionDict,
                                                         controller)
 
             topTitleTag = soup.head.find("title")
