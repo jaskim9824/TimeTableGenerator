@@ -5,26 +5,11 @@ $scope.selectedTerm = "FallTerm1";
 $scope.updateTerm = function(term) {
   $scope.selectedTerm = term;
 }
-$scope.updateField2 = function(field2) {
-  $scope.field2.group2 = field2;
-}
-$scope.updateField3 = function(field3) {
-  $scope.field3.group3 = field3;
-}
-$scope.updateField4 = function(field4) {
-  $scope.field4.group4 = field4;
-}
 var that = this;
-this.render = function(plan) {
-            this.disable(this.previousPlan);
-            this.enable(plan);
-            this.previousPlan = plan;
-};
 var radios = document.querySelectorAll("input[type=radio][name=planselector]");
 Array.prototype.forEach.call(radios, function (radio) {
     radio.addEventListener("change", function () { 
 that.setDefaults($scope.selectedPlan);
-that.render($scope.selectedPlan+$scope.selectedTerm);
    });
 });
 this.highlightElement = function(element, category) {
@@ -41,41 +26,11 @@ this.unHighlightElement = function(element, category) {
         element.classList.remove(category + "-highlighted");
         element.classList.add(category);
     };
-this.TraditionalPlanList = [];
-this.TraditionalPlanClicked = [];
-this.TraditionalPlanLegendBtns = [];
-this.TraditionalPlanLegendBtnsClicked = [];
-this.TraditionalPlanClickedMap = new Map();
 this.TraditionalPlanTerms = 8;
-this.AlternatePlanList = [];
-this.AlternatePlanClicked = [];
-this.AlternatePlanLegendBtns = [];
-this.AlternatePlanLegendBtnsClicked = [];
-this.AlternatePlanClickedMap = new Map();
 this.AlternatePlanTerms = 9;
-this.CoopPlan1List = [];
-this.CoopPlan1Clicked = [];
-this.CoopPlan1LegendBtns = [];
-this.CoopPlan1LegendBtnsClicked = [];
-this.CoopPlan1ClickedMap = new Map();
 this.CoopPlan1Terms = 13;
-this.CoopPlan2List = [];
-this.CoopPlan2Clicked = [];
-this.CoopPlan2LegendBtns = [];
-this.CoopPlan2LegendBtnsClicked = [];
-this.CoopPlan2ClickedMap = new Map();
 this.CoopPlan2Terms = 13;
-this.CoopPlan3BiomedicalList = [];
-this.CoopPlan3BiomedicalClicked = [];
-this.CoopPlan3BiomedicalLegendBtns = [];
-this.CoopPlan3BiomedicalLegendBtnsClicked = [];
-this.CoopPlan3BiomedicalClickedMap = new Map();
 this.CoopPlan3BiomedicalTerms = 13;
-this.CoopPlan4List = [];
-this.CoopPlan4Clicked = [];
-this.CoopPlan4LegendBtns = [];
-this.CoopPlan4LegendBtnsClicked = [];
-this.CoopPlan4ClickedMap = new Map();
 this.CoopPlan4Terms = 13;
 this.previousPlan = $scope.selectedPlan+$scope.selectedTerm
 this.setDefaults = function(plan) { 
