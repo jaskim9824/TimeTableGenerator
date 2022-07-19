@@ -272,6 +272,9 @@ class CourseSectionWrapper:
     def __init__(self, name = ""):
         self.name = name
         self.sections = []
+
+    def __str__(self) -> str:
+        return self.name
     
     def addSection(self, section):
         self.sections.append(section)

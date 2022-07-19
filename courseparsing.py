@@ -73,6 +73,8 @@ class Course:
         self.courseGroup = str(courseGroup)
         self.pushLeft = pushLeft
         self.pushRight = pushRight
+    def __str__(self) -> str:
+        return self.name
 
 # Main function for parsing information from list of courses Excel file.
 # Uses parseSeq to organize courses by plan and by term

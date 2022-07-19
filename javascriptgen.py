@@ -53,28 +53,13 @@ def generateInitialBlockController(courseGroupDict, courseGroupList, initialTerm
     controller.write("""$scope.updateTerm = function(term) {
   $scope.selectedTerm = term;
 }\n""")
-    controller.write("""$scope.updateField2 = function(field2) {
-  $scope.field2.group2 = field2;
-}
-$scope.updateField3 = function(field3) {
-  $scope.field3.group3 = field3;
-}
-$scope.updateField4 = function(field4) {
-  $scope.field4.group4 = field4;
-}\n""")
     controller.write("var that = this;\n")
-    controller.write("""this.render = function(plan) {
-            this.disable(this.previousPlan);
-            this.enable(plan);
-            this.previousPlan = plan;
-};\n""")
+
 
     controller.write("""var radios = document.querySelectorAll("input[type=radio][name=planselector]");
 Array.prototype.forEach.call(radios, function (radio) {
     radio.addEventListener("change", function () { \n""")
     controller.write("that.setDefaults($scope.selectedPlan);\n")
-    planString = generatePlanString(courseGroupList)
-    controller.write("that.render("+planString+");\n")
     controller.write("""   });
 });\n""")
     generateHighlightElement(controller)
@@ -147,11 +132,11 @@ def writeRadioChangeDirective(controller):
 #   controller - file handle for controller JS file
 def generatePlanBasedInitalVariables(sequenceDict, initialCourseGroupVals, courseGroupList, controller):
     for plan in sequenceDict:
-        controller.write("this." + cleaner.cleanString(plan) + "List = [];\n")
-        controller.write("this." + cleaner.cleanString(plan) + "Clicked = [];\n")
-        controller.write("this." + cleaner.cleanString(plan) + "LegendBtns = [];\n")
-        controller.write("this." + cleaner.cleanString(plan) + "LegendBtnsClicked = [];\n")
-        controller.write("this." + cleaner.cleanString(plan) + "ClickedMap = new Map();\n")
+        # controller.write("this." + cleaner.cleanString(plan) + "List = [];\n")
+        # controller.write("this." + cleaner.cleanString(plan) + "Clicked = [];\n")
+        # controller.write("this." + cleaner.cleanString(plan) + "LegendBtns = [];\n")
+        # controller.write("this." + cleaner.cleanString(plan) + "LegendBtnsClicked = [];\n")
+        # controller.write("this." + cleaner.cleanString(plan) + "ClickedMap = new Map();\n")
         numterms = len(sequenceDict[plan].keys())
         controller.write("this." + cleaner.cleanString(plan) + "Terms = " + str(numterms) + ";\n")
     for courseGroup in initialCourseGroupVals:
@@ -643,3 +628,10 @@ def generatePlanString(courseGroupList):
         planString += "+"+formattedCourseGroup.format(number=courseGroup)
     planString += "+$scope.selectedTerm"
     return planString
+
+def generateInitialOptionObjects(planOptionDict, controller):
+    for plan in planOptionDict:
+        for term in planOptionDict[plan]:
+            controller.write("$scope."+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj = {")
+            for optionGroup in planOptionDict[plan][term]:
+                controller.write(optionGroup.getOptionName() + ": " + optionGroup.options[0])
