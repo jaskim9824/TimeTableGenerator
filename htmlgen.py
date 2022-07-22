@@ -424,7 +424,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
                 if course.name == "Complementary Elective":
                     # Class allows formatting so words fit in course box
                     courseID = courseID+str(electiveCountWrapper["COMP"])
-                    courseDiv = createCourseDiv(soup, courseID, orCase, minutesFromEight, minutesLong, course.pushLeft, course.pushRight)
+                    courseDiv = createCourseDiv(soup, courseID, orCase, minutesFromEight, minutesLong, course.position)
                     # id must include which number elective it is (electiveName0, electiveName1, electiveName2, ...)
                     courseDisc["id"] = courseDisc["id"][:-4] + str(electiveCountWrapper["COMP"]) + "desc"
                     electiveCountWrapper["COMP"] += 1
@@ -433,7 +433,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
                 elif course.name == "Program/Technical Elective":
                     # Class allows formatting so words fit in course box
                     courseID = courseID+str(electiveCountWrapper["PROG"])
-                    courseDiv = createCourseDiv(soup, courseID, orCase, minutesFromEight, minutesLong, course.pushLeft, course.pushRight)
+                    courseDiv = createCourseDiv(soup, courseID, orCase, minutesFromEight, minutesLong, course.position)
                     # id must include which number elective it is (electiveName0, electiveName1, electiveName2, ...)
                     courseDisc["id"] = courseDisc["id"][:-4] + str(electiveCountWrapper["PROG"]) + "desc"
                     electiveCountWrapper["PROG"] += 1
@@ -442,7 +442,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
                 elif course.name == "ITS Elective":
                     courseID = courseID+str(electiveCountWrapper["ITS"])
                     # Class allows formatting so words fit in course box
-                    courseDiv = createCourseDiv(soup, courseID, orCase, minutesFromEight, minutesLong, course.pushLeft, course.pushRight)
+                    courseDiv = createCourseDiv(soup, courseID, orCase, minutesFromEight, minutesLong, course.position)
                     # id must include which number elective it is (electiveName0, electiveName1, electiveName2, ...)
                     courseDisc["id"] = courseDisc["id"][:-4] + str(electiveCountWrapper["ITS"]) + "desc"
                     electiveCountWrapper["ITS"] += 1
@@ -455,8 +455,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
                                                 orCase,
                                                 minutesFromEight,
                                                 minutesLong,
-                                                course.pushLeft, 
-                                                course.pushRight) 
+                                                course.position) 
                     formatCourseDescriptionForRegular(soup, course, courseDisc)
 
                 # text appearing in course box (eg: CHEM 103)
@@ -504,7 +503,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
                     courseContDiv.append(courseGroupList[i])
                 appendToEachDay(tagsList, courseContDiv)
 
-# Checks termList for overlapping courses and update pushLeft/pushRight attributes
+# Checks termList for overlapping courses and updates pushLeft/pushRight attributes
 # if there is a time overlap.
 # Parameters:
 #   termList - list of courses being taken that term
@@ -539,21 +538,38 @@ def adjustOverlapping(termList):
                 if course.fri == 'Y':
                     courseTimes["friday"].append(timeDict)
 
+    overlaps = []
     # O(n^2) comparison between each of the courses
     for day in courseTimes:
+        counter = 1
         for courseTime in courseTimes[day]:
-            for compareTime in courseTimes[day]:
-                if courseTime != compareTime:
-                    # If compareTime starts before courseTime ends and compareTime starts after courseTime starts or
-                    # if compareTime ends after courseTime starts and compareTime starts before courseTime starts
-                    if (compareTime["start"] < courseTime["end"] and compareTime["start"] >= courseTime["start"]) \
-                    or (compareTime["end"] > courseTime["start"] and compareTime["start"] <= courseTime["start"]):
-                        # move courseTime left and compareTime right
-                        courseTime["course"].pushLeft = True
-                        compareTime["course"].pushLeft = False
-                        compareTime["course"].pushRight = True
-                        courseTime["course"].pushRight = False
-                        break
+            overlappingCourses = []
+            for compareTime in courseTimes[day][counter:]:
+                # If compareTime starts before courseTime ends and compareTime starts after courseTime starts or
+                # if compareTime ends after courseTime starts and compareTime starts before courseTime starts
+                if (compareTime["start"] < courseTime["end"] and compareTime["start"] >= courseTime["start"]) \
+                or (compareTime["end"] > courseTime["start"] and compareTime["start"] <= courseTime["start"]):
+                    # move courseTime left and compareTime right
+                    if courseTime["course"] not in overlappingCourses:
+                        overlappingCourses.append(courseTime["course"])
+                    if compareTime["course"] not in overlappingCourses:
+                        overlappingCourses.append(compareTime["course"])
+            counter += 1
+            overlaps.append(overlappingCourses)
+
+    for overlapList in overlaps:
+        if len(overlapList) == 2:
+            overlapList[0].position = "left2"
+            overlapList[1].position = "right2"
+        elif len(overlapList) == 3:
+            overlapList[0].position = "left3"
+            overlapList[1].position = "center3"
+            overlapList[2].position = "right3"
+        elif len(overlapList) == 4:
+            overlapList[0].position = "leftleft4"
+            overlapList[1].position = "left4"
+            overlapList[2].position = "right4"
+            overlapList[3].position = "rightright4"
 
 # Calculates the amount of minutes from 8:00am to the start time of a class
 # Parameters:
@@ -608,7 +624,7 @@ def calcClassDuration(startTime, endTime):
 #   minutesLong - length in minutes of class, rounded to the nearest 30 minutes
 # Returns:
 #   courseDiv - HTML tag for the container of the course
-def createCourseDiv(soup, courseID, orBool, minutesFromEight, minutesLong, pushLeft, pushRight):
+def createCourseDiv(soup, courseID, orBool, minutesFromEight, minutesLong, position):
     # adjustmentFactor helps format vertical position of courses
     adjustmentFactor = -2
     if minutesFromEight == 0:
@@ -621,10 +637,7 @@ def createCourseDiv(soup, courseID, orBool, minutesFromEight, minutesLong, pushL
         # course starts at X:00 (8:00, 9:00, etc.) and is Y hours and 30 minutes long (1 hour & 30 mins, 2 hours & 30 mins, etc.)
         adjustmentFactor = 2
     classStr = ""
-    if pushLeft:
-        classStr += "left"
-    elif pushRight:
-        classStr += "right"
+    classStr += position
     if orBool:
         classStr += "orcourse"
     else:

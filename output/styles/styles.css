@@ -241,10 +241,6 @@ h3#planhead {
     padding: 1px;
 }
 
-.coursegroupcontainer .course {
-    margin-bottom: 49px;
-}
-
 .coursegrouptitle {
     text-align: center;
     margin: 0;
@@ -258,38 +254,70 @@ h3#planhead {
     text-align: center;
     font-size: 110%;
 }
-      
+
 /* Course box styling */
-.course, .orcourse {
+.course, .orcourse, .left2course, .left2orcourse, .right2course, .right2orcourse,
+.left3course, .left3orcourse, .center3course, .center3orcourse, .right3course, .right3orcourse,
+.leftleft4course, .leftleft4orcourse, .left4course, .left4orcourse, .right4course, .right4orcourse,
+.rightright4course, .rightright4orcourse {
     box-sizing: border-box;
     border-style: solid;
     border-color: black;
     border-width: 2px;
     height: 50px;
+    background-color: #eec89a;
+}
+
+.course {
     width: 321px;
-    background-color: #eec89a;
 }
 
-.leftcourse, .leftorcourse {
-    box-sizing: border-box;
-    border-style: solid;
-    border-color: black;
-    border-width: 2px;
-    height: 50px;
+.left2course {
     width: 160.5px;
-    background-color: #eec89a;
 }
 
-.rightcourse, .rightorcourse {
-    box-sizing: border-box;
-    border-style: solid;
-    border-color: black;
-    border-width: 2px;
-    height: 50px;
+.right2course {
     width: 160.5px;
     position: relative;
     left: 160.5px;
-    background-color: #eec89a;
+}
+
+.left3course {
+    width: 107px;
+}
+
+.center3course {
+    width: 107px;
+    position: relative;
+    left: 107px;
+}
+
+.right3course {
+    width: 107px;
+    position: relative;
+    left: 214px;
+}
+
+.leftleft4course {
+    width: 80.25px;
+}
+
+.left4course {
+    width: 80.25px;
+    position: relative;
+    left: 80.25px;
+}
+
+.right4course {
+    width: 80.25px;
+    position: relative;
+    left: 160.5px;
+}
+
+.rightright4course {
+    width: 80.25px;
+    position: relative;
+    left: 240.75px;
 }
 
 .coursegroupcontainer .lastcourseingroup {
@@ -336,39 +364,33 @@ p.ortext {
 }
 
 /* Default course hover */
-.course:hover, .orcourse:hover, .leftcourse:hover, .rightcourse:hover, .leftorcourse:hover, .rightorcourse:hover {
+.course:hover, .orcourse:hover, .left2course:hover, .right2course:hover, .left3course:hover, 
+.center3course:hover, .right3course:hover, .leftleft4course:hover, .left4course:hover, 
+.right4course:hover,  .rightright4course:hover {
     background-color: #f2cd00;
     border-color:#f2cd00;
 }
 
 /* Default course selected */
-.course-highlighted, .leftcourse-highlighted, .rightcourse-highlighted {
+.course-highlighted, .left2course-highlighted, .right2course-highlighted,
+.left3course-highlighted, .center3course-highlighted, .right3course-highlighted,
+.leftleft4course-highlighted, .left4course-highlighted, .right4course-highlighted, .rightright4course-highlighted {
     border-style: solid;
     border-color: black;
     border-width: 2px;
     height: 50px;
     width: 150px;
-    background-color: #f2cd00;
-}
-
-/* Makes sure margin of orcourse is unchanged */
-.orcourse-highlighted, .leftorcourse-highlighted, .rightorcourse-highlighted {
-    border-style: solid;
-    border-color: black;
-    border-width: 2px;
-    height: 50px;
-    width: 150px;
-    margin-bottom: 8px;
     background-color: #f2cd00;
 }
 
 /* Default highlighted hover */
-.course-highlighted:hover, .leftcourse-highlighted:hover, .rightcourse-highlighted:hover, 
-.orcourse-highlighted:hover, .leftorcourse-highlighted:hover, .rightorcourse-highlighted:hover {
+.course-highlighted:hover, .left2course-highlighted:hover, .right2course-highlighted:hover, 
+.left3course-highlighted:hover, .center3course-highlighted:hover, .right3course-highlighted:hover,
+.leftleft4course-highlighted:hover, .left4course-highlighted:hover, .right4course-highlighted:hover,
+.rightright4course-highlighted:hover {
     background-color: #f2cd00;
     border-color:#f2cd00;
 }
-
     
 /*This is for the Hover over course description*/
 .tooltip {

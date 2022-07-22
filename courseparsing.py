@@ -21,7 +21,7 @@ class Course:
     classType = "", capEnrl = "", totEnrl = "", campus = "", location = "", 
     notesNbr = "", noteNbr = "", note = "", rqGroup = "", openTo = "", approvedHrs = "", 
     duration = "", career = "", consent = "", calendarDescr = "", maxUnits = "", calendarPrint = "",
-    courseGroup = "", pushLeft = False, pushRight = False):
+    courseGroup = "", position = ""):
 
         self.name = str(name)
         self.plainName = str(plainName)
@@ -71,8 +71,7 @@ class Course:
         self.maxUnits = str(maxUnits)
         self.calendarPrint = str(calendarPrint)
         self.courseGroup = str(courseGroup)
-        self.pushLeft = pushLeft
-        self.pushRight = pushRight
+        self.position = str(position)
     def __str__(self) -> str:
         return self.name
 
@@ -102,7 +101,7 @@ def parseCourses(filename, sequenceFileName):
             shortDesc = sheet.cell_value(row, 2)
             classNbr = sheet.cell_value(row, 3)
             subject = sheet.cell_value(row, 4)
-            catalog = sheet.cell_value(row, 5)
+            catalog = sheet.cell_value(row, 5).strip()
             component = sheet.cell_value(row, 6)
             sect = sheet.cell_value(row, 7)
             classStatus = sheet.cell_value(row, 8)
@@ -142,9 +141,9 @@ def parseCourses(filename, sequenceFileName):
             calendarDescr = sheet.cell_value(row, 42)
             maxUnits = sheet.cell_value(row, 43)
 
-            plainName = subject + catalog  # no section number
+            plainName = subject + " " + catalog  # no section number
             plainNameList.append(plainName)  # allows easy search in parseSeq
-            courseName = subject + catalog + " " + sect  # with section number
+            courseName = subject + " " + catalog + " " + sect  # with section number
 
             courseObjDict[courseName] = Course(courseName, plainName, acadOrg, term, shortDesc, classNbr,
             subject, catalog, component, sect, classStatus, descr, crsStatus,
