@@ -541,20 +541,19 @@ def adjustOverlapping(termList):
     overlaps = []
     # O(n^2) comparison between each of the courses
     for day in courseTimes:
-        counter = 1
         for courseTime in courseTimes[day]:
             overlappingCourses = []
-            for compareTime in courseTimes[day][counter:]:
-                # If compareTime starts before courseTime ends and compareTime starts after courseTime starts or
-                # if compareTime ends after courseTime starts and compareTime starts before courseTime starts
-                if (compareTime["start"] < courseTime["end"] and compareTime["start"] >= courseTime["start"]) \
-                or (compareTime["end"] > courseTime["start"] and compareTime["start"] <= courseTime["start"]):
-                    # move courseTime left and compareTime right
-                    if courseTime["course"] not in overlappingCourses:
-                        overlappingCourses.append(courseTime["course"])
-                    if compareTime["course"] not in overlappingCourses:
-                        overlappingCourses.append(compareTime["course"])
-            counter += 1
+            for compareTime in courseTimes[day]:
+                if courseTime != compareTime:
+                    # If compareTime starts before courseTime ends and compareTime starts after courseTime starts or
+                    # if compareTime ends after courseTime starts and compareTime starts before courseTime starts
+                    if (compareTime["start"] < courseTime["end"] and compareTime["start"] >= courseTime["start"]) \
+                    or (compareTime["end"] > courseTime["start"] and compareTime["start"] <= courseTime["start"]):
+                        # move courseTime left and compareTime right
+                        if courseTime["course"] not in overlappingCourses:
+                            overlappingCourses.append(courseTime["course"])
+                        if compareTime["course"] not in overlappingCourses:
+                            overlappingCourses.append(compareTime["course"])
             overlaps.append(overlappingCourses)
 
     for overlapList in overlaps:

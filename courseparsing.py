@@ -71,7 +71,7 @@ class Course:
         self.maxUnits = str(maxUnits)
         self.calendarPrint = str(calendarPrint)
         self.courseGroup = str(courseGroup)
-        self.position = str(position)
+        self.position = position
     def __str__(self) -> str:
         return self.name
 
