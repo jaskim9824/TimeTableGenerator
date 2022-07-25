@@ -1,7 +1,7 @@
 var app = angular.module("main", []);
 app.controller("main", function($scope) { 
 $scope.selectedPlan = "TraditionalPlan";
-$scope.selectedTerm = "FallTerm1";
+$scope.selectedTerm = "FallTerm3";
 $scope.updateTerm = function(term) {
   $scope.selectedTerm = term;
 }
@@ -26,16 +26,12 @@ this.unHighlightElement = function(element, category) {
         element.classList.remove(category + "-highlighted");
         element.classList.add(category);
     };
-$scope.TraditionalPlanFallTerm1obj = {};
-$scope.TraditionalPlanWinterTerm2obj = {};
 $scope.TraditionalPlanFallTerm3obj = {group2:"2A"};
 $scope.TraditionalPlanWinterTerm4obj = {group2:"2A"};
 $scope.TraditionalPlanFallTerm5obj = {group3:"3A"};
 $scope.TraditionalPlanWinterTerm6obj = {group3:"3A"};
 $scope.TraditionalPlanFallTerm7obj = {};
 $scope.TraditionalPlanWinterTerm8obj = {};
-$scope.AlternatePlanFallTerm1obj = {};
-$scope.AlternatePlanWinterTerm2obj = {};
 $scope.AlternatePlanFallTerm3obj = {};
 $scope.AlternatePlanWinterTerm4obj = {};
 $scope.AlternatePlanSummerTerm5obj = {};
@@ -43,8 +39,6 @@ $scope.AlternatePlanFallTerm6obj = {};
 $scope.AlternatePlanWinterTerm7obj = {};
 $scope.AlternatePlanSummerTerm8obj = {};
 $scope.AlternatePlanFallTerm9obj = {};
-$scope.CoopPlan1FallTerm1obj = {};
-$scope.CoopPlan1WinterTerm2obj = {};
 $scope.CoopPlan1FallTerm3obj = {};
 $scope.CoopPlan1WinterTerm4obj = {};
 $scope.CoopPlan1SummerCoopTerm1obj = {};
@@ -56,8 +50,6 @@ $scope.CoopPlan1WinterTerm6obj = {};
 $scope.CoopPlan1SummerTerm7obj = {};
 $scope.CoopPlan1FallCoopTerm5obj = {};
 $scope.CoopPlan1WinterTerm8obj = {};
-$scope.CoopPlan2FallTerm1obj = {};
-$scope.CoopPlan2WinterTerm2obj = {};
 $scope.CoopPlan2FallTerm3obj = {};
 $scope.CoopPlan2WinterCoopTerm1obj = {};
 $scope.CoopPlan2SummerTerm4obj = {};
@@ -69,8 +61,6 @@ $scope.CoopPlan2WinterCoopTerm4obj = {};
 $scope.CoopPlan2SummerTerm7obj = {};
 $scope.CoopPlan2FallCoopTerm5obj = {};
 $scope.CoopPlan2WinterTerm8obj = {};
-$scope.CoopPlan3BiomedicalFallTerm1obj = {};
-$scope.CoopPlan3BiomedicalWinterTerm2obj = {};
 $scope.CoopPlan3BiomedicalFallTerm3obj = {};
 $scope.CoopPlan3BiomedicalWinterTerm4obj = {};
 $scope.CoopPlan3BiomedicalSummerCoopTerm1obj = {};
@@ -82,8 +72,6 @@ $scope.CoopPlan3BiomedicalWinterCoopTerm3obj = {};
 $scope.CoopPlan3BiomedicalSummerCoopTerm4obj = {};
 $scope.CoopPlan3BiomedicalFallTerm8obj = {};
 $scope.CoopPlan3BiomedicalWinterTerm9obj = {};
-$scope.CoopPlan4FallTerm1obj = {};
-$scope.CoopPlan4WinterTerm2obj = {};
 $scope.CoopPlan4FallTerm3obj = {};
 $scope.CoopPlan4WinterTerm4obj = {};
 $scope.CoopPlan4SummerTerm5obj = {};
@@ -95,37 +83,37 @@ $scope.CoopPlan4WinterCoopTerm4obj = {};
 $scope.CoopPlan4SummerCoopTerm5obj = {};
 $scope.CoopPlan4FallTerm7obj = {};
 $scope.CoopPlan4WinterTerm8obj = {};
-this.TraditionalPlanTerms = 8;
-this.AlternatePlanTerms = 9;
-this.CoopPlan1Terms = 13;
-this.CoopPlan2Terms = 13;
-this.CoopPlan3BiomedicalTerms = 13;
-this.CoopPlan4Terms = 13;
+this.TraditionalPlanTerms = 6;
+this.AlternatePlanTerms = 7;
+this.CoopPlan1Terms = 11;
+this.CoopPlan2Terms = 11;
+this.CoopPlan3BiomedicalTerms = 11;
+this.CoopPlan4Terms = 11;
 this.previousPlan = $scope.selectedPlan+$scope.selectedTerm
 this.setDefaults = function(plan) { 
   switch(plan) { 
       case "TraditionalPlan": 
-            $scope.selectedTerm = "FallTerm1";
+            $scope.selectedTerm = "FallTerm3";
           $scope.$apply();
           break;
       case "AlternatePlan": 
-            $scope.selectedTerm = "FallTerm1";
+            $scope.selectedTerm = "FallTerm3";
           $scope.$apply();
           break;
       case "CoopPlan1": 
-            $scope.selectedTerm = "FallTerm1";
+            $scope.selectedTerm = "FallTerm3";
           $scope.$apply();
           break;
       case "CoopPlan2": 
-            $scope.selectedTerm = "FallTerm1";
+            $scope.selectedTerm = "FallTerm3";
           $scope.$apply();
           break;
       case "CoopPlan3Biomedical": 
-            $scope.selectedTerm = "FallTerm1";
+            $scope.selectedTerm = "FallTerm3";
           $scope.$apply();
           break;
       case "CoopPlan4": 
-            $scope.selectedTerm = "FallTerm1";
+            $scope.selectedTerm = "FallTerm3";
           $scope.$apply();
           break;
     default:
@@ -137,16 +125,6 @@ that.render($scope.selectedPlan+$scope.selectedTerm);
 };
 this.disable = function(plan) {
     switch (plan) { 
-  case "TraditionalPlanFallTerm1": 
-    for (let i = 0; i < this.TraditionalPlanList.length; i++) {
-        this.TraditionalPlanList[i][0].hide(true);
-    }
-    break; 
-  case "TraditionalPlanWinterTerm2": 
-    for (let i = 0; i < this.TraditionalPlanList.length; i++) {
-        this.TraditionalPlanList[i][0].hide(true);
-    }
-    break; 
   case "TraditionalPlanFallTerm3": 
     for (let i = 0; i < this.TraditionalPlanList.length; i++) {
         this.TraditionalPlanList[i][0].hide(true);
@@ -175,16 +153,6 @@ this.disable = function(plan) {
   case "TraditionalPlanWinterTerm8": 
     for (let i = 0; i < this.TraditionalPlanList.length; i++) {
         this.TraditionalPlanList[i][0].hide(true);
-    }
-    break; 
-  case "AlternatePlanFallTerm1": 
-    for (let i = 0; i < this.AlternatePlanList.length; i++) {
-        this.AlternatePlanList[i][0].hide(true);
-    }
-    break; 
-  case "AlternatePlanWinterTerm2": 
-    for (let i = 0; i < this.AlternatePlanList.length; i++) {
-        this.AlternatePlanList[i][0].hide(true);
     }
     break; 
   case "AlternatePlanFallTerm3": 
@@ -220,16 +188,6 @@ this.disable = function(plan) {
   case "AlternatePlanFallTerm9": 
     for (let i = 0; i < this.AlternatePlanList.length; i++) {
         this.AlternatePlanList[i][0].hide(true);
-    }
-    break; 
-  case "CoopPlan1FallTerm1": 
-    for (let i = 0; i < this.CoopPlan1List.length; i++) {
-        this.CoopPlan1List[i][0].hide(true);
-    }
-    break; 
-  case "CoopPlan1WinterTerm2": 
-    for (let i = 0; i < this.CoopPlan1List.length; i++) {
-        this.CoopPlan1List[i][0].hide(true);
     }
     break; 
   case "CoopPlan1FallTerm3": 
@@ -287,16 +245,6 @@ this.disable = function(plan) {
         this.CoopPlan1List[i][0].hide(true);
     }
     break; 
-  case "CoopPlan2FallTerm1": 
-    for (let i = 0; i < this.CoopPlan2List.length; i++) {
-        this.CoopPlan2List[i][0].hide(true);
-    }
-    break; 
-  case "CoopPlan2WinterTerm2": 
-    for (let i = 0; i < this.CoopPlan2List.length; i++) {
-        this.CoopPlan2List[i][0].hide(true);
-    }
-    break; 
   case "CoopPlan2FallTerm3": 
     for (let i = 0; i < this.CoopPlan2List.length; i++) {
         this.CoopPlan2List[i][0].hide(true);
@@ -352,16 +300,6 @@ this.disable = function(plan) {
         this.CoopPlan2List[i][0].hide(true);
     }
     break; 
-  case "CoopPlan3BiomedicalFallTerm1": 
-    for (let i = 0; i < this.CoopPlan3BiomedicalList.length; i++) {
-        this.CoopPlan3BiomedicalList[i][0].hide(true);
-    }
-    break; 
-  case "CoopPlan3BiomedicalWinterTerm2": 
-    for (let i = 0; i < this.CoopPlan3BiomedicalList.length; i++) {
-        this.CoopPlan3BiomedicalList[i][0].hide(true);
-    }
-    break; 
   case "CoopPlan3BiomedicalFallTerm3": 
     for (let i = 0; i < this.CoopPlan3BiomedicalList.length; i++) {
         this.CoopPlan3BiomedicalList[i][0].hide(true);
@@ -415,16 +353,6 @@ this.disable = function(plan) {
   case "CoopPlan3BiomedicalWinterTerm9": 
     for (let i = 0; i < this.CoopPlan3BiomedicalList.length; i++) {
         this.CoopPlan3BiomedicalList[i][0].hide(true);
-    }
-    break; 
-  case "CoopPlan4FallTerm1": 
-    for (let i = 0; i < this.CoopPlan4List.length; i++) {
-        this.CoopPlan4List[i][0].hide(true);
-    }
-    break; 
-  case "CoopPlan4WinterTerm2": 
-    for (let i = 0; i < this.CoopPlan4List.length; i++) {
-        this.CoopPlan4List[i][0].hide(true);
     }
     break; 
   case "CoopPlan4FallTerm3": 
@@ -488,24 +416,6 @@ this.disable = function(plan) {
 };
 this.enable = function(plan) {
   switch(plan) {
-    case "TraditionalPlanFallTerm1": 
-      for (let i = 0; i < this.TraditionalPlanList.length; i++) {
-          this.TraditionalPlanList[i][0].show(true);
-      }
-      for (let i = 0; i < this.TraditionalPlanClicked.length; i++) {
-          var element = document.getElementById(this.TraditionalPlanClicked[i][0]);
-          this.highlightElement(element, this.TraditionalPlanClicked[i][1]);
-      }
-      break; 
-    case "TraditionalPlanWinterTerm2": 
-      for (let i = 0; i < this.TraditionalPlanList.length; i++) {
-          this.TraditionalPlanList[i][0].show(true);
-      }
-      for (let i = 0; i < this.TraditionalPlanClicked.length; i++) {
-          var element = document.getElementById(this.TraditionalPlanClicked[i][0]);
-          this.highlightElement(element, this.TraditionalPlanClicked[i][1]);
-      }
-      break; 
     case "TraditionalPlanFallTerm3": 
       for (let i = 0; i < this.TraditionalPlanList.length; i++) {
           this.TraditionalPlanList[i][0].show(true);
@@ -558,24 +468,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.TraditionalPlanClicked.length; i++) {
           var element = document.getElementById(this.TraditionalPlanClicked[i][0]);
           this.highlightElement(element, this.TraditionalPlanClicked[i][1]);
-      }
-      break; 
-    case "AlternatePlanFallTerm1": 
-      for (let i = 0; i < this.AlternatePlanList.length; i++) {
-          this.AlternatePlanList[i][0].show(true);
-      }
-      for (let i = 0; i < this.AlternatePlanClicked.length; i++) {
-          var element = document.getElementById(this.AlternatePlanClicked[i][0]);
-          this.highlightElement(element, this.AlternatePlanClicked[i][1]);
-      }
-      break; 
-    case "AlternatePlanWinterTerm2": 
-      for (let i = 0; i < this.AlternatePlanList.length; i++) {
-          this.AlternatePlanList[i][0].show(true);
-      }
-      for (let i = 0; i < this.AlternatePlanClicked.length; i++) {
-          var element = document.getElementById(this.AlternatePlanClicked[i][0]);
-          this.highlightElement(element, this.AlternatePlanClicked[i][1]);
       }
       break; 
     case "AlternatePlanFallTerm3": 
@@ -639,24 +531,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.AlternatePlanClicked.length; i++) {
           var element = document.getElementById(this.AlternatePlanClicked[i][0]);
           this.highlightElement(element, this.AlternatePlanClicked[i][1]);
-      }
-      break; 
-    case "CoopPlan1FallTerm1": 
-      for (let i = 0; i < this.CoopPlan1List.length; i++) {
-          this.CoopPlan1List[i][0].show(true);
-      }
-      for (let i = 0; i < this.CoopPlan1Clicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan1Clicked[i][0]);
-          this.highlightElement(element, this.CoopPlan1Clicked[i][1]);
-      }
-      break; 
-    case "CoopPlan1WinterTerm2": 
-      for (let i = 0; i < this.CoopPlan1List.length; i++) {
-          this.CoopPlan1List[i][0].show(true);
-      }
-      for (let i = 0; i < this.CoopPlan1Clicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan1Clicked[i][0]);
-          this.highlightElement(element, this.CoopPlan1Clicked[i][1]);
       }
       break; 
     case "CoopPlan1FallTerm3": 
@@ -758,24 +632,6 @@ this.enable = function(plan) {
           this.highlightElement(element, this.CoopPlan1Clicked[i][1]);
       }
       break; 
-    case "CoopPlan2FallTerm1": 
-      for (let i = 0; i < this.CoopPlan2List.length; i++) {
-          this.CoopPlan2List[i][0].show(true);
-      }
-      for (let i = 0; i < this.CoopPlan2Clicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan2Clicked[i][0]);
-          this.highlightElement(element, this.CoopPlan2Clicked[i][1]);
-      }
-      break; 
-    case "CoopPlan2WinterTerm2": 
-      for (let i = 0; i < this.CoopPlan2List.length; i++) {
-          this.CoopPlan2List[i][0].show(true);
-      }
-      for (let i = 0; i < this.CoopPlan2Clicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan2Clicked[i][0]);
-          this.highlightElement(element, this.CoopPlan2Clicked[i][1]);
-      }
-      break; 
     case "CoopPlan2FallTerm3": 
       for (let i = 0; i < this.CoopPlan2List.length; i++) {
           this.CoopPlan2List[i][0].show(true);
@@ -875,24 +731,6 @@ this.enable = function(plan) {
           this.highlightElement(element, this.CoopPlan2Clicked[i][1]);
       }
       break; 
-    case "CoopPlan3BiomedicalFallTerm1": 
-      for (let i = 0; i < this.CoopPlan3BiomedicalList.length; i++) {
-          this.CoopPlan3BiomedicalList[i][0].show(true);
-      }
-      for (let i = 0; i < this.CoopPlan3BiomedicalClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan3BiomedicalClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan3BiomedicalClicked[i][1]);
-      }
-      break; 
-    case "CoopPlan3BiomedicalWinterTerm2": 
-      for (let i = 0; i < this.CoopPlan3BiomedicalList.length; i++) {
-          this.CoopPlan3BiomedicalList[i][0].show(true);
-      }
-      for (let i = 0; i < this.CoopPlan3BiomedicalClicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan3BiomedicalClicked[i][0]);
-          this.highlightElement(element, this.CoopPlan3BiomedicalClicked[i][1]);
-      }
-      break; 
     case "CoopPlan3BiomedicalFallTerm3": 
       for (let i = 0; i < this.CoopPlan3BiomedicalList.length; i++) {
           this.CoopPlan3BiomedicalList[i][0].show(true);
@@ -990,24 +828,6 @@ this.enable = function(plan) {
       for (let i = 0; i < this.CoopPlan3BiomedicalClicked.length; i++) {
           var element = document.getElementById(this.CoopPlan3BiomedicalClicked[i][0]);
           this.highlightElement(element, this.CoopPlan3BiomedicalClicked[i][1]);
-      }
-      break; 
-    case "CoopPlan4FallTerm1": 
-      for (let i = 0; i < this.CoopPlan4List.length; i++) {
-          this.CoopPlan4List[i][0].show(true);
-      }
-      for (let i = 0; i < this.CoopPlan4Clicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan4Clicked[i][0]);
-          this.highlightElement(element, this.CoopPlan4Clicked[i][1]);
-      }
-      break; 
-    case "CoopPlan4WinterTerm2": 
-      for (let i = 0; i < this.CoopPlan4List.length; i++) {
-          this.CoopPlan4List[i][0].show(true);
-      }
-      for (let i = 0; i < this.CoopPlan4Clicked.length; i++) {
-          var element = document.getElementById(this.CoopPlan4Clicked[i][0]);
-          this.highlightElement(element, this.CoopPlan4Clicked[i][1]);
       }
       break; 
     case "CoopPlan4FallTerm3": 

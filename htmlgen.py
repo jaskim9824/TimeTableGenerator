@@ -424,7 +424,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
                 if course.name == "Complementary Elective":
                     # Class allows formatting so words fit in course box
                     courseID = courseID+str(electiveCountWrapper["COMP"])
-                    courseDiv = createCourseDiv(soup, courseID, orCase, minutesFromEight, minutesLong, course.position)
+                    courseDiv = createCourseDiv(soup, courseID, orCase, minutesFromEight, minutesLong)
                     # id must include which number elective it is (electiveName0, electiveName1, electiveName2, ...)
                     courseDisc["id"] = courseDisc["id"][:-4] + str(electiveCountWrapper["COMP"]) + "desc"
                     electiveCountWrapper["COMP"] += 1
@@ -433,7 +433,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
                 elif course.name == "Program/Technical Elective":
                     # Class allows formatting so words fit in course box
                     courseID = courseID+str(electiveCountWrapper["PROG"])
-                    courseDiv = createCourseDiv(soup, courseID, orCase, minutesFromEight, minutesLong, course.position)
+                    courseDiv = createCourseDiv(soup, courseID, orCase, minutesFromEight, minutesLong)
                     # id must include which number elective it is (electiveName0, electiveName1, electiveName2, ...)
                     courseDisc["id"] = courseDisc["id"][:-4] + str(electiveCountWrapper["PROG"]) + "desc"
                     electiveCountWrapper["PROG"] += 1
@@ -442,7 +442,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
                 elif course.name == "ITS Elective":
                     courseID = courseID+str(electiveCountWrapper["ITS"])
                     # Class allows formatting so words fit in course box
-                    courseDiv = createCourseDiv(soup, courseID, orCase, minutesFromEight, minutesLong, course.position)
+                    courseDiv = createCourseDiv(soup, courseID, orCase, minutesFromEight, minutesLong)
                     # id must include which number elective it is (electiveName0, electiveName1, electiveName2, ...)
                     courseDisc["id"] = courseDisc["id"][:-4] + str(electiveCountWrapper["ITS"]) + "desc"
                     electiveCountWrapper["ITS"] += 1
@@ -454,8 +454,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
                                                 courseID, 
                                                 orCase,
                                                 minutesFromEight,
-                                                minutesLong,
-                                                course.position) 
+                                                minutesLong) 
                     formatCourseDescriptionForRegular(soup, course, courseDisc)
 
                 # text appearing in course box (eg: CHEM 103)
@@ -490,10 +489,10 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
                 if not skipAddCourseFlag:
                     # the flag telling us to skip appending this course is not set, so append it
                     courseContDiv.append(courseDiv)
-                    appendToEachDay(tagsList, courseContDiv)  # course may occur on multiple days, need to append to each day
+                    appendToEachDay(tagsList, courseContDiv, course.position)  # course may occur on multiple days, need to append to each day
 
             if courseGroupTitle != "":
-                appendToEachDay(tagsList, courseContDiv)
+                appendToEachDay(tagsList, courseContDiv, course.position)
             if courseGroupList != []:
                 # A course group is involved. Append each course to the courseContDiv, then
                 # append courseContDiv to any days for which that course occurs
@@ -501,7 +500,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
                     if i == (len(courseGroupList) - 1):
                         courseGroupList[i]["class"].append("lastcourseingroup")  # last course has no bottom margin
                     courseContDiv.append(courseGroupList[i])
-                appendToEachDay(tagsList, courseContDiv)
+                appendToEachDay(tagsList, courseContDiv, course.position)
 
 # Checks termList for overlapping courses and updates pushLeft/pushRight attributes
 # if there is a time overlap.
@@ -538,9 +537,10 @@ def adjustOverlapping(termList):
                 if course.fri == 'Y':
                     courseTimes["friday"].append(timeDict)
 
-    overlaps = []
+    overlaps = {}
     # O(n^2) comparison between each of the courses
     for day in courseTimes:
+        overlaps[day] = []
         for courseTime in courseTimes[day]:
             overlappingCourses = []
             for compareTime in courseTimes[day]:
@@ -554,21 +554,35 @@ def adjustOverlapping(termList):
                             overlappingCourses.append(courseTime["course"])
                         if compareTime["course"] not in overlappingCourses:
                             overlappingCourses.append(compareTime["course"])
-            overlaps.append(overlappingCourses)
+            overlaps[day].append(overlappingCourses)
 
-    for overlapList in overlaps:
-        if len(overlapList) == 2:
-            overlapList[0].position = "left2"
-            overlapList[1].position = "right2"
-        elif len(overlapList) == 3:
-            overlapList[0].position = "left3"
-            overlapList[1].position = "center3"
-            overlapList[2].position = "right3"
-        elif len(overlapList) == 4:
-            overlapList[0].position = "leftleft4"
-            overlapList[1].position = "left4"
-            overlapList[2].position = "right4"
-            overlapList[3].position = "rightright4"
+    for day in overlaps:
+        for overlapList in overlaps[day]:
+            if len(overlapList) == 2:
+                overlapList[0].position[day] = "left2"
+                overlapList[1].position[day] = "right2"
+            elif len(overlapList) == 3:
+                overlapList[0].position[day] = "left3"
+                overlapList[1].position[day] = "center3"
+                overlapList[2].position[day] = "right3"
+            elif len(overlapList) == 4:
+                overlapList[0].position[day] = "leftleft4"
+                overlapList[1].position[day] = "left4"
+                overlapList[2].position[day] = "right4"
+                overlapList[3].position[day] = "rightright4"
+            elif len(overlapList) == 5:
+                overlapList[0].position[day] = "leftleft5"
+                overlapList[1].position[day] = "left5"
+                overlapList[2].position[day] = "center5"
+                overlapList[3].position[day] = "right5"
+                overlapList[4].position[day] = "rightright5"
+            elif len(overlapList) == 6:
+                overlapList[0].position[day] = "lll6"
+                overlapList[1].position[day] = "ll6"
+                overlapList[2].position[day] = "l6"
+                overlapList[3].position[day] = "r6"
+                overlapList[4].position[day] = "rr6"
+                overlapList[5].position[day] = "rrr6"
 
 # Calculates the amount of minutes from 8:00am to the start time of a class
 # Parameters:
@@ -623,7 +637,7 @@ def calcClassDuration(startTime, endTime):
 #   minutesLong - length in minutes of class, rounded to the nearest 30 minutes
 # Returns:
 #   courseDiv - HTML tag for the container of the course
-def createCourseDiv(soup, courseID, orBool, minutesFromEight, minutesLong, position):
+def createCourseDiv(soup, courseID, orBool, minutesFromEight, minutesLong):
     # adjustmentFactor helps format vertical position of courses
     adjustmentFactor = -2
     if minutesFromEight == 0:
@@ -636,7 +650,6 @@ def createCourseDiv(soup, courseID, orBool, minutesFromEight, minutesLong, posit
         # course starts at X:00 (8:00, 9:00, etc.) and is Y hours and 30 minutes long (1 hour & 30 mins, 2 hours & 30 mins, etc.)
         adjustmentFactor = 2
     classStr = ""
-    classStr += position
     if orBool:
         classStr += "orcourse"
     else:
@@ -774,13 +787,24 @@ def addOrCourses(courseOrList, courseGroup, courseGroupList, tagsList, soup):
 #   tagsList - list of HTML tags of days we need to append to. Every day the course
 #   occurs on, that day's tag will appear in this list
 #   courseContDiv - container for an entire course, everything to do with one course is in this div
-def appendToEachDay(tagsList, courseContDiv):
+def appendToEachDay(tagsList, courseContDiv, position):
     for dayTag in tagsList:
         # if the course occurs on multiple days, append to each dayDiv (mondayDiv, tuesdayDiv, etc.)
         if dayTagInLateWeek(dayTag) and ("class=\"tooltiptextright\"") in str(courseContDiv):
             # if course on thursday or friday, move tooltip to left of course (so not off page)
             courseContDiv.find(class_="tooltiptextright")["class"] = "tooltiptextleft"
-        dayTag.append(deepcopy(courseContDiv))
+        newDiv = deepcopy(courseContDiv)
+        if "class=\"monday\"" in str(dayTag):
+            newDiv.find(class_="course tooltip")["class"] = position["monday"] + "course tooltip"
+        elif "class=\"tuesday\"" in str(dayTag):
+            newDiv.find(class_="course tooltip")["class"] = position["tuesday"] + "course tooltip"
+        elif "class=\"wednesday\"" in str(dayTag):
+            newDiv.find(class_="course tooltip")["class"] = position["wednesday"] + "course tooltip"
+        elif "class=\"thursday\"" in str(dayTag):
+            newDiv.find(class_="course tooltip")["class"] = position["thursday"] + "course tooltip"
+        elif "class=\"friday\"" in str(dayTag):
+            newDiv.find(class_="course tooltip")["class"] = position["friday"] + "course tooltip"
+        dayTag.append(newDiv)
 
 # Checks if a day is late in the week (thursday or friday)
 # Parameters:

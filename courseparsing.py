@@ -21,7 +21,7 @@ class Course:
     classType = "", capEnrl = "", totEnrl = "", campus = "", location = "", 
     notesNbr = "", noteNbr = "", note = "", rqGroup = "", openTo = "", approvedHrs = "", 
     duration = "", career = "", consent = "", calendarDescr = "", maxUnits = "", calendarPrint = "",
-    courseGroup = "", position = ""):
+    courseGroup = "", position = {"monday":"", "tuesday":"", "wednesday":"", "thursday":"", "friday":""}):
 
         self.name = str(name)
         self.plainName = str(plainName)

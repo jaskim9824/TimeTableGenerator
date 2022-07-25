@@ -256,10 +256,11 @@ h3#planhead {
 }
 
 /* Course box styling */
-.course, .orcourse, .left2course, .left2orcourse, .right2course, .right2orcourse,
-.left3course, .left3orcourse, .center3course, .center3orcourse, .right3course, .right3orcourse,
-.leftleft4course, .leftleft4orcourse, .left4course, .left4orcourse, .right4course, .right4orcourse,
-.rightright4course, .rightright4orcourse {
+.course, .left2course, .right2course,
+.left3course, .center3course, .right3course,
+.leftleft4course, .left4course, .right4course, .rightright4course,
+.leftleft5course, .left5course, .center5course, .right5course, .rightright5course,
+.lll6course, .ll6course, .l6course, .r6course, .rr6course, .rrr6course {
     box-sizing: border-box;
     border-style: solid;
     border-color: black;
@@ -320,6 +321,74 @@ h3#planhead {
     left: 240.75px;
 }
 
+.leftleft5couse {
+    width: 64.2px;
+}
+
+.left5course {
+    width: 64.2px;
+    position: relative;
+    left: 64.2px;
+}
+
+.center5course {
+    width: 64.2px;
+    position: relative;
+    left: 128.4px;
+}
+
+.right5course {
+    width: 64.2px;
+    position: relative;
+    left: 192.6px;
+}
+
+.rightright5course {
+    width: 64.2px;
+    position: relative;
+    left: 256.8px;
+}
+
+.lll6course {
+    width: 53.5px;
+}
+
+.ll6course {
+    width: 53.5px;
+    position: relative;
+    left: 53.5px;
+}
+
+.l6course {
+    width: 53.5px;
+    position: relative;
+    left: 107px;
+}
+
+.r6course {
+    width: 53.5px;
+    position: relative;
+    left: 160.5px;
+}
+
+.rr6course {
+    width: 53.5px;
+    position: relative;
+    left: 214px;
+}
+
+.rrr6course {
+    width: 53.5px;
+    position: relative;
+    left: 267.5px;
+}
+
+.leftleft5course .embed, .right5course .embed, .center5course .embed,
+.right5course .embed, .rightright5course.embed, .lll6course .embed, .ll6course .embed,
+.l6course .embed, .r6course .embed, .rr6course .embed, .rrr6course .embed {
+    font-size: 75%;
+}
+
 .coursegroupcontainer .lastcourseingroup {
     margin-bottom: 0;
 }
@@ -366,7 +435,9 @@ p.ortext {
 /* Default course hover */
 .course:hover, .orcourse:hover, .left2course:hover, .right2course:hover, .left3course:hover, 
 .center3course:hover, .right3course:hover, .leftleft4course:hover, .left4course:hover, 
-.right4course:hover,  .rightright4course:hover {
+.right4course:hover,  .rightright4course:hover, .leftleft5course:hover, .left5course:hover,
+.center5course:hover, .right5course:hover, .rightright5course:hover, .lll6course:hover,
+.ll6course:hover, .l6course:hover, .r6course:hover, .rr6course:hover, .rrr6course:hover {
     background-color: #f2cd00;
     border-color:#f2cd00;
 }
