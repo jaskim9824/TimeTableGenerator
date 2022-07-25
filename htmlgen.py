@@ -559,8 +559,9 @@ def adjustOverlapping(termList):
     for day in overlaps:
         for overlapList in overlaps[day]:
             for i in range(0, len(overlapList)):
-                overlapList[i].position[day]["width"] = 321/len(overlapList)
-                overlapList[i].position[day]["left"] = (321/len(overlapList))*i
+                if 321/len(overlapList) < overlapList[i].position[day]["width"]:
+                    overlapList[i].position[day]["width"] = 321/len(overlapList)
+                    overlapList[i].position[day]["left"] = (321/len(overlapList))*i
 
 # Calculates the amount of minutes from 8:00am to the start time of a class
 # Parameters:
