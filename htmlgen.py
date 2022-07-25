@@ -682,12 +682,12 @@ def formatCourseDescriptionForRegular(soup, course, courseDisc):
     # courseFeeIndex.append("(" + "fi " + course.calc_fee_index + ")" + " ")
 
     # adding term avail 
-    # courseTermAvail = soup.new_tag("p", attrs={"class":"descriptionavailability"})
-    # courseTermAvail.append("(" + course.duration + ", ")
+    courseTermAvail = soup.new_tag("p", attrs={"class":"descriptionavailability"})
+    courseTermAvail.append("(" + course.duration + ", ")
 
     # adding alpha hours
     courseAlphaHours = soup.new_tag("p", attrs={"class":"descriptionalphahours"})
-    courseAlphaHours.append("(" + course.approvedHrs + ")" + " ")
+    courseAlphaHours.append(course.approvedHrs.lower() + ")" + " ")
 
     # adding desc
     courseDescription = soup.new_tag("p", attrs={"class":"fulldescription"})
@@ -726,7 +726,7 @@ def formatCourseDescriptionForRegular(soup, course, courseDisc):
     courseDisc.append(courseLine)
     courseDisc.append(courseCredits)
     # courseDisc.append(courseFeeIndex)
-    # courseDisc.append(courseTermAvail)
+    courseDisc.append(courseTermAvail)
     courseDisc.append(courseAlphaHours)
     courseDisc.append(courseDescription)
     courseDisc.append(courseInstructorName)
