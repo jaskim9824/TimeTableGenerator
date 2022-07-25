@@ -558,31 +558,9 @@ def adjustOverlapping(termList):
 
     for day in overlaps:
         for overlapList in overlaps[day]:
-            if len(overlapList) == 2:
-                overlapList[0].position[day] = "left2"
-                overlapList[1].position[day] = "right2"
-            elif len(overlapList) == 3:
-                overlapList[0].position[day] = "left3"
-                overlapList[1].position[day] = "center3"
-                overlapList[2].position[day] = "right3"
-            elif len(overlapList) == 4:
-                overlapList[0].position[day] = "leftleft4"
-                overlapList[1].position[day] = "left4"
-                overlapList[2].position[day] = "right4"
-                overlapList[3].position[day] = "rightright4"
-            elif len(overlapList) == 5:
-                overlapList[0].position[day] = "leftleft5"
-                overlapList[1].position[day] = "left5"
-                overlapList[2].position[day] = "center5"
-                overlapList[3].position[day] = "right5"
-                overlapList[4].position[day] = "rightright5"
-            elif len(overlapList) == 6:
-                overlapList[0].position[day] = "lll6"
-                overlapList[1].position[day] = "ll6"
-                overlapList[2].position[day] = "l6"
-                overlapList[3].position[day] = "r6"
-                overlapList[4].position[day] = "rr6"
-                overlapList[5].position[day] = "rrr6"
+            for i in range(0, len(overlapList)):
+                overlapList[i].position[day]["width"] = 321/len(overlapList)
+                overlapList[i].position[day]["left"] = (321/len(overlapList))*i
 
 # Calculates the amount of minutes from 8:00am to the start time of a class
 # Parameters:
@@ -794,16 +772,25 @@ def appendToEachDay(tagsList, courseContDiv, position):
             # if course on thursday or friday, move tooltip to left of course (so not off page)
             courseContDiv.find(class_="tooltiptextright")["class"] = "tooltiptextleft"
         newDiv = deepcopy(courseContDiv)
+
+        day = ""
         if "class=\"monday\"" in str(dayTag):
-            newDiv.find(class_="course tooltip")["class"] = position["monday"] + "course tooltip"
+            day = "monday"
         elif "class=\"tuesday\"" in str(dayTag):
-            newDiv.find(class_="course tooltip")["class"] = position["tuesday"] + "course tooltip"
+            day = "tuesday"
         elif "class=\"wednesday\"" in str(dayTag):
-            newDiv.find(class_="course tooltip")["class"] = position["wednesday"] + "course tooltip"
+            day= "wednesday"
         elif "class=\"thursday\"" in str(dayTag):
-            newDiv.find(class_="course tooltip")["class"] = position["thursday"] + "course tooltip"
+            day = "thursday"
         elif "class=\"friday\"" in str(dayTag):
-            newDiv.find(class_="course tooltip")["class"] = position["friday"] + "course tooltip"
+            day = "friday"
+
+        if day != "":
+            newDiv.find(class_="course tooltip")["style"] += ";position:relative;width:" + str(position[day]["width"]) + \
+            "px;left:" + str(position[day]["left"]) + "px"
+
+        if position[day]["width"] <= 64.2:
+            newDiv.find(class_="course tooltip")["class"].append("narrowclass")
         dayTag.append(newDiv)
 
 # Checks if a day is late in the week (thursday or friday)
