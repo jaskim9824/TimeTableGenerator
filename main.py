@@ -56,7 +56,7 @@ def main():
 
             # radio inputs for plan, term, and course group
             htmlgen.placeRadioInputs(formTag, termTag, courseGroupTag, optionDict, courseSectionWrapper, soup)
-            htmlgen.placeSectionRadioInputs(sequenceDict, courseSectionWrapper, soup)
+            # htmlgen.placeSectionRadioInputs(sequenceDict, courseSectionWrapper, soup)
             courseGroupTag.append(courseSectionWrapper)
             # main tag holding timetable itself
             displayTag = htmlgen.generateDisplayDiv(soup, courseGroupList)

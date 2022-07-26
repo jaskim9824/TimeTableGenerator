@@ -45,7 +45,7 @@ header {
     width: fit-content;
     font-size: 25px;
     position: absolute;
-    left: 750px;
+    left: 710px;
     top: 12px;
     color: #F2CD00;
 }
@@ -67,7 +67,7 @@ header {
         
     }
 
-    .header img{
+    .header img {
         margin-right: 0;
         float: left;
         /* img needs to be re-aligned on narrow screens */
@@ -75,19 +75,27 @@ header {
         bottom: 10px;
     }
 
-    .header a.site-title {
-        font-size: 15px;
-        left: 800px;
-    }
-
     /* Changing width of tooltip on narrow screens */
     .coursecontainer .tooltip .tooltiptextleft, .coursecontainer .tooltip .tooltiptextright {
-        width: 400px;
+        width: 250px;
+    }
+
+    .coursecontainer .tooltip .tooltiptextleft {
+        right: 10%;
+    }
+
+    .coursecontainer .tooltip .tooltiptextright {
+        left: 10%;
     }
 
     /* Smaller font on narrow screens */
     .coursecontainer .tooltip .descriptiontitle {
         font-size: 15px;
+    }
+
+    .coursecontainer .tooltip .tooltiptextright .calendardescription {
+        display: block;
+        line-height: 0.7;
     }
 
     /* Smaller font on narrow screens */
@@ -104,7 +112,7 @@ h3#planhead {
     width: fit-content;
     font-size: 175%;
     position: relative;
-    left: 50rem;
+    left: 815px;
 }
 
 /* Container for radio input selectors */
@@ -400,7 +408,7 @@ footer {
     height: 50px;
     margin-right: 0;
     position: relative;
-    left: 44rem;
+    left: 46rem;
 }
 
 /* copyright logo and text */

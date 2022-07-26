@@ -448,12 +448,10 @@ def placeCourses(daysTagsDict, termList, soup, plan, term):
                 courseContDiv.append(courseDiv)
                 appendToEachDay(tagsList, courseContDiv, course.position)  # course may occur on multiple days, need to append to each day
 
-# Checks termList for overlapping courses and updates pushLeft/pushRight attributes
+# Checks termList for overlapping courses and updates the position attribute
 # if there is a time overlap.
 # Parameters:
 #   termList - list of courses being taken that term
-# Returns:
-#   None. The pushLeft/pushRight attributes of Course objects are updated.
 def adjustOverlapping(termList):
     courseTimes = {}  # dict of list of dicts. Inner dicts store Course object, start time, & end time for one course
     courseTimes["monday"] = []
@@ -604,6 +602,9 @@ def formatCourseDescriptionForRegular(soup, course, courseDisc):
     # adding line seperating title and description
     courseLine = soup.new_tag("hr", attrs={"class":"descriptionline"})
 
+    # container for calendar description
+    calendarDescription = soup.new_tag("div", attrs={"class":"calendardescription"})
+
     # adding number of credits
     courseCredits = soup.new_tag("p", attrs={"class":"descriptioncredits"})
     courseCredits.append(html.unescape("&#9733 ") + course.maxUnits + " ")
@@ -655,11 +656,14 @@ def formatCourseDescriptionForRegular(soup, course, courseDisc):
     # appending info to disc tag
     courseDisc.append(courseTitle)
     courseDisc.append(courseLine)
-    courseDisc.append(courseCredits)
-    # courseDisc.append(courseFeeIndex)
-    courseDisc.append(courseTermAvail)
-    courseDisc.append(courseAlphaHours)
-    courseDisc.append(courseDescription)
+
+    calendarDescription.append(courseCredits)
+    # calendarDescription.append(courseFeeIndex)
+    calendarDescription.append(courseTermAvail)
+    calendarDescription.append(courseAlphaHours)
+    calendarDescription.append(courseDescription)
+    courseDisc.append(calendarDescription)
+    
     courseDisc.append(courseInstructorName)
     courseDisc.append(courseInstructorEmail)
     courseDisc.append(courseLocation)
