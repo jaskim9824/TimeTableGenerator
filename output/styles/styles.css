@@ -93,7 +93,8 @@ header {
         font-size: 15px;
     }
 
-    .coursecontainer .tooltip .tooltiptextright .calendardescription {
+    .coursecontainer .tooltip .tooltiptextright .calendardescription,
+    .coursecontainer .tooltip .tooltiptextleft .calendardescription {
         display: block;
         line-height: 0.7;
     }
