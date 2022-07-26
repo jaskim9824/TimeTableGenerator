@@ -4,7 +4,7 @@
 # University of Alberta, Summer 2022, Curriculum Development Co-op Term
 
 # This file contains the functions neccesary to parse the Excel file
-# containing the sequncing information
+# containing the sequencing information
 
 # Dependencies: copy, xlrd
 
@@ -45,56 +45,6 @@ def parseSeq(filename, course_obj_dict, plainNameList):
                     if name == "":
                         # Cell in Excel is empty, skip over this cell
                         continue
-                    # if ("(" in name) and (")" in name):
-                    #     # course group is between opening and closing brackets
-                    #     open_bracket = name.find("(")
-                    #     close_bracket = name.find(")")
-                    #     course_group = name[open_bracket + 1:close_bracket]
-                    #     course_group.strip().replace(" ", "")
-                    #     if close_bracket == (len(name) - 1):
-                    #         # Case: course group is last thing in cell
-                    #         name = name[:open_bracket]
-                    #     else:
-                    #         # Case: some text after course group that is part of course name
-                    #         name = name[:open_bracket] + name[close_bracket + 1:]
-
-                    # if "OR" in name:
-                    #     # If OR case, follow the same procedure but set calendar_print as "or" (or "lastor")
-                    #     namelist = name.split("OR")
-                    #     for orname in namelist:
-                    #         pureName = orname
-                    #         orname = orname.strip()
-                    #         if orname not in plainNameList:
-                    #             continue
-                    #         # course_obj_dict key has section number in key, orname doesn't; need to search for 
-                    #         # full name (with section number)
-                    #         fullOrNames = findFullNames(course_obj_dict, orname)
-                    #         for fullOrName in fullOrNames:
-                    #             orcourse = deepcopy(course_obj_dict[fullOrName])
-                    #             if namelist[-1] == pureName:
-                    #                 # last OR course (courses after this are not in this OR option, will be a different div)
-                    #                 orcourse.calendarPrint = "lastor"
-                    #             else:
-                    #                 orcourse.calendarPrint = "or"
-                    #             if course_group != "":
-                    #                 orcourse.courseGroup = course_group
-                    #             term_list.append(orcourse)
-                    #     plan_dict[term_name] = term_list
-                    #     row += 1
-                    #     continue
-
-                    # if name not in plainNameList:
-                    #     continue
-
-                    # course_obj_dict key has section number in key, name doesn't; need to search for 
-                    # # full name (with section number)
-                    # fullNames = findFullNames(course_obj_dict, name)
-                    # for fullName in fullNames:
-                    #     # deepcopy since sequencing leads to prereqs and coreqs not being the same between different plans
-                    #     curr_course = deepcopy(course_obj_dict[fullName])
-                    #     if course_group != "":
-                    #         curr_course.courseGroup = course_group
-                    #     term_list.append(curr_course)  # store each course in a list
                     parsedCourseObj = courseParse(name, course_obj_dict, plainNameList)
                     if type(parsedCourseObj) == type([]):
                         for obj in parsedCourseObj:
@@ -284,12 +234,12 @@ class CourseSectionWrapper:
 # If the cell contains a single course name, what is returned is a list with a single
 # CourseSectionWrapper object
 # If the cell contains mutiple courses sepearted by OR, what is returned is a list of
-#  CourseSectionWrapper objects
-# If the cell contains a course group desigination, what is returned is a list of lists,
-# with each list contains CourseSectionWrapper object(s) and the name of the course group
+# CourseSectionWrapper objects
+# If the cell contains a course group designation, what is returned is a list of lists,
+# with each list containing CourseSectionWrapper object(s) and the name of the course group
 # as the last item
 # Parameters:
-#   name - text within cell that is parsed
+#   name - text within Excel cell that is parsed
 #   course_obj_dict - dict containing course info
 #   plainNameList - list of all possible course names (including section names)
 def courseParse(name, course_obj_dict, plainNameList):
@@ -302,7 +252,7 @@ def courseParse(name, course_obj_dict, plainNameList):
         # non course group case
         else:
             return [createCourseSection(item.upper().strip(), course_obj_dict, plainNameList) for item in nameList]
-    #single course
+    # single course
     else:
         return [createCourseSection(nameList[0].upper(), course_obj_dict, plainNameList)]
 
@@ -332,10 +282,20 @@ def courseParseTest(name, course_obj_dict):
     else:
         return [createCourseSectionTest(nameList[0].upper(), course_obj_dict)]
 
+# Creates and returns a CourseSectionWrapper object holding all of the
+# Course objects for each section. eg: if Math 100 has sections A1 & A2
+# then the returned wrapper will contain 2 course objects, one for each section.
+# Parameters:
+#   course - name of a course (str)
+#   course_obj_dict - dict holding all Course objects
+#   plainNameList - list of all possible course names (including section names)
+# Returns: 
+#   CourseSectionWrapper object holding Course objects for
+#   all of the sections with the course name
 def createCourseSection(course, course_obj_dict, plainNameList):
     if course not in plainNameList:
         return None
-    fullNames = findFullNames(course_obj_dict, course)
+    fullNames = findFullNames(course_obj_dict, course)  # fullNames include section numbers
     wrapper = CourseSectionWrapper(course)
     for fullName in fullNames:
         curr_course = deepcopy(course_obj_dict[fullName])
@@ -350,22 +310,34 @@ def createCourseSectionTest(course, course_obj_dict):
         wrapper.addSection(curr_course)
     return wrapper
 
+# Parses text that has been designated as containing a course group. Stores the courses in a
+# doubly-nested list with each element being a CourseSectionWrapper.
+# Parameters:
+#   nameList - one Excel entry in sequencing file split at each "OR"
+#   course_obj_dict - dict holding all Course objects
+#   plainNameList - list of all possible course names (including section names)
+# Returns:
+#   double-nested list holding CourseSectionWrapper objects
 def courseParseCourseGroups(nameList, course_obj_dict, plainNameList):
     courseGroups = []
     for name in nameList:
         name = name.replace("{","").replace("}","")
+
+        # finding the course group name ("3A", "4B", etc.)
         courseGroupNameIndexStart = name.find("(")
         courseGroupNameIndexEnd = name.find(")")
         if courseGroupNameIndexEnd == -1 or courseGroupNameIndexStart == -1:
             raise ValueError("Course group name improperly formatted")
         courseGroupName = name[courseGroupNameIndexStart+1:courseGroupNameIndexEnd]
         strippedCourses = name[0:courseGroupNameIndexStart]
+
         courseList = strippedCourses.split("or")
         courseGroupList = []
         for course in courseList:
             if course.upper().strip() not in plainNameList:
+                # course info was not parsed from the course info Excel file
                 continue
-            courseGroupList.append(createCourseSection(course.upper().strip(), course_obj_dict, plainNameList))
+            courseGroupList.append(createCourseSection(course.upper().strip(), course_obj_dict, plainNameList))  # create courseSectionWrapper
         courseGroupList.append(courseGroupName)
         courseGroups.append(courseGroupList)
     return courseGroups

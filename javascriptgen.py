@@ -121,14 +121,14 @@ def writeRadioChangeDirective(controller):
 #   courseGroupDict - dict that maps plans to a dict that maps course groups to the 
 #   options avaiable in that course group
 #   courseGroupList - list of course groups taken overall in the program
-#   initialTerm - First term to occur, must be the same for all plans (should always be Fall Term 1 in engineering)
+#   initialTerm - First term to occur in the first plan
 #   controller - file handle to controller.js
 def generateSetDefaults(courseGroupDict, courseGroupList, initialTerm, controller):
     controller.write("this.setDefaults = function(plan) { \n")
     controller.write("  switch(plan) { \n")  # different term and course group options in each plan
     formattedCaseStatement = "      case \"{case}\": \n"
-    formattedTerm = "            $scope.selectedTerm = \"" + cleaner.cleanString(initialTerm) + "\";\n"
-    formattedCourseGroup = "            $scope.field{number}.group{number} ="
+    formattedTerm = "            $scope.selectedTerm = \"" + cleaner.cleanString(initialTerm) + "\";\n"  # set initial term
+    formattedCourseGroup = "            $scope.field{number}.group{number} ="  # set initial course groups
     switchEndString = """    default:
     console.log("shouldn't be here");
     }
@@ -146,7 +146,7 @@ def generateSetDefaults(courseGroupDict, courseGroupList, initialTerm, controlle
         controller.write("          break;\n")
     controller.write(switchEndString)
 
-# Function that generates the listener that listens to course group selection
+# Function that generates the listener that listens to course group
 # radio inputs
 # Parameters:
 #   courseGroupList - list of course groups taken in this program
@@ -157,7 +157,7 @@ def generateSubRadioListener(courseGroupList, controller):
     controller.write("that.render(" + planString + ");\n")
     controller.write("};\n")
 
-# Function that generates the statement representing which plan is currently selected
+# Statement that gets the full name of the currently selected plan
 # Parameters:
 #   courseGroupList - list of all course groups taken that term
 def generatePlanString(courseGroupList):
@@ -168,9 +168,8 @@ def generatePlanString(courseGroupList):
     planString += "+$scope.selectedTerm"
     return planString
 
-# Function that generates the object variables storing which
-# course groups can be taken in a given plan & term.
-# The objects are simply key-value pairs
+# Function that generates the object variables storing which course groups 
+# can be taken in a given plan & term. The objects are simply key-value pairs
 # planOptionDict - dict mapping plan & term to the course group options available in that plan & term
 # controller - file handle to controller.js
 def generateInitialOptionObjects(planOptionDict, controller):

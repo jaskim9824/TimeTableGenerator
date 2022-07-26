@@ -5,12 +5,11 @@
 # This file contains all the functions needed to generate the required
 # HTML elements to produce the MEC E Program Visualizer webpage
 
-# Dependencies: cleaner, linegen, html
+# Dependencies: cleaner, html, copy, coursegroupparsing
 
 import cleaner
 import html
 from copy import deepcopy
-
 from coursegroupparsing import CourseGroupOption
 
 # Changes the header title to include deptName, which is pulled
@@ -63,25 +62,6 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, courseSecti
             planWrapper.append(breakTag)
             termTag.append(planWrapper)
             wrapperDiv = soup.new_tag("div", attrs={"ng-switch-when": cleaner.cleanString(plan) + cleaner.cleanString(term)})
-        
-        # for courseGroupList in courseGroupDict[plan].values():
-        #     # courseGroupList is a list fo course groups that go together (eg: ["2A", "2B"] or ["4A", "4B"])
-        #     totalCourseGroup = "".join(courseGroupList)
-        #     courseGroupWrapper = soup.new_tag("div", attrs={"id": "OR" + totalCourseGroup})
-        #     for indivCourseGroup in courseGroupList:
-        #         # indivCourseGroup is one of the options in a group (eg: "2A" or "3B")
-        #         # ng-change used to update $scope.fieldX.groupX
-        #         radioInput = soup.new_tag("input", attrs={"type":"radio", 
-        #                                 "name":cleaner.cleanString(plan) + totalCourseGroup + "optionselector",
-        #                                 "ng-model":"field" + indivCourseGroup[0] + ".group" + indivCourseGroup[0], 
-        #                                 "ng-change": "updateField" + indivCourseGroup[0] + "(\"" + indivCourseGroup + "\")",
-        #                                 "value":indivCourseGroup,
-        #                                 "id":indivCourseGroup})
-        #         labelTag = soup.new_tag("label", attrs={"for":indivCourseGroup})
-        #         labelTag.append(indivCourseGroup)
-        #         courseGroupWrapper.append(radioInput)
-        #         courseGroupWrapper.append(labelTag)
-        #         wrapperDiv.append(courseGroupWrapper)
            
             wrapperDiv.append(courseSectionWrapper)
             for course in sequenceDict[plan][term]:
@@ -249,8 +229,7 @@ def generateDisplayDiv(soup, courseGroupList):
     return soup.new_tag("div", attrs={"class":"display",
                                       "ng-switch":switchVariable})
 
-# Function that places the outer divs for the course group selection 
-# radio inputs for each plan
+# Function that places the outer divs for the course group radio inputs for each plan
 # Parameters:
 #   courseGroupSelectTag - HTML tag representing outer div used to hold the course group selection menu
 #   soup - soup object, used to create HTML tags
@@ -330,11 +309,7 @@ def placeTermDivs(planTag, planDict, soup, plan, term):
     daysTagsDict = createDailyDivs(soup)
 
     # placing courses on mondayDiv, tuesdayDiv, etc. then appending to termDiv
-<<<<<<< HEAD
-    placeCourses(daysTagsDict, planDict[term], soup, plan, term, electiveCounterWrapper)
-=======
-    placeCourses(daysTagsDict, planDict[term], soup, plan)
->>>>>>> e2ba1e72a96c8a1afaa8863d3e35b078f90f6e68
+    placeCourses(daysTagsDict, planDict[term], soup, plan, term)
     for dayTag in daysTagsDict.values():
         termDiv.append(dayTag)
     planTag.append(termDiv)
@@ -403,17 +378,8 @@ def createDailyDivs(soup):
 #   termList - list of courses being taken that term
 #   soup - soup object, used to create HTML tags
 #   plan - name of plan whose terms are being placed
-<<<<<<< HEAD
-#   electiveCountWrapper - dict mapping elective abbreviated name ("ITS", "PROG", "COMP")
-#   to count of current ocurrence of that elective
-def placeCourses(daysTagsDict, termList, soup, plan, term, electiveCountWrapper):
-    courseGroupList = []  # list of courses (course objects) in a course group
-    courseGroupTitle = ""  # name of the course group (eg: "Course group 2A")
-    courseOrList = []
-    hexcolorlist= ["033dfc", "fc0303", "ef8c2b", "0ccb01", "bd43fa", "e8e123"]
-=======
-def placeCourses(daysTagsDict, termList, soup, plan):
->>>>>>> e2ba1e72a96c8a1afaa8863d3e35b078f90f6e68
+#   term - name of the temr whose courses are being placed
+def placeCourses(daysTagsDict, termList, soup, plan, term):
 
     adjustOverlapping(termList)  # check for overlapping courses, set position field if overlap
 
@@ -558,7 +524,8 @@ def adjustOverlapping(termList):
 #   minutesFromEight - amount of minutes from 8:00am to startTime
 def calcMinutes(startTime):
     colonIndex = startTime.find(":")
-    assert colonIndex != -1, "Error in start time, ensure the Excel file is properly formatted in the Hrs From column"
+    if colonIndex == -1:
+        raise ValueError("Error in start time, ensure the Excel file is properly formatted in the Hrs From column")
     hours = int(startTime[:colonIndex])
     minutes = int(startTime[colonIndex + 1:])
     return (hours*60 + minutes) - 8*60
@@ -572,8 +539,10 @@ def calcMinutes(startTime):
 def calcClassDuration(startTime, endTime):
     startColonIndex = startTime.find(":")
     endColonIndex = startTime.find(":")
-    assert startColonIndex != -1, "Error in start time, ensure the Excel file is properly formatted in the Hrs From column"
-    assert endColonIndex != -1, "Error in end time, ensure the Excel file is properly formatted in the Hrs To column"
+    if startColonIndex == -1:
+        raise ValueError("Error in start time, ensure the Excel file is properly formatted in the Hrs From column")
+    if endColonIndex == -1:
+        raise ValueError("Error in end time, ensure the Excel file is properly formatted in the Hrs To column")
 
     startHours = int(startTime[:startColonIndex])
     startMinutes = int(startTime[startColonIndex + 1:])

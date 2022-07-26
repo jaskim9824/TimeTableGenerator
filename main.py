@@ -23,7 +23,7 @@ def main():
             soup = BeautifulSoup(input, 'html.parser')
 
             # parsing the Excel files
-            courseObjDict, sequenceDict = courseparsing.parseCourses("TimeTable.xls", "Sequencing.xls")
+            sequenceDict = courseparsing.parseCourses("TimeTable.xls", "Sequencing.xls")
             deptName = "Test Department"  # hardcoded for now
 
             # extracting course group information

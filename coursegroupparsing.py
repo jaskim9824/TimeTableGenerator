@@ -3,12 +3,12 @@
 # Oversight: Dr. David Nobes
 # University of Alberta, Summer 2022, Curriculum Development Co-op Term
 
-# The file contains the functions needed to extract the course group 
+# This file contains the functions needed to extract the course group 
 # information needed to generate the web page
 
-# Function that finds the list of all course groups taken that term
+# Function that finds the list of all course groups available in that term
 # Parameters:
-#   courseGroupDict - dict that maps plans to the course groups that exist in them
+#   courseGroupDict - dict that maps plans to the course groups that exist in each plan
 # Returns a list of course groups taken in that program
 def findListofAllCourseGroups(courseGroupDict):
     currentList = []
@@ -18,15 +18,15 @@ def findListofAllCourseGroups(courseGroupDict):
                 currentList.append(element)
     return currentList
 
-# Function that consturcts a dict that maps plans to the course groups existing in that plan
+# Function that constructs a dict that maps plans to the course groups existing in that plan
 # and their options
 # Parameters:
-#   sequenceDict - dict that maps plan names to the plan dict containing sequncing info about that plan
-# Returns a dict that maps plans to the course groups that exist in them
+#   sequenceDict - dict that maps plan names to the plan dict containing sequencing info about that plan
+# Returns a dict that maps plans to the course groups that exist in each plan
 def extractPlanCourseGroupDict(sequenceDict):
     courseGroupDict = {}
     for plan in sequenceDict:
-        index = plan.find("{")
+        index = plan.find("{")  # course groups must appear in curly braces
         if index != -1:
             shortenedPlanName = plan[0:index].strip()
         else:
@@ -35,18 +35,19 @@ def extractPlanCourseGroupDict(sequenceDict):
             courseGroupDict[shortenedPlanName] = {}
         courseGroupList = extractCourseGroupListFromString(plan)
         if courseGroupList == []:
+            # no course groups available
             continue
         planCourseGroupsDict = courseGroupDict[shortenedPlanName]
         courseGroupDict[shortenedPlanName] = appendCourseGroups(planCourseGroupsDict,courseGroupList)
     return courseGroupDict
 
-# Function that appends course groups and options to a specfic plan course group dict
+# Function that appends course groups and options to a specfic plan in course group dict
 #   planCourseGroupDict - dict that maps course groups to a list of options taken in that group
 #   courseGroupList - list of course group options
-# Returns a new course group dict for that specifc plan
+# Returns a new course group dict for that specific plan
 def appendCourseGroups(planCourseGroupsDict, courseGroupList):
     for group in courseGroupList:
-        numOfGroup = int(''.join(filter(lambda s: (s.isdigit()), group)))
+        numOfGroup = int(''.join(filter(lambda s: (s.isdigit()), group))) # for group 3A the numOfGroup is 3
         if numOfGroup not in planCourseGroupsDict:
             planCourseGroupsDict[numOfGroup] = []
         if group not in planCourseGroupsDict[numOfGroup]:

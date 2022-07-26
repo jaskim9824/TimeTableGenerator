@@ -156,7 +156,7 @@ def parseCourses(filename, sequenceFileName):
 
         courseSeqDict = sequenceparsing.parseSeq(sequenceFileName, courseObjDict, plainNameList)  # organize courses by plan & by term
 
-        return courseObjDict, courseSeqDict
+        return courseSeqDict
         
     except FileNotFoundError:
         raise FileNotFoundError("Excel course information file not found, ensure it is present and the name is correct.")
