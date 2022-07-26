@@ -69,7 +69,6 @@ $scope.CoopPlan4WinterCoopTerm4obj = {};
 $scope.CoopPlan4SummerCoopTerm5obj = {};
 $scope.CoopPlan4FallTerm7obj = {};
 $scope.CoopPlan4WinterTerm8obj = {};
-this.previousPlan = $scope.selectedPlan+$scope.selectedTerm
 this.setDefaults = function(plan) { 
   switch(plan) { 
       case "TraditionalPlan": 

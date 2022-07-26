@@ -29,7 +29,6 @@ def main():
             # extracting course group information
             courseGroupDict = coursegroupparsing.extractPlanCourseGroupDict(sequenceDict)
             courseGroupList = coursegroupparsing.findListofAllCourseGroups(courseGroupDict)
-            intitalCourseGroupVals = coursegroupparsing.findIntitalValuesofCourseGroups(courseGroupDict, courseGroupList)
             optionDict = coursegroupparsing.extractingListofOptions(sequenceDict)
 
             # writing JS controller

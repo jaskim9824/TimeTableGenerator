@@ -4,7 +4,7 @@
 # University of Alberta, Summer 2022, Curriculum Development Co-op Term
 
 # This file contains all the functions neccessary to generate the JS of the 
-# webpage which is not releated to the generation of the lines
+# webpage. Primarily for switching between plans/terms/course groups
 
 # Dependencies: cleaner
 import cleaner
@@ -12,10 +12,10 @@ import cleaner
 # Function that generates the JS before the generation of the course diagram
 # Parameters:
 #   sequenceDict - dict that maps plan name to a dict that represents the plan sequence
-#   initialCourseGroupVals - dict that maps the course group with the initial value it should take
 #   courseGroupDict - dict that maps plans to a dict that maps course groups to the 
 #   options avaiable in that course group 
 #   courseGroupList - list of course groups taken overall in the program
+#   planOptionDict - dict mapping plan & term to the course group options available in that plan & term
 #   controller - file handle for controller JS file
 def intializeControllerJavaScript(sequenceDict, courseGroupDict, courseGroupList, planOptionDict, controller):
     generateInitialBlockController(courseGroupDict, list(list(sequenceDict.values())[0].keys())[0], controller)
@@ -35,25 +35,29 @@ def closeControllerJavaScript(controller):
     controller.close()
 
 # Function that generates the initial block of Javascript in controller.js
+# Initializes variables and writes the main controller function
 # Parameters:
 #   courseGroupDict - dict that maps plans to a dict that maps course groups to the 
 #   options avaiable in that course group
-#   initialTerm - First term to occur, must be the same for all plans (should always be Fall Term 1 in engineering)
+#   initialTerm - First term to occur in the first plan
 #   controller - file handle to controller.js
 def generateInitialBlockController(courseGroupDict, initialTerm, controller):
-    planList = list(courseGroupDict.keys())
+    planList = list(courseGroupDict.keys())  # used to access first occurring plan
+
+    # writing the main controller function
     controller.write("var app = angular.module(\"main\", []);\n")
     controller.write("app.controller(\"main\", function($scope) { \n")
+
     # Initializing selectedPlan and selectedTerm scope vars
     controller.write("$scope.selectedPlan = \"" + cleaner.cleanString(planList[0])+ "\";\n")
     controller.write("$scope.selectedTerm = \"" + cleaner.cleanString(initialTerm) + "\";\n")
-    # Writing functions that update term and course group fields. Functions are called when changing
-    # radio inputs. Note: selectedPlan can be altered directly, these vars need these helper funtions
+
+    # Writing function that updates the currently selected term. Functions are called when changing
+    # radio inputs. Note: selectedPlan can be altered directly, this var needs a helper function
     controller.write("""$scope.updateTerm = function(term) {
   $scope.selectedTerm = term;
 }\n""")
-    controller.write("var that = this;\n")
-
+    controller.write("var that = this;\n")  # allows access to the above variables inside any function by using 'that'
 
     controller.write("""var radios = document.querySelectorAll("input[type=radio][name=planselector]");
 Array.prototype.forEach.call(radios, function (radio) {
@@ -62,17 +66,15 @@ Array.prototype.forEach.call(radios, function (radio) {
     controller.write("""   });
 });\n""")
 
-# Function that generates the blocks of the controller JS file that is dependent
+# Function that generates the blocks of the controller JS file that are dependent
 # on the number and names of plans provided
 # Parameters:
 #   sequenceDict - dict that maps plan name to a dict that represents the plan sequence
-#   initialCourseGroupVals - dict that maps the course group with the initial value it should take
 #   courseGroupDict - dict that maps plans to a dict that maps course groups to the 
 #   options avaiable in that course group 
 #   courseGroupList - list of course groups taken overall in the program
 #   controller - file handle for controller JS file
 def generatePlanBasedBlocksController(sequenceDict, courseGroupDict, courseGroupList, controller):
-    generatePlanBasedInitalVariables(courseGroupList, controller)
     generateSetDefaults(courseGroupDict, courseGroupList, list(list(sequenceDict.values())[0].keys())[0], controller)
     generateSubRadioListener(courseGroupList, controller)
 
@@ -111,15 +113,6 @@ def writeRadioChangeDirective(controller):
     };
     });"""
     controller.write(radioChangeDirective)
-
-# Function that generates the intial variables for the controller
-# based on the plans
-# Parameters: 
-#   courseGroupList - list of course groups taken overall in the program
-#   controller - file handle for controller JS file
-def generatePlanBasedInitalVariables(courseGroupList, controller):
-    planString = generatePlanString(courseGroupList)
-    controller.write("this.previousPlan = " +planString + "\n")
 
 # Function that writes the setDefaults function based on the plans and course groups.
 # The JS generated sets the default term and course group options for each plan. 
@@ -164,7 +157,7 @@ def generateSubRadioListener(courseGroupList, controller):
     controller.write("that.render(" + planString + ");\n")
     controller.write("};\n")
 
-# Function that generates the statementd representing which plan is currently selected
+# Function that generates the statement representing which plan is currently selected
 # Parameters:
 #   courseGroupList - list of all course groups taken that term
 def generatePlanString(courseGroupList):
@@ -175,6 +168,11 @@ def generatePlanString(courseGroupList):
     planString += "+$scope.selectedTerm"
     return planString
 
+# Function that generates the object variables storing which
+# course groups can be taken in a given plan & term.
+# The objects are simply key-value pairs
+# planOptionDict - dict mapping plan & term to the course group options available in that plan & term
+# controller - file handle to controller.js
 def generateInitialOptionObjects(planOptionDict, controller):
     for plan in planOptionDict:
         for term in planOptionDict[plan]:
