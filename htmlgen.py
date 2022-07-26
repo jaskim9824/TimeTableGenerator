@@ -7,7 +7,6 @@
 
 # Dependencies: cleaner, linegen, html
 
-from distutils.command.clean import clean
 import cleaner
 import html
 from copy import deepcopy
@@ -32,7 +31,7 @@ def switchTitle(titleTag, topTitleTag, deptName):
 #   courseGroupTag - div HTML tag where the course group radio inputs will be placed
 #   courseGroupDict - dict that maps the plans to the course groups in it
 #   soup - soup object, used to create HTML tags
-def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, soup):
+def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, courseSectionWrapper, soup):
     for plan in sequenceDict:
         # radio inputs for selecting plan, can ng-model directly to selectedPlan
         radioInput = soup.new_tag("input", attrs={"type":"radio", 
@@ -83,7 +82,8 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, soup):
         #         courseGroupWrapper.append(radioInput)
         #         courseGroupWrapper.append(labelTag)
         #         wrapperDiv.append(courseGroupWrapper)
-            courseSectionWrapper = soup.new_tag("div")
+           
+            wrapperDiv.append(courseSectionWrapper)
             for course in sequenceDict[plan][term]:
                 if type(course) == type(CourseGroupOption()):
                     # append to coursegroup form
@@ -154,7 +154,8 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, soup):
                                 labelTag = soup.new_tag("label", attrs={"for":section})
                                 labelTag.append(section)
                                 sectionWrapper.append(sectionRadio)
-                                sectionWrapper.append(labelTag)     
+                                sectionWrapper.append(labelTag)
+                            courseSectionWrapper.append(sectionWrapper)    
                             labelTag.append(option)
                             optionWrapper.append(optionRadio)
                             optionWrapper.append(labelTag)
@@ -195,13 +196,43 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, soup):
                                 labelTag = soup.new_tag("label", attrs={"for":section})
                                 labelTag.append(section)
                                 sectionWrapper.append(sectionRadio)
-                                sectionWrapper.append(labelTag)                                                
+                                sectionWrapper.append(labelTag)
+                            courseSectionWrapper.append(sectionWrapper)                                             
                             labelTag = soup.new_tag("label", attrs={"for":option})
                             labelTag.append(option)
                             optionWrapper.append(optionRadio)
                             optionWrapper.append(labelTag)
                         wrapperDiv.append(optionWrapper)
             courseGroupTag.append(wrapperDiv)
+
+def placeSectionRadioInputs(seqDict, courseSectionWrapper, soup):
+    for plan in seqDict:
+        for term in seqDict[plan]:
+            for course in seqDict[plan][term]:
+                if len(course) == 1 and type(course[0]) != []:
+                    sectionWrapper = soup.new_tag("div")
+                    sectionWrapper.append(str(course[0]))
+                    breakTag = soup.new_tag("br")
+                    sectionWrapper.append(breakTag)
+                    for section in course[0].sections:
+                        sectionRadio = soup.new_tag("input", attrs={"type":"radio",
+                                                                            "name":cleaner.cleanString(plan) + 
+                                                                           cleaner.cleanString(term)+
+                                                                           cleaner.cleanString(str(course[0])),
+                                                                           "ng-model":cleaner.cleanString(plan) + 
+                                                                               cleaner.cleanString(term) +
+                                                                               "obj."+
+                                                                               cleaner.cleanString(str(course[0])),
+                                                                            "value": str(section),
+                                                                            "id": str(section)})
+                        labelTag = soup.new_tag("label", attrs={"for":str(section)})
+                        labelTag.append(str(section))
+                        sectionWrapper.append(sectionRadio)
+                        sectionWrapper.append(labelTag)
+                        breakTag = soup.new_tag("br")
+                        sectionWrapper.append(breakTag)
+                    courseSectionWrapper.append(sectionWrapper)
+
 
 # Function that generates the display div which holds the plan diagram
 # Parameters:
@@ -302,7 +333,7 @@ def placeTermDivs(planTag, planDict, soup, plan, term):
     daysTagsDict = createDailyDivs(soup)
 
     # placing courses on mondayDiv, tuesdayDiv, etc. then appending to termDiv
-    placeCourses(daysTagsDict, planDict[term], soup, plan, electiveCounterWrapper)
+    placeCourses(daysTagsDict, planDict[term], soup, plan, term, electiveCounterWrapper)
     for dayTag in daysTagsDict.values():
         termDiv.append(dayTag)
     planTag.append(termDiv)
@@ -373,7 +404,7 @@ def createDailyDivs(soup):
 #   plan - name of plan whose terms are being placed
 #   electiveCountWrapper - dict mapping elective abbreviated name ("ITS", "PROG", "COMP")
 #   to count of current ocurrence of that elective
-def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
+def placeCourses(daysTagsDict, termList, soup, plan, term, electiveCountWrapper):
     courseGroupList = []  # list of courses (course objects) in a course group
     courseGroupTitle = ""  # name of the course group (eg: "Course group 2A")
     courseOrList = []
@@ -385,7 +416,15 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
         for courseWrapper in courseWrapperList:
             if (type(courseWrapper) == type([])) and (len(courseWrapper) == 2):
                 # courseWrapper is for a course group
-                courseGroupName = courseWrapper[1]
+                courseGroupName = courseWrapper[-1]
+                outsideDiv = soup.new_tag("div", attrs={"ng-if":cleaner.cleanString(plan)+
+                                                                cleaner.cleanString(term)
+                                                                +"obj."
+                                                                +"group"+
+                                                                courseGroupName[0]
+                                                                +"== \""
+                                                                +courseGroupName+
+                                                                "\""})
                 courseWrapper = courseWrapper[0]
             if (type(courseWrapper) == type([])) and (len(courseWrapper) == 1):
                 # courseWrapper is for an elective, not used in timetable
