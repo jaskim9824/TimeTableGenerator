@@ -34,7 +34,6 @@ def main():
 
             # writing JS controller
             javascriptgen.intializeControllerJavaScript(sequenceDict, 
-                                                        intitalCourseGroupVals,
                                                         courseGroupDict,
                                                         courseGroupList, 
                                                         optionDict,
