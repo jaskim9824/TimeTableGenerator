@@ -321,11 +321,16 @@ def placeTermDivs(planTag, planDict, soup, plan, term):
 def createTimeGridDivs(soup):
     timeDiv = soup.new_tag("div", attrs={"class":"time"})  # leftmost flexbox with times running down left of page
     for i in range(8, 22):  # for hours between 8am-9pm
+
+        # helps align the grid
         adjustmentFactor = 0
         if i > 8:
             adjustmentFactor = -2
+
+        # text displaying time on left of page
         timeSlotDiv = soup.new_tag("div", attrs={"class":"timeslot"})
         timeSlotDiv.append(str(i) + ":00")
+
         # 1 hour = 135.35 pixels. Initial value 24.5 aligns times to the rest of the grid
         timeDiv.append(soup.new_tag("hr", attrs={"class":"horizontaldivider", 
                                 "style":"position:absolute; top:" + str(24.5+135.35*(i - 8) + adjustmentFactor) + "px"}))
@@ -374,15 +379,18 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
     courseOrList = []
     hexcolorlist= ["033dfc", "fc0303", "ef8c2b", "0ccb01", "bd43fa", "e8e123"]
 
-    adjustOverlapping(termList)  # check for overlapping courses, set pushLeft/pushRight attrs if overlap
+    adjustOverlapping(termList)  # check for overlapping courses, set position field if overlap
 
     for courseWrapperList in termList:
         for courseWrapper in courseWrapperList:
             if (type(courseWrapper) == type([])) and (len(courseWrapper) == 2):
+                # courseWrapper is for a course group
                 courseGroupName = courseWrapper[1]
                 courseWrapper = courseWrapper[0]
             if (type(courseWrapper) == type([])) and (len(courseWrapper) == 1):
+                # courseWrapper is for an elective, not used in timetable
                 continue
+
             for course in courseWrapper.sections:
                 tagsList = []
                 minutesFromEight = calcMinutes(course.hrsFrom)  # minutes from 8:00 to start of class
@@ -399,7 +407,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
                 if course.fri == 'Y':
                     tagsList.append(daysTagsDict["friday"])
 
-                courseID = cleaner.cleanString(course.name)+cleaner.cleanString(plan)
+                courseID = cleaner.cleanString(course.name)+cleaner.cleanString(plan)  # id of html element
                 orCase = False
                 lastOrCase = False
                 if (course.calendarPrint == "or") or (course.calendarPrint == "lastor"):
@@ -512,7 +520,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
 # Returns:
 #   None. The pushLeft/pushRight attributes of Course objects are updated.
 def adjustOverlapping(termList):
-    courseTimes = {}  # dict of list of dicts. Inner dict stores Course object, start time, end time for one course
+    courseTimes = {}  # dict of list of dicts. Inner dicts store Course object, start time, & end time for one course
     courseTimes["monday"] = []
     courseTimes["tuesday"] = []
     courseTimes["wednesday"] = []
@@ -521,10 +529,13 @@ def adjustOverlapping(termList):
     for courseWrapperList in termList:
         for courseWrapper in courseWrapperList:
             if (type(courseWrapper) == type([])) and (len(courseWrapper) == 2):
+                # courseWrapper is for a course group
                 courseGroupName = courseWrapper[1]
                 courseWrapper = courseWrapper[0]
             if (type(courseWrapper) == type([])) and (len(courseWrapper) == 1):
+                # courseWrapper is for an elective, not used in timetable
                 continue
+
             for course in courseWrapper.sections:
                 minutesFromEight = calcMinutes(course.hrsFrom)  # minutes from 8:00 to start of class
                 minutesLong = calcClassDuration(course.hrsFrom, course.hrsTo)  # duration of class
@@ -546,28 +557,30 @@ def adjustOverlapping(termList):
     overlaps = {}
     # O(n^2) comparison between each of the courses
     for day in courseTimes:
-        overlaps[day] = []
+        overlaps[day] = []  # may have different number of overlaps on different days; keep days separate
         for courseTime in courseTimes[day]:
-            overlappingCourses = []
-            for compareTime in courseTimes[day]:
+            overlappingCourses = []  # list of courses that are overlapping with courseTime
+            for compareTime in courseTimes[day]:  # compare courseTime to all other courses in that day
                 if courseTime != compareTime:
                     # If compareTime starts before courseTime ends and compareTime starts after courseTime starts or
                     # if compareTime ends after courseTime starts and compareTime starts before courseTime starts
                     if (compareTime["start"] < courseTime["end"] and compareTime["start"] >= courseTime["start"]) \
                     or (compareTime["end"] > courseTime["start"] and compareTime["start"] <= courseTime["start"]):
-                        # move courseTime left and compareTime right
+                        # courseTime & compareTime are overlapping, append them to a list
                         if courseTime["course"] not in overlappingCourses:
                             overlappingCourses.append(courseTime["course"])
                         if compareTime["course"] not in overlappingCourses:
                             overlappingCourses.append(compareTime["course"])
             overlaps[day].append(overlappingCourses)
 
+    # set the position field of overlapping courses
     for day in overlaps:
         for overlapList in overlaps[day]:
             for i in range(0, len(overlapList)):
                 if 321/len(overlapList) < overlapList[i].position[day]["width"]:
+                    # we only do this if it makes the course narrower (course has to be as narrow as required & not any wider)
                     overlapList[i].position[day]["width"] = 321/len(overlapList)
-                    overlapList[i].position[day]["left"] = (321/len(overlapList))*i
+                    overlapList[i].position[day]["left"] = (321/len(overlapList))*i  # relative position from left
 
 # Calculates the amount of minutes from 8:00am to the start time of a class
 # Parameters:
@@ -767,11 +780,14 @@ def addOrCourses(courseOrList, courseGroup, courseGroupList, tagsList, soup):
         appendToEachDay(tagsList, courseOrContDiv)  # append to courseOrContDiv to each day it occurs on
     courseOrList = []  # reset in case multiple OR cases in a term
 
-# Appends courseContDiv to all of the days that course occurs on
+# Appends courseContDiv to all of the days that course occurs on, 
+# sets the width & relative position based on Course object fields
 # Parameters:
 #   tagsList - list of HTML tags of days we need to append to. Every day the course
 #   occurs on, that day's tag will appear in this list
 #   courseContDiv - container for an entire course, everything to do with one course is in this div
+#   position - position field of Course object (course.position), dict with keys as days of week.
+#   Values as another dict with "width" & "left" keys used to format the course
 def appendToEachDay(tagsList, courseContDiv, position):
     for dayTag in tagsList:
         # if the course occurs on multiple days, append to each dayDiv (mondayDiv, tuesdayDiv, etc.)
@@ -780,6 +796,7 @@ def appendToEachDay(tagsList, courseContDiv, position):
             courseContDiv.find(class_="tooltiptextright")["class"] = "tooltiptextleft"
         newDiv = deepcopy(courseContDiv)
 
+        # determining which day we are placing on (should only be one)
         day = ""
         if "class=\"monday\"" in str(dayTag):
             day = "monday"
@@ -793,14 +810,16 @@ def appendToEachDay(tagsList, courseContDiv, position):
             day = "friday"
 
         if day != "":
+            # set the width & relative position from left
             newDiv.find(class_="course tooltip")["style"] += ";position:relative;width:" + str(position[day]["width"]) + \
             "px;left:" + str(position[day]["left"]) + "px"
 
         if position[day]["width"] <= 64.2:
+            # if course is very narrow, different styling applies
             newDiv.find(class_="course tooltip")["class"].append("narrowclass")
         dayTag.append(newDiv)
 
-# Checks if a day is late in the week (thursday or friday)
+# Checks if a dayTag is late in the week (thursday or friday)
 # Parameters:
 #   dayTag - HTML tag for a day
 # Returns:
