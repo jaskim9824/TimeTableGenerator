@@ -108,6 +108,41 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, so
                         breakTag = soup.new_tag("br")
                         sectionWrapper.append(breakTag)
                     courseSectionWrapper.append(sectionWrapper)
+                elif len(course) > 1 and type(course[0]) == []:
+                    for opt in course:
+                        # or course wrapped in course group
+                        if len(opt) > 2:
+                            continue
+                        else:
+                            sectionWrapper = soup.new_tag("div", attrs={"ng-if":cleaner.cleanString(plan) + 
+                                                                           cleaner.cleanString(term)+
+                                                                           "obj."+
+                                                                           "group"+
+                                                                           opt[-1][0] + 
+                                                                           "==\"" + 
+                                                                           opt[-1] + 
+                                                                           "\""})
+                            sectionWrapper.append(str(opt[0]))
+                            breakTag = soup.new_tag("br")
+                            sectionWrapper.append(breakTag)
+                            for section in opt[0].sections:
+                                sectionRadio = soup.new_tag("input", attrs={"type":"radio",
+                                                                            "name":cleaner.cleanString(plan) + 
+                                                                           cleaner.cleanString(term)+
+                                                                           cleaner.cleanString(str(opt[0])),
+                                                                           "ng-model":cleaner.cleanString(plan) + 
+                                                                               cleaner.cleanString(term) +
+                                                                               "obj."+
+                                                                               cleaner.cleanString(str(opt[0])),
+                                                                            "value": str(section),
+                                                                            "id": str(section)})
+                                labelTag = soup.new_tag("label", attrs={"for":str(section)})
+                                labelTag.append(str(section))
+                                sectionWrapper.append(sectionRadio)
+                                sectionWrapper.append(labelTag)
+                                breakTag = soup.new_tag("br")
+                                sectionWrapper.append(breakTag)
+                            courseSectionWrapper.append(sectionWrapper)
             wrapperDiv.append(courseSectionWrapper)
             for course in sequenceDict[plan][term]:
                 if type(course) == type(CourseGroupOption()):
