@@ -5,12 +5,14 @@
 # This file contains all the functions needed to generate the required
 # HTML elements to produce the MEC E Program Visualizer webpage
 
-# Dependencies: cleaner, html, copy, coursegroupparsing
+# Dependencies: cleaner, linegen, html
 
 import cleaner
 import html
 from copy import deepcopy
+
 from coursegroupparsing import CourseGroupOption
+from sequenceparsing import CourseSectionWrapper
 
 # Changes the header title to include deptName, which is pulled
 # from Sequncing Excel file
@@ -30,7 +32,7 @@ def switchTitle(titleTag, topTitleTag, deptName):
 #   courseGroupTag - div HTML tag where the course group radio inputs will be placed
 #   courseGroupDict - dict that maps the plans to the course groups in it
 #   soup - soup object, used to create HTML tags
-def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, courseSectionWrapper, soup):
+def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, soup):
     for plan in sequenceDict:
         # radio inputs for selecting plan, can ng-model directly to selectedPlan
         radioInput = soup.new_tag("input", attrs={"type":"radio", 
@@ -62,7 +64,50 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, courseSecti
             planWrapper.append(breakTag)
             termTag.append(planWrapper)
             wrapperDiv = soup.new_tag("div", attrs={"ng-switch-when": cleaner.cleanString(plan) + cleaner.cleanString(term)})
-           
+        
+        # for courseGroupList in courseGroupDict[plan].values():
+        #     # courseGroupList is a list fo course groups that go together (eg: ["2A", "2B"] or ["4A", "4B"])
+        #     totalCourseGroup = "".join(courseGroupList)
+        #     courseGroupWrapper = soup.new_tag("div", attrs={"id": "OR" + totalCourseGroup})
+        #     for indivCourseGroup in courseGroupList:
+        #         # indivCourseGroup is one of the options in a group (eg: "2A" or "3B")
+        #         # ng-change used to update $scope.fieldX.groupX
+        #         radioInput = soup.new_tag("input", attrs={"type":"radio", 
+        #                                 "name":cleaner.cleanString(plan) + totalCourseGroup + "optionselector",
+        #                                 "ng-model":"field" + indivCourseGroup[0] + ".group" + indivCourseGroup[0], 
+        #                                 "ng-change": "updateField" + indivCourseGroup[0] + "(\"" + indivCourseGroup + "\")",
+        #                                 "value":indivCourseGroup,
+        #                                 "id":indivCourseGroup})
+        #         labelTag = soup.new_tag("label", attrs={"for":indivCourseGroup})
+        #         labelTag.append(indivCourseGroup)
+        #         courseGroupWrapper.append(radioInput)
+        #         courseGroupWrapper.append(labelTag)
+        #         wrapperDiv.append(courseGroupWrapper)
+            courseSectionWrapper = soup.new_tag("div")
+            for course in seqDict[plan][term]:
+                if len(course) == 1 and type(course[0]) != []:
+                    sectionWrapper = soup.new_tag("div")
+                    sectionWrapper.append(str(course[0]))
+                    breakTag = soup.new_tag("br")
+                    sectionWrapper.append(breakTag)
+                    for section in course[0].sections:
+                        sectionRadio = soup.new_tag("input", attrs={"type":"radio",
+                                                                            "name":cleaner.cleanString(plan) + 
+                                                                           cleaner.cleanString(term)+
+                                                                           cleaner.cleanString(str(course[0])),
+                                                                           "ng-model":cleaner.cleanString(plan) + 
+                                                                               cleaner.cleanString(term) +
+                                                                               "obj."+
+                                                                               cleaner.cleanString(str(course[0])),
+                                                                            "value": str(section),
+                                                                            "id": str(section)})
+                        labelTag = soup.new_tag("label", attrs={"for":str(section)})
+                        labelTag.append(str(section))
+                        sectionWrapper.append(sectionRadio)
+                        sectionWrapper.append(labelTag)
+                        breakTag = soup.new_tag("br")
+                        sectionWrapper.append(breakTag)
+                    courseSectionWrapper.append(sectionWrapper)
             wrapperDiv.append(courseSectionWrapper)
             for course in sequenceDict[plan][term]:
                 if type(course) == type(CourseGroupOption()):
@@ -185,33 +230,6 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, courseSecti
                         wrapperDiv.append(optionWrapper)
             courseGroupTag.append(wrapperDiv)
 
-def placeSectionRadioInputs(seqDict, courseSectionWrapper, soup):
-    for plan in seqDict:
-        for term in seqDict[plan]:
-            for course in seqDict[plan][term]:
-                if len(course) == 1 and type(course[0]) != []:
-                    sectionWrapper = soup.new_tag("div")
-                    sectionWrapper.append(str(course[0]))
-                    breakTag = soup.new_tag("br")
-                    sectionWrapper.append(breakTag)
-                    for section in course[0].sections:
-                        sectionRadio = soup.new_tag("input", attrs={"type":"radio",
-                                                                            "name":cleaner.cleanString(plan) + 
-                                                                           cleaner.cleanString(term)+
-                                                                           cleaner.cleanString(str(course[0])),
-                                                                           "ng-model":cleaner.cleanString(plan) + 
-                                                                               cleaner.cleanString(term) +
-                                                                               "obj."+
-                                                                               cleaner.cleanString(str(course[0])),
-                                                                            "value": str(section),
-                                                                            "id": str(section)})
-                        labelTag = soup.new_tag("label", attrs={"for":str(section)})
-                        labelTag.append(str(section))
-                        sectionWrapper.append(sectionRadio)
-                        sectionWrapper.append(labelTag)
-                        breakTag = soup.new_tag("br")
-                        sectionWrapper.append(breakTag)
-                    courseSectionWrapper.append(sectionWrapper)
 
 
 # Function that generates the display div which holds the plan diagram
@@ -229,7 +247,8 @@ def generateDisplayDiv(soup, courseGroupList):
     return soup.new_tag("div", attrs={"class":"display",
                                       "ng-switch":switchVariable})
 
-# Function that places the outer divs for the course group radio inputs for each plan
+# Function that places the outer divs for the course group selection 
+# radio inputs for each plan
 # Parameters:
 #   courseGroupSelectTag - HTML tag representing outer div used to hold the course group selection menu
 #   soup - soup object, used to create HTML tags
@@ -309,7 +328,7 @@ def placeTermDivs(planTag, planDict, soup, plan, term):
     daysTagsDict = createDailyDivs(soup)
 
     # placing courses on mondayDiv, tuesdayDiv, etc. then appending to termDiv
-    placeCourses(daysTagsDict, planDict[term], soup, plan, term)
+    placeCourses(daysTagsDict, planDict[term], soup, plan)
     for dayTag in daysTagsDict.values():
         termDiv.append(dayTag)
     planTag.append(termDiv)
@@ -378,8 +397,7 @@ def createDailyDivs(soup):
 #   termList - list of courses being taken that term
 #   soup - soup object, used to create HTML tags
 #   plan - name of plan whose terms are being placed
-#   term - name of the temr whose courses are being placed
-def placeCourses(daysTagsDict, termList, soup, plan, term):
+def placeCourses(daysTagsDict, termList, soup, plan):
 
     adjustOverlapping(termList)  # check for overlapping courses, set position field if overlap
 
@@ -388,14 +406,14 @@ def placeCourses(daysTagsDict, termList, soup, plan, term):
             if (type(courseWrapper) == type([])) and (len(courseWrapper) == 2):
                 # courseWrapper is for a course group
                 courseGroupName = courseWrapper[-1]
-                outsideDiv = soup.new_tag("div", attrs={"ng-if":cleaner.cleanString(plan)+
-                                                                cleaner.cleanString(term)
-                                                                +"obj."
-                                                                +"group"+
-                                                                courseGroupName[0]
-                                                                +"== \""
-                                                                +courseGroupName+
-                                                                "\""})
+                # outsideDiv = soup.new_tag("div", attrs={"ng-if":cleaner.cleanString(plan)+
+                #                                                 cleaner.cleanString(term)
+                #                                                 +"obj."
+                #                                                 +"group"+
+                #                                                 courseGroupName[0]
+                #                                                 +"== \""
+                #                                                 +courseGroupName+
+                #                                                 "\""})
                 courseWrapper = courseWrapper[0]
             if (type(courseWrapper) == type([])) and (len(courseWrapper) == 1):
                 # courseWrapper is for an elective, not used in timetable
@@ -448,10 +466,12 @@ def placeCourses(daysTagsDict, termList, soup, plan, term):
                 courseContDiv.append(courseDiv)
                 appendToEachDay(tagsList, courseContDiv, course.position)  # course may occur on multiple days, need to append to each day
 
-# Checks termList for overlapping courses and updates the position attribute
+# Checks termList for overlapping courses and updates pushLeft/pushRight attributes
 # if there is a time overlap.
 # Parameters:
 #   termList - list of courses being taken that term
+# Returns:
+#   None. The pushLeft/pushRight attributes of Course objects are updated.
 def adjustOverlapping(termList):
     courseTimes = {}  # dict of list of dicts. Inner dicts store Course object, start time, & end time for one course
     courseTimes["monday"] = []
@@ -522,8 +542,7 @@ def adjustOverlapping(termList):
 #   minutesFromEight - amount of minutes from 8:00am to startTime
 def calcMinutes(startTime):
     colonIndex = startTime.find(":")
-    if colonIndex == -1:
-        raise ValueError("Error in start time, ensure the Excel file is properly formatted in the Hrs From column")
+    assert colonIndex != -1, "Error in start time, ensure the Excel file is properly formatted in the Hrs From column"
     hours = int(startTime[:colonIndex])
     minutes = int(startTime[colonIndex + 1:])
     return (hours*60 + minutes) - 8*60
@@ -537,10 +556,8 @@ def calcMinutes(startTime):
 def calcClassDuration(startTime, endTime):
     startColonIndex = startTime.find(":")
     endColonIndex = startTime.find(":")
-    if startColonIndex == -1:
-        raise ValueError("Error in start time, ensure the Excel file is properly formatted in the Hrs From column")
-    if endColonIndex == -1:
-        raise ValueError("Error in end time, ensure the Excel file is properly formatted in the Hrs To column")
+    assert startColonIndex != -1, "Error in start time, ensure the Excel file is properly formatted in the Hrs From column"
+    assert endColonIndex != -1, "Error in end time, ensure the Excel file is properly formatted in the Hrs To column"
 
     startHours = int(startTime[:startColonIndex])
     startMinutes = int(startTime[startColonIndex + 1:])
@@ -602,9 +619,6 @@ def formatCourseDescriptionForRegular(soup, course, courseDisc):
     # adding line seperating title and description
     courseLine = soup.new_tag("hr", attrs={"class":"descriptionline"})
 
-    # container for calendar description
-    calendarDescription = soup.new_tag("div", attrs={"class":"calendardescription"})
-
     # adding number of credits
     courseCredits = soup.new_tag("p", attrs={"class":"descriptioncredits"})
     courseCredits.append(html.unescape("&#9733 ") + course.maxUnits + " ")
@@ -656,14 +670,11 @@ def formatCourseDescriptionForRegular(soup, course, courseDisc):
     # appending info to disc tag
     courseDisc.append(courseTitle)
     courseDisc.append(courseLine)
-
-    calendarDescription.append(courseCredits)
-    # calendarDescription.append(courseFeeIndex)
-    calendarDescription.append(courseTermAvail)
-    calendarDescription.append(courseAlphaHours)
-    calendarDescription.append(courseDescription)
-    courseDisc.append(calendarDescription)
-    
+    courseDisc.append(courseCredits)
+    # courseDisc.append(courseFeeIndex)
+    courseDisc.append(courseTermAvail)
+    courseDisc.append(courseAlphaHours)
+    courseDisc.append(courseDescription)
     courseDisc.append(courseInstructorName)
     courseDisc.append(courseInstructorEmail)
     courseDisc.append(courseLocation)

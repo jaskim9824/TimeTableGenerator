@@ -51,13 +51,12 @@ def main():
             termTag = mainTag.find(id = "termlegend")
 
             courseGroupTag = mainTag.find(id = "optionlegend")
-            courseSectionWrapper = soup.new_tag("div")
+           
  
 
             # radio inputs for plan, term, and course group
-            htmlgen.placeRadioInputs(formTag, termTag, courseGroupTag, optionDict, courseSectionWrapper, soup)
+            htmlgen.placeRadioInputs(formTag, termTag, courseGroupTag, optionDict, sequenceDict, soup)
             # htmlgen.placeSectionRadioInputs(sequenceDict, courseSectionWrapper, soup)
-            courseGroupTag.append(courseSectionWrapper)
             # main tag holding timetable itself
             displayTag = htmlgen.generateDisplayDiv(soup, courseGroupList)
 
