@@ -378,7 +378,10 @@ def placeCourses(daysTagsDict, termList, soup, plan, electiveCountWrapper):
 
     for courseWrapperList in termList:
         for courseWrapper in courseWrapperList:
-            if type(courseWrapper) == type([]):
+            if (type(courseWrapper) == type([])) and (len(courseWrapper) == 2):
+                courseGroupName = courseWrapper[1]
+                courseWrapper = courseWrapper[0]
+            if (type(courseWrapper) == type([])) and (len(courseWrapper) == 1):
                 continue
             for course in courseWrapper.sections:
                 tagsList = []
@@ -517,7 +520,10 @@ def adjustOverlapping(termList):
     courseTimes["friday"] = []
     for courseWrapperList in termList:
         for courseWrapper in courseWrapperList:
-            if type(courseWrapper) == type([]):
+            if (type(courseWrapper) == type([])) and (len(courseWrapper) == 2):
+                courseGroupName = courseWrapper[1]
+                courseWrapper = courseWrapper[0]
+            if (type(courseWrapper) == type([])) and (len(courseWrapper) == 1):
                 continue
             for course in courseWrapper.sections:
                 minutesFromEight = calcMinutes(course.hrsFrom)  # minutes from 8:00 to start of class
