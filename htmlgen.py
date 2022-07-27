@@ -87,26 +87,22 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, so
             for course in seqDict[plan][term]:
                 if len(course) == 1 and type(course[0]) != []:
                     sectionWrapper = soup.new_tag("div")
+                    sectionSelectWrapper = soup.new_tag("select", attrs={"name":cleaner.cleanString(plan) + 
+                                                                           cleaner.cleanString(term)+
+                                                                           cleaner.cleanString(str(course[0])),
+                                                                   "ng-model":cleaner.cleanString(plan) + 
+                                                                               cleaner.cleanString(term) +
+                                                                               "obj."+
+                                                                               cleaner.cleanString(str(course[0]))})
                     sectionWrapper.append(str(course[0]))
                     breakTag = soup.new_tag("br")
                     sectionWrapper.append(breakTag)
                     for section in course[0].sections:
-                        sectionRadio = soup.new_tag("input", attrs={"type":"radio",
-                                                                            "name":cleaner.cleanString(plan) + 
-                                                                           cleaner.cleanString(term)+
-                                                                           cleaner.cleanString(str(course[0])),
-                                                                           "ng-model":cleaner.cleanString(plan) + 
-                                                                               cleaner.cleanString(term) +
-                                                                               "obj."+
-                                                                               cleaner.cleanString(str(course[0])),
-                                                                            "value": str(section),
-                                                                            "id": str(section)})
-                        labelTag = soup.new_tag("label", attrs={"for":str(section)})
-                        labelTag.append(str(section))
-                        sectionWrapper.append(sectionRadio)
-                        sectionWrapper.append(labelTag)
-                        breakTag = soup.new_tag("br")
-                        sectionWrapper.append(breakTag)
+                        sectionRadio = soup.new_tag("option", attrs={"value": str(section),
+                                                                      "id": str(section)})
+                        sectionRadio.append(str(section))
+                        sectionSelectWrapper.append(sectionRadio)
+                    sectionWrapper.append(sectionSelectWrapper)
                     courseSectionWrapper.append(sectionWrapper)
                 elif len(course) > 1 and type(course[0]) == []:
                     for opt in course:
