@@ -352,7 +352,7 @@ def placeTermDivs(planTag, planDict, soup, plan, term):
     daysTagsDict = createDailyDivs(soup)
 
     # placing courses on mondayDiv, tuesdayDiv, etc. then appending to termDiv
-    placeCourses(daysTagsDict, planDict[term], soup, plan)
+    placeCourses(daysTagsDict, planDict[term], soup, plan, term)
     for dayTag in daysTagsDict.values():
         termDiv.append(dayTag)
     planTag.append(termDiv)
@@ -421,7 +421,7 @@ def createDailyDivs(soup):
 #   termList - list of courses being taken that term
 #   soup - soup object, used to create HTML tags
 #   plan - name of plan whose terms are being placed
-def placeCourses(daysTagsDict, termList, soup, plan):
+def placeCourses(daysTagsDict, termList, soup, plan, term):
 
     adjustOverlapping(termList)  # check for overlapping courses, set position field if overlap
 
@@ -468,7 +468,15 @@ def placeCourses(daysTagsDict, termList, soup, plan):
                     adjustmentFactor = -3
 
                 # outer course container used for absolute vertical positioning
-                courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", "style":"position:absolute; top:" + str(37 + (135.35/60)*minutesFromEight + adjustmentFactor) + "px; height:" + str((135.35/60)*minutesLong) + "px"})
+                courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", 
+                                                           "style":"position:absolute; top:" + 
+                                                           str(37 + (135.35/60)*minutesFromEight 
+                                                           + adjustmentFactor) + 
+                                                           "px; height:" + 
+                                                           str((135.35/60)*minutesLong) + 
+                                                           "px",
+                                                           "ng-if":cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(courseWrapper))
+                                                           +"==\""+str(course)+"\""})
 
                 courseDisc = soup.new_tag("div", attrs={"id":courseID+"desc",
                                                 "class":"tooltiptextright",
