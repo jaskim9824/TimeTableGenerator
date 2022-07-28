@@ -122,7 +122,8 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, so
                             sectionWrapper.append(str(opt[0]))
                             breakTag = soup.new_tag("br")
                             sectionWrapper.append(breakTag)
-                            sectionSelectWrapper = soup.new_tag("select", attrs={"name":cleaner.cleanString(plan) + 
+                            sectionSelectWrapper = soup.new_tag("select", attrs={"ng-change":"render()",
+                                                                        "name":cleaner.cleanString(plan) + 
                                                                            cleaner.cleanString(term)+
                                                                            cleaner.cleanString(str(opt[0])),
                                                                            "ng-model":cleaner.cleanString(plan) + 
@@ -330,6 +331,7 @@ def placeCourseGroupRadioInputsForSubPlan(subPlanTag, soup, subPlanOptionList, s
 #   controller - file handle for controller.js
 def placePlanDivs(displayTag, sequenceDict, soup, controller):
     controller.write("$scope.coursesobj = {};\n")
+    controller.write("let tempDict = {};\n")
     for plan in sequenceDict:
         controller.write("$scope.coursesobj." + cleaner.cleanString(plan) + " = {};\n")
         for term in sequenceDict[plan]:
@@ -409,7 +411,7 @@ def createDailyDivs(plan, term, soup, controller):
     daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
     for day in daysOfWeek:
         controller.write("$scope.coursesobj." + cleaner.cleanString(plan) + "." + cleaner.cleanString(term) + "." + 
-        day.lower() + " = {};\n")
+        day.lower() + " = [];\n")
         # create a column-oriented flexbox for each day of the week, add first horizontal divider
         currentDiv = soup.new_tag("div", attrs={"class":day.lower()})
         dayHeaderDiv = soup.new_tag("div", attrs={"class":"dayheader"})
@@ -831,14 +833,14 @@ def appendToEachDay(tagsList, courseContDiv, position, plan, term, startTime, co
             "px;left:" + str(position[day]["left"]) + "px"
             newDiv.find(class_="course tooltip")["id"] += "-" + day  # id should be unique identifier, different for each day
 
-            controller.write("$scope.coursesobj." + cleaner.cleanString(plan) + "." + cleaner.cleanString(term) + 
-            "." + day + ".courseID = \"" + newDiv.find(class_="course tooltip")["id"] + "\";\n")
-            controller.write("$scope.coursesobj." + cleaner.cleanString(plan) + "." + cleaner.cleanString(term) + 
-            "." + day + ".start = \"" +  str(startTime) + "\";\n")
-            controller.write("$scope.coursesobj." + cleaner.cleanString(plan) + "." + cleaner.cleanString(term) + 
-            "." + day + ".end = \"" + str(startTime + courseLength) + "\";\n")
-            controller.write("$scope.coursesobj." + cleaner.cleanString(plan) + "." + cleaner.cleanString(term) + 
-            "." + day + ".enabled = false;\n")
+            controller.write("tempDict.courseID = \"" + newDiv.find(class_="course tooltip")["id"] + "\";\n")
+            controller.write("tempDict.start = \"" +  str(startTime) + "\";\n")
+            controller.write("tempDict.end = \"" + str(startTime + courseLength) + "\";\n")
+            controller.write("tempDict.width = 321;\n")
+            controller.write("tempDict.left = 0;\n")
+            controller.write("tempDict.enabled = false;\n")
+            controller.write("$scope.coursesobj." + cleaner.cleanString(plan) + "." + cleaner.cleanString(term) + "." + day +
+            ".push(tempDict);\n")
 
         if position[day]["width"] <= 64.2:
             # if course is very narrow, different styling applies

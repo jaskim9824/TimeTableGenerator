@@ -59,6 +59,12 @@ def generateInitialBlockController(courseGroupDict, initialTerm, controller):
 }\n""")
     controller.write("var that = this;\n")  # allows access to the above variables inside any function by using 'that'
 
+    controller.write("""this.render = function() {
+    checkOverlaps($scope.selectedPlan, $scope.selectedTerm)
+};\n""")
+
+    generateCheckOverlaps(controller)
+
     controller.write("""var radios = document.querySelectorAll("input[type=radio][name=planselector]");
 Array.prototype.forEach.call(radios, function (radio) {
     radio.addEventListener("change", function () { \n""")
@@ -181,4 +187,41 @@ def generateInitialOptionObjects(planOptionDict, controller):
                 if count != len(planOptionDict[plan][term]) - 1:
                     controller.write(",")
             controller.write("};\n")
+
+def generateCheckOverlaps(controller):
+    functionStatement = """this.checkOverlaps = function(plan, term) {
+    allOverlaps = {};
+    for (const [day, dayList] of Object.entries($scope.coursesobj[plan][term])) {
+        allOverlaps[day] = [];
+        for (let i = 0; i < dayList.length; i++) {
+            let overlapsList = [];
+            if (dayList[i].enabled) {
+                for (let j = 0; j < dayList.length; j++) {
+                    if ((i != j) && (dayList[j].enabled)) {
+                        if (((dayList[i].start < dayList[j].end) && (dayList[i].start >= dayList[j].start)) || ((dayList[j].end > dayList[i].start) && (dayList[j].start <= dayList[i].start))) {
+                            if (!overlapsList.includes(dayList[i])) {
+                                overlapsList.push(dayList[i]);
+                            }
+                            if (!overlapsList.includes(dayList[j])) {
+                                overlapsList.push(dayList[j]);
+                            }
+                        }
+                    }
+                }
+            }
+            allOverlaps[day].push(overlapsList);
+        }
+    }
+
+    for (const [dayName, list] of Object.entries(allOverlaps)) {
+        for (let i = 0; i < list.lenth; i++) {
+            if (321/list.length < list[i].width) {
+                list[i].width = 321/list.length;
+                list[i].left = (321/list.length)*i;
+            }
+        }
+    }
+};\n"""
+
+    controller.write(functionStatement)
                 
