@@ -65,7 +65,8 @@ def main():
             # generating html for each plan & each term
             htmlgen.placePlanDivs(displayTag, 
                                   sequenceDict, 
-                                  soup)
+                                  soup,
+                                  controller)
 
             javascriptgen.closeControllerJavaScript(controller)
 

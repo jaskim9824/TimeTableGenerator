@@ -327,13 +327,17 @@ def placeCourseGroupRadioInputsForSubPlan(subPlanTag, soup, subPlanOptionList, s
 #   displayTag - HTML tag representing outer display div where the different plan sequences are placed
 #   sequenceDict - dict that maps plan name to a dict that represents the plan sequence
 #   soup - soup object, used to create HTML tags
-def placePlanDivs(displayTag, sequenceDict, soup):
+#   controller - file handle for controller.js
+def placePlanDivs(displayTag, sequenceDict, soup, controller):
+    controller.write("$scope.coursesobj = {};\n")
     for plan in sequenceDict:
+        controller.write("$scope.coursesobj." + cleaner.cleanString(plan) + " = {};\n")
         for term in sequenceDict[plan]:
+            controller.write("$scope.coursesobj." + cleaner.cleanString(plan) + "." + cleaner.cleanString(term) + " = {};\n")
             switchInput = soup.new_tag("div", attrs={"id":cleaner.cleanString(plan) + cleaner.cleanString(term),
                                                     "ng-switch-when":cleaner.cleanString(plan) + cleaner.cleanString(term),
                                                     "style":"height:fit-content; display:flex; flex-direction:row; flex-wrap:column;"})
-            placeTermDivs(switchInput, sequenceDict[plan], soup, plan, term)
+            placeTermDivs(switchInput, sequenceDict[plan], soup, plan, term, controller)
             displayTag.append(switchInput)
 
 # Function that places the column divs which represent the terms within a certain plan
@@ -343,17 +347,18 @@ def placePlanDivs(displayTag, sequenceDict, soup):
 #   soup - soup object, used to create HTML tags
 #   plan - name of plan whose terms are being placed
 #   term - name of the term whose courses are being placed
-def placeTermDivs(planTag, planDict, soup, plan, term):
+#   controller - file handle for controller.js
+def placeTermDivs(planTag, planDict, soup, plan, term, controller):
     termDiv = soup.new_tag("div", attrs={"class":"coursegrid"})  # grid of flexboxes that displays timetable
 
     timeDiv = createTimeGridDivs(soup)  # writes text for each hour & draws horizontal dividing lines
     termDiv.append(timeDiv)
 
     # creating the flexboxes for each day of week
-    daysTagsDict = createDailyDivs(soup)
+    daysTagsDict = createDailyDivs(plan, term, soup, controller)
 
     # placing courses on mondayDiv, tuesdayDiv, etc. then appending to termDiv
-    placeCourses(daysTagsDict, planDict[term], soup, plan, term)
+    placeCourses(daysTagsDict, planDict[term], soup, plan, term, controller)
     for dayTag in daysTagsDict.values():
         termDiv.append(dayTag)
     planTag.append(termDiv)
@@ -392,14 +397,19 @@ def createTimeGridDivs(soup):
 # Creates the div for each day of the week. Each div will hold all of the courses taken during that day.
 # Also creates a horizontal dividing line running across the entire page at each hour.
 # Parameters:
+#   plan - name of the current plan being placed
+#   term - name of the current term being placed
 #   soup - soup object, used to create HTML tags
+#   controller = file handle to controller.js
 # Returns:
 #   daysTagsDict - dict mapping day of week ("monday", "tuesday", etc.) to the div
 #   for that day of the week. Useful to shortcut to the div one requires
-def createDailyDivs(soup):
+def createDailyDivs(plan, term, soup, controller):
     daysTagsDict = {}
     daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
     for day in daysOfWeek:
+        controller.write("$scope.coursesobj." + cleaner.cleanString(plan) + "." + cleaner.cleanString(term) + "." + 
+        day.lower() + " = {};\n")
         # create a column-oriented flexbox for each day of the week, add first horizontal divider
         currentDiv = soup.new_tag("div", attrs={"class":day.lower()})
         dayHeaderDiv = soup.new_tag("div", attrs={"class":"dayheader"})
@@ -422,7 +432,8 @@ def createDailyDivs(soup):
 #   termList - list of courses being taken that term
 #   soup - soup object, used to create HTML tags
 #   plan - name of plan whose terms are being placed
-def placeCourses(daysTagsDict, termList, soup, plan, term):
+#   controller - file handle for controller.js
+def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
 
     adjustOverlapping(termList)  # check for overlapping courses, set position field if overlap
 
@@ -505,7 +516,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term):
                         courseDiv.append(courseDisc)
 
                         courseContDiv.append(courseDiv)
-                        appendToEachDay(tagsList, courseContDiv, section.position)  # course may occur on multiple days, need to append to each day
+                        appendToEachDay(tagsList, courseContDiv, section.position, plan, term, minutesFromEight, minutesLong, controller)  # course may occur on multiple days, need to append to each day
  
             elif (type(courseWrapper) == type([])) and (len(courseWrapper) == 1):
                 # courseWrapper is for an elective, not used in timetable
@@ -563,7 +574,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term):
                     courseDiv.append(courseDisc)
 
                     courseContDiv.append(courseDiv)
-                    appendToEachDay(tagsList, courseContDiv, course.position)  # course may occur on multiple days, need to append to each day
+                    appendToEachDay(tagsList, courseContDiv, course.position, plan, term, minutesFromEight, minutesLong, controller)  # course may occur on multiple days, need to append to each day
 
 # Checks termList for overlapping courses and updates pushLeft/pushRight attributes
 # if there is a time overlap.
@@ -788,7 +799,12 @@ def formatCourseDescriptionForRegular(soup, course, courseDisc):
 #   courseContDiv - container for an entire course, everything to do with one course is in this div
 #   position - position field of Course object (course.position), dict with keys as days of week.
 #   Values as another dict with "width" & "left" keys used to format the course
-def appendToEachDay(tagsList, courseContDiv, position):
+#   plan - name of the current plan
+#   term - name of the current term
+#   startTime - start time for course
+#   courseLength - length of course in minutes
+#   controller - file handle for controller.js
+def appendToEachDay(tagsList, courseContDiv, position, plan, term, startTime, courseLength, controller):
     for dayTag in tagsList:
         # if the course occurs on multiple days, append to each dayDiv (mondayDiv, tuesdayDiv, etc.)
         if dayTagInLateWeek(dayTag) and ("class=\"tooltiptextright\"") in str(courseContDiv):
@@ -809,10 +825,20 @@ def appendToEachDay(tagsList, courseContDiv, position):
         elif "class=\"friday\"" in str(dayTag):
             day = "friday"
 
-        if day != "":
+        if day != "":  # guard, every course should have a day
             # set the width & relative position from left
             newDiv.find(class_="course tooltip")["style"] += ";position:relative;width:" + str(position[day]["width"]) + \
             "px;left:" + str(position[day]["left"]) + "px"
+            newDiv.find(class_="course tooltip")["id"] += "-" + day  # id should be unique identifier, different for each day
+
+            controller.write("$scope.coursesobj." + cleaner.cleanString(plan) + "." + cleaner.cleanString(term) + 
+            "." + day + ".courseID = \"" + newDiv.find(class_="course tooltip")["id"] + "\";\n")
+            controller.write("$scope.coursesobj." + cleaner.cleanString(plan) + "." + cleaner.cleanString(term) + 
+            "." + day + ".start = \"" +  str(startTime) + "\";\n")
+            controller.write("$scope.coursesobj." + cleaner.cleanString(plan) + "." + cleaner.cleanString(term) + 
+            "." + day + ".end = \"" + str(startTime + courseLength) + "\";\n")
+            controller.write("$scope.coursesobj." + cleaner.cleanString(plan) + "." + cleaner.cleanString(term) + 
+            "." + day + ".enabled = false;\n")
 
         if position[day]["width"] <= 64.2:
             # if course is very narrow, different styling applies
