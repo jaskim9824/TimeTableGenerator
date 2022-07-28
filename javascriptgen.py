@@ -188,7 +188,20 @@ def generateInitialOptionObjects(planOptionDict, controller):
                     controller.write(",")
             controller.write("};\n")
 
+# Function that writes the JS function to check for overlapping courses on the currently displayed page.
+# Compares all enabled courses in a day, if there is an overlap, the width & left fields of the
+# course object are modified to prevent an overlap
+# Parameters:
+#   controller - file handle for controller.js
 def generateCheckOverlaps(controller):
+    # first main loop: for each day, compare each course to every other course
+    # (for a given dayList[i] object, compare it to dayList[j] for j sweeping all course objects).
+    # If there is an overlap, store the course objects in a list. For each dayList[i] that has an overlap,
+    # store the overlapsList in another list (allOverlaps[day]).
+    #
+    # second main loop: for each overlapsList and for each course in overlapsList, if 
+    # changing the course width makes the course narrower, modify the course object fields
+    # of .width & .left
     functionStatement = """this.checkOverlaps = function(plan, term) {
     allOverlaps = {};
     for (const [day, dayList] of Object.entries($scope.coursesobj[plan][term])) {
