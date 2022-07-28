@@ -444,6 +444,9 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
         orCase = False
         if len(courseWrapperList) > 2 and type(courseWrapperList[0]) != []:
             orCase = True
+            orName = ""
+            for courseWrapper in courseWrapperList:
+                orName += courseWrapper.name
         for courseWrapper in courseWrapperList:
             if (type(courseWrapper) == type([])):
                 orCase = False
@@ -461,6 +464,9 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                 courseGroupName = courseGroupSubName[0]
                 if len(courseGroupCourseList) > 1:
                     orCase = True
+                    orName = ""
+                    for course in courseGroupCourseList:
+                        orName += str(course)
                 for course in courseGroupCourseList:
                     for section in course.sections:
                         tagsList = []
@@ -481,7 +487,32 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                         if minutesFromEight != 0:
                             adjustmentFactor = -3
                          # outer course container used for absolute vertical positioning
-                        courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", 
+                        if orCase:
+                            courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", 
+                                                           "style":"position:absolute; top:" + 
+                                                           str(37 + (135.35/60)*minutesFromEight 
+                                                           + adjustmentFactor) + 
+                                                           "px; height:" + 
+                                                           str((135.35/60)*minutesLong) + 
+                                                           "px",
+                                                           "ng-if":cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(course))
+                                                           +"==\""+str(section)+"\"" +
+                                                           "&&"+
+                                                           cleaner.cleanString(plan)
+                                                           +cleaner.cleanString(term)+
+                                                           "obj.group"+
+                                                           courseGroupName+
+                                                           "=="+
+                                                           "\""+
+                                                           courseGroupSubName+
+                                                           "\"&&"+
+                                                           cleaner.cleanString(plan)
+                                                           +cleaner.cleanString(term)+
+                                                           "obj."+
+                                                           orName+
+                                                           "=="+"\""+str(course)+"\""})
+                        else:
+                            courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", 
                                                            "style":"position:absolute; top:" + 
                                                            str(37 + (135.35/60)*minutesFromEight 
                                                            + adjustmentFactor) + 
@@ -499,6 +530,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                                                            "\""+
                                                            courseGroupSubName+
                                                            "\""})
+
                         
                         courseDisc = soup.new_tag("div", attrs={"id":courseID+"desc",
                                                         "class":"tooltiptextright",
@@ -548,7 +580,20 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                         adjustmentFactor = -3
 
                     # outer course container used for absolute vertical positioning
-                    courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", 
+                    if orCase:
+                        courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", 
+                                                           "style":"position:absolute; top:" + 
+                                                           str(37 + (135.35/60)*minutesFromEight 
+                                                           + adjustmentFactor) + 
+                                                           "px; height:" + 
+                                                           str((135.35/60)*minutesLong) + 
+                                                           "px",
+                                                           "ng-if":cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(courseWrapper))
+                                                           +"==\""+str(course)+"\""+
+                                                           "&&"+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+
+                                                           orName+"==\""+str(courseWrapper)+"\""})
+                    else:
+                        courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", 
                                                            "style":"position:absolute; top:" + 
                                                            str(37 + (135.35/60)*minutesFromEight 
                                                            + adjustmentFactor) + 
