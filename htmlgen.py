@@ -167,7 +167,6 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, so
                                                                                "obj."+
                                                                                course.parentCourseGroup[0]})
                         optionWrapper = soup.new_tag("div", attrs={"ng-switch-when":course.parentCourseGroup})
-                        optionOutsideWrapper.append(optionWrapper)
                         for option in course.options:
                             optionRadio = soup.new_tag("input", attrs={"type":"radio",
                                                                     "name":cleaner.cleanString(plan) + 
@@ -209,6 +208,7 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, so
                             labelTag.append(option)
                             optionWrapper.append(optionRadio)
                             optionWrapper.append(labelTag)
+                        optionOutsideWrapper.append(optionWrapper)
                         wrapperDiv.append(optionOutsideWrapper)
                             
                     else:
