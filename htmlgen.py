@@ -7,6 +7,7 @@
 
 # Dependencies: cleaner, linegen, html
 
+from re import S
 import cleaner
 import html
 from copy import deepcopy
@@ -425,11 +426,17 @@ def placeCourses(daysTagsDict, termList, soup, plan, term):
 
     adjustOverlapping(termList)  # check for overlapping courses, set position field if overlap
 
+
     for courseWrapperList in termList:
+        orCase = False
+        if len(courseWrapperList) > 2 and type(courseWrapperList[0]) != []:
+            orCase = True
         for courseWrapper in courseWrapperList:
-            if (type(courseWrapper) == type([])) and (len(courseWrapper) == 2):
+            if (type(courseWrapper) == type([])):
+                orCase = False
                 # courseWrapper is for a course group
-                courseGroupName = courseWrapper[-1]
+                courseGroupSubName = courseWrapper[-1]
+                courseGroupCourseList = courseWrapper[:-1]
                 # outsideDiv = soup.new_tag("div", attrs={"ng-if":cleaner.cleanString(plan)+
                 #                                                 cleaner.cleanString(term)
                 #                                                 +"obj."
@@ -438,37 +445,97 @@ def placeCourses(daysTagsDict, termList, soup, plan, term):
                 #                                                 +"== \""
                 #                                                 +courseGroupName+
                 #                                                 "\""})
-                courseWrapper = courseWrapper[0]
-            if (type(courseWrapper) == type([])) and (len(courseWrapper) == 1):
+                courseGroupName = courseGroupSubName[0]
+                if len(courseGroupCourseList) > 1:
+                    orCase = True
+                for course in courseGroupCourseList:
+                    for section in course.sections:
+                        tagsList = []
+                        minutesFromEight = calcMinutes(section.hrsFrom)  # minutes from 8:00 to start of class
+                        minutesLong = calcClassDuration(section.hrsFrom, section.hrsTo)  # duration of class
+                        if section.mon == 'Y':
+                            tagsList.append(daysTagsDict["monday"])
+                        if section.tues == 'Y':
+                            tagsList.append(daysTagsDict["tuesday"])
+                        if section.wed == 'Y':
+                            tagsList.append(daysTagsDict["wednesday"])
+                        if section.thurs == 'Y':
+                            tagsList.append(daysTagsDict["thursday"])
+                        if section.fri == 'Y':
+                            tagsList.append(daysTagsDict["friday"])
+                        courseID = cleaner.cleanString(section.name)+cleaner.cleanString(plan)
+                        adjustmentFactor = 0
+                        if minutesFromEight != 0:
+                            adjustmentFactor = -3
+                         # outer course container used for absolute vertical positioning
+                        courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", 
+                                                           "style":"position:absolute; top:" + 
+                                                           str(37 + (135.35/60)*minutesFromEight 
+                                                           + adjustmentFactor) + 
+                                                           "px; height:" + 
+                                                           str((135.35/60)*minutesLong) + 
+                                                           "px",
+                                                           "ng-if":cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(course))
+                                                           +"==\""+str(section)+"\"" +
+                                                           "&&"+
+                                                           cleaner.cleanString(plan)
+                                                           +cleaner.cleanString(term)+
+                                                           "obj.group"+
+                                                           courseGroupName+
+                                                           "=="+
+                                                           "\""+
+                                                           courseGroupSubName+
+                                                           "\""})
+                        
+                        courseDisc = soup.new_tag("div", attrs={"id":courseID+"desc",
+                                                        "class":"tooltiptextright",
+                                                        "ng-click":"$event.stopPropagation()"})
+
+                        courseDiv = createCourseDiv(soup, 
+                                                    courseID, 
+                                                    minutesFromEight,
+                                                    minutesLong) 
+                        formatCourseDescriptionForRegular(soup, section, courseDisc)
+
+                        # text appearing in course box (eg: CHEM 103)
+                        courseHeader = soup.new_tag("h3", attrs={"class":"embed"})
+                        courseHeader.append(section.plainName + " (" + section.sect + ")")
+
+                        courseDiv.append(courseHeader)
+                        courseDiv.append(courseDisc)
+
+                        courseContDiv.append(courseDiv)
+                        appendToEachDay(tagsList, courseContDiv, section.position)  # course may occur on multiple days, need to append to each day
+ 
+            elif (type(courseWrapper) == type([])) and (len(courseWrapper) == 1):
                 # courseWrapper is for an elective, not used in timetable
                 continue
-
-            for course in courseWrapper.sections:
-                # placing an individual course on the timetable
-                tagsList = []
-                minutesFromEight = calcMinutes(course.hrsFrom)  # minutes from 8:00 to start of class
-                minutesLong = calcClassDuration(course.hrsFrom, course.hrsTo)  # duration of class
-                # save the tags we will need to append to for later
-                if course.mon == 'Y':
-                    tagsList.append(daysTagsDict["monday"])
-                if course.tues == 'Y':
-                    tagsList.append(daysTagsDict["tuesday"])
-                if course.wed == 'Y':
-                    tagsList.append(daysTagsDict["wednesday"])
-                if course.thurs == 'Y':
-                    tagsList.append(daysTagsDict["thursday"])
-                if course.fri == 'Y':
-                    tagsList.append(daysTagsDict["friday"])
-
-                courseID = cleaner.cleanString(course.name)+cleaner.cleanString(plan)  # id of html element
+            else:
+                for course in courseWrapper.sections:
+                    # placing an individual course on the timetable
+                    tagsList = []
+                    minutesFromEight = calcMinutes(course.hrsFrom)  # minutes from 8:00 to start of class
+                    minutesLong = calcClassDuration(course.hrsFrom, course.hrsTo)  # duration of class
+                    # save the tags we will need to append to for later
+                    if course.mon == 'Y':
+                        tagsList.append(daysTagsDict["monday"])
+                    if course.tues == 'Y':
+                        tagsList.append(daysTagsDict["tuesday"])
+                    if course.wed == 'Y':
+                        tagsList.append(daysTagsDict["wednesday"])
+                    if course.thurs == 'Y':
+                        tagsList.append(daysTagsDict["thursday"])
+                    if course.fri == 'Y':
+                        tagsList.append(daysTagsDict["friday"])
+                    courseID = cleaner.cleanString(course.name)+cleaner.cleanString(plan)  # id of html element
                 
-                # helps align courses to the grid
-                adjustmentFactor = 0
-                if minutesFromEight != 0:
-                    adjustmentFactor = -3
+                    # helps align courses to the grid
+                    adjustmentFactor = 0
+                    if minutesFromEight != 0:
+                        adjustmentFactor = -3
 
-                # outer course container used for absolute vertical positioning
-                courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", 
+                    # outer course container used for absolute vertical positioning
+                    courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", 
                                                            "style":"position:absolute; top:" + 
                                                            str(37 + (135.35/60)*minutesFromEight 
                                                            + adjustmentFactor) + 
@@ -478,25 +545,25 @@ def placeCourses(daysTagsDict, termList, soup, plan, term):
                                                            "ng-if":cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(courseWrapper))
                                                            +"==\""+str(course)+"\""})
 
-                courseDisc = soup.new_tag("div", attrs={"id":courseID+"desc",
+                    courseDisc = soup.new_tag("div", attrs={"id":courseID+"desc",
                                                 "class":"tooltiptextright",
                                                 "ng-click":"$event.stopPropagation()"})
 
-                courseDiv = createCourseDiv(soup, 
+                    courseDiv = createCourseDiv(soup, 
                                             courseID, 
                                             minutesFromEight,
                                             minutesLong) 
-                formatCourseDescriptionForRegular(soup, course, courseDisc)
+                    formatCourseDescriptionForRegular(soup, course, courseDisc)
 
-                # text appearing in course box (eg: CHEM 103)
-                courseHeader = soup.new_tag("h3", attrs={"class":"embed"})
-                courseHeader.append(course.plainName + " (" + course.sect + ")")
+                    # text appearing in course box (eg: CHEM 103)
+                    courseHeader = soup.new_tag("h3", attrs={"class":"embed"})
+                    courseHeader.append(course.plainName + " (" + course.sect + ")")
 
-                courseDiv.append(courseHeader)
-                courseDiv.append(courseDisc)
+                    courseDiv.append(courseHeader)
+                    courseDiv.append(courseDisc)
 
-                courseContDiv.append(courseDiv)
-                appendToEachDay(tagsList, courseContDiv, course.position)  # course may occur on multiple days, need to append to each day
+                    courseContDiv.append(courseDiv)
+                    appendToEachDay(tagsList, courseContDiv, course.position)  # course may occur on multiple days, need to append to each day
 
 # Checks termList for overlapping courses and updates pushLeft/pushRight attributes
 # if there is a time overlap.
