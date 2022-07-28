@@ -105,10 +105,10 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, so
                         sectionSelectWrapper.append(sectionRadio)
                     sectionWrapper.append(sectionSelectWrapper)
                     courseSectionWrapper.append(sectionWrapper)
-                elif len(course) > 1 and type(course[0]) == []:
+                elif len(course) > 1 and type(course[0]) == type([]):
                     for opt in course:
                         # or course wrapped in course group
-                        if len(opt) > 2:
+                        if len(opt) != 2:
                             continue
                         else:
                             sectionWrapper = soup.new_tag("div", attrs={"ng-if":cleaner.cleanString(plan) + 
