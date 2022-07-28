@@ -224,15 +224,23 @@ def generateCheckOverlaps(controller):
                     }
                 }
             }
-            allOverlaps[day].push(overlapsList);
+            if (overlapsList.length > 0) {
+                allOverlaps[day].push(overlapsList);
+            }
         }
     }
 
     for (const [dayName, list] of Object.entries(allOverlaps)) {
-        for (let i = 0; i < list.lenth; i++) {
-            if (321/list.length < list[i].width) {
-                list[i].width = 321/list.length;
-                list[i].left = (321/list.length)*i;
+        for (let i = 0; i < list.length; i++) {
+            if (list[i].length > 0) {
+                for (const [index, overlapObj] of Object.entries(list[i])) {
+                    if (321/list.length < overlapObj.width) {
+                        overlapObj.width = 321/list.length;
+                        overlapObj.left = (321/list.length)*i;
+                        document.getElementById(overlapObj.courseID.replace("_", "-")).style.width = 321/list.length;
+                        document.getElementById(overlapObj.courseID.replace("_","-")).style.left = (321/list.length)*i;
+                    }
+                }
             }
         }
     }

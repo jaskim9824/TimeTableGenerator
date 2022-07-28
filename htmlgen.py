@@ -122,7 +122,7 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, so
                             sectionWrapper.append(str(opt[0]))
                             breakTag = soup.new_tag("br")
                             sectionWrapper.append(breakTag)
-                            sectionSelectWrapper = soup.new_tag("select", attrs={"ng-change":"render()",
+                            sectionSelectWrapper = soup.new_tag("select", attrs={"ng-change":"render(\"" + cleaner.cleanString(str(opt[0])) + "\")",
                                                                         "name":cleaner.cleanString(plan) + 
                                                                            cleaner.cleanString(term)+
                                                                            cleaner.cleanString(str(opt[0])),
@@ -879,6 +879,7 @@ def appendToEachDay(tagsList, courseContDiv, position, plan, term, startTime, co
 
             objectName = "$scope.coursesobj." + cleaner.cleanString(plan) + "." + cleaner.cleanString(term) + "." + day + "."  + newDiv.find(class_="course tooltip")["id"].replace("-", "_")
             controller.write(objectName + " = {};\n")
+            controller.write(objectName + ".courseID = \"" + newDiv.find(class_="course tooltip")["id"].replace("-", "_") + "\";\n")
             controller.write(objectName + ".start = \"" +  str(startTime) + "\";\n")
             controller.write(objectName + ".end = \"" + str(startTime + courseLength) + "\";\n")
             controller.write(objectName + ".width = 321;\n")
