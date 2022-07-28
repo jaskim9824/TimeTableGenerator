@@ -59,11 +59,13 @@ def generateInitialBlockController(courseGroupDict, initialTerm, controller):
 }\n""")
     controller.write("var that = this;\n")  # allows access to the above variables inside any function by using 'that'
 
-    controller.write("""this.render = function() {
-    checkOverlaps($scope.selectedPlan, $scope.selectedTerm)
+    controller.write("""$scope.render = function(courseName) {
+    that.updateObjFields($scope.selectedPlan, $scope.selectedTerm, courseName);
+    that.checkOverlaps($scope.selectedPlan, $scope.selectedTerm);
 };\n""")
 
     generateCheckOverlaps(controller)
+    generateUpdateObjFields(controller)
 
     controller.write("""var radios = document.querySelectorAll("input[type=radio][name=planselector]");
 Array.prototype.forEach.call(radios, function (radio) {
@@ -206,17 +208,17 @@ def generateCheckOverlaps(controller):
     allOverlaps = {};
     for (const [day, dayList] of Object.entries($scope.coursesobj[plan][term])) {
         allOverlaps[day] = [];
-        for (let i = 0; i < dayList.length; i++) {
+        for (const [courseID, courseObj] of Object.entries($scope.coursesobj[plan][term][day])) {
             let overlapsList = [];
-            if (dayList[i].enabled) {
-                for (let j = 0; j < dayList.length; j++) {
-                    if ((i != j) && (dayList[j].enabled)) {
-                        if (((dayList[i].start < dayList[j].end) && (dayList[i].start >= dayList[j].start)) || ((dayList[j].end > dayList[i].start) && (dayList[j].start <= dayList[i].start))) {
-                            if (!overlapsList.includes(dayList[i])) {
-                                overlapsList.push(dayList[i]);
+            if (courseObj.enabled) {
+                for (const [checkID, checkObj] of Object.entries($scope.coursesobj[plan][term][day])) {
+                    if ((courseID != checkID) && (checkObj.enabled)) {
+                        if (((courseObj.start < checkObj.end) && (courseObj.start >= checkObj.start)) || ((checkObj.end > courseObj.start) && (checkObj.start <= courseObj.start))) {
+                            if (!overlapsList.includes(courseObj)) {
+                                overlapsList.push(courseObj);
                             }
-                            if (!overlapsList.includes(dayList[j])) {
-                                overlapsList.push(dayList[j]);
+                            if (!overlapsList.includes(checkObj)) {
+                                overlapsList.push(checkObj);
                             }
                         }
                     }
@@ -237,4 +239,17 @@ def generateCheckOverlaps(controller):
 };\n"""
 
     controller.write(functionStatement)
+
+def generateUpdateObjFields(controller):
+    formattedFunctionStatement = """this.updateObjFields = function(plan, term, courseName) {
+    for (const [day, dayList] of Object.entries($scope.coursesobj[plan][term])) {
+        for (const [courseID, courseObj] of Object.entries($scope.coursesobj[plan][term][day])) {
+            if (courseID.includes(courseName)) {
+                courseObj.enabled = true;
+            }
+        }
+    }
+};\n"""
+
+    controller.write(formattedFunctionStatement)
                 

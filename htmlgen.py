@@ -331,7 +331,6 @@ def placeCourseGroupRadioInputsForSubPlan(subPlanTag, soup, subPlanOptionList, s
 #   controller - file handle for controller.js
 def placePlanDivs(displayTag, sequenceDict, soup, controller):
     controller.write("$scope.coursesobj = {};\n")
-    controller.write("let tempDict = {};\n")
     for plan in sequenceDict:
         controller.write("$scope.coursesobj." + cleaner.cleanString(plan) + " = {};\n")
         for term in sequenceDict[plan]:
@@ -878,14 +877,13 @@ def appendToEachDay(tagsList, courseContDiv, position, plan, term, startTime, co
             "px;left:" + str(position[day]["left"]) + "px"
             newDiv.find(class_="course tooltip")["id"] += "-" + day  # id should be unique identifier, different for each day
 
-            controller.write("tempDict.courseID = \"" + newDiv.find(class_="course tooltip")["id"] + "\";\n")
-            controller.write("tempDict.start = \"" +  str(startTime) + "\";\n")
-            controller.write("tempDict.end = \"" + str(startTime + courseLength) + "\";\n")
-            controller.write("tempDict.width = 321;\n")
-            controller.write("tempDict.left = 0;\n")
-            controller.write("tempDict.enabled = false;\n")
-            controller.write("$scope.coursesobj." + cleaner.cleanString(plan) + "." + cleaner.cleanString(term) + "." + day +
-            ".push(tempDict);\n")
+            objectName = "$scope.coursesobj." + cleaner.cleanString(plan) + "." + cleaner.cleanString(term) + "." + day + "."  + newDiv.find(class_="course tooltip")["id"].replace("-", "_")
+            controller.write(objectName + " = {};\n")
+            controller.write(objectName + ".start = \"" +  str(startTime) + "\";\n")
+            controller.write(objectName + ".end = \"" + str(startTime + courseLength) + "\";\n")
+            controller.write(objectName + ".width = 321;\n")
+            controller.write(objectName + ".left = 0;\n")
+            controller.write(objectName + ".enabled = false;\n")
 
         if position[day]["width"] <= 64.2:
             # if course is very narrow, different styling applies
