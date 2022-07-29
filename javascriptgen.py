@@ -213,6 +213,7 @@ def generateCheckOverlaps(controller):
         for (const [courseID, courseObj] of Object.entries($scope.coursesobj[plan][term][day])) {
             let overlapsList = [];
             if (courseObj.enabled) {
+                let foundOverlap = false;
                 for (const [checkID, checkObj] of Object.entries($scope.coursesobj[plan][term][day])) {
                     if ((courseID != checkID) && (checkObj.enabled)) {
                         let courseStart = Number(courseObj.start);
@@ -220,6 +221,7 @@ def generateCheckOverlaps(controller):
                         let checkStart = Number(checkObj.start);
                         let checkEnd = Number(checkObj.end);
                         if (((courseEnd > checkStart) && (courseStart <= checkStart)) || ((checkEnd > courseStart) && (checkStart <= courseStart))) {
+                            foundOverlap = true;
                             if (!overlapsList.includes(courseObj)) {
                                 overlapsList.push(courseObj);
                             }
@@ -228,6 +230,10 @@ def generateCheckOverlaps(controller):
                             }
                         }
                     }
+                }
+                if (!foundOverlap) {
+                    courseObj.width = 321;
+                    courseObj.left = 0;
                 }
             }
             if (overlapsList.length > 0) {
@@ -256,16 +262,15 @@ def generateUpdateObjFields(controller):
     formattedFunctionStatement = """this.updateObjFields = function(plan, term) {
     for (const [day, dayList] of Object.entries($scope.coursesobj[plan][term])) {
         for (const [courseID, courseObj] of Object.entries($scope.coursesobj[plan][term][day])) {
+            let found = false;
             for (const [plainName, fullName] of Object.entries($scope[plan + term + "obj"])) {
                 if (!plainName.includes("group")) {
                     if (courseID.includes(fullName.replace(/ /g, ""))) {
-                        courseObj.enabled = true;
-                    }
-                    else {
-                        courseObj.enabled = false;
+                        found = true;
                     }
                 }
             }
+            courseObj.enabled = found;
         }
     }
 };\n"""
