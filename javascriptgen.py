@@ -62,10 +62,12 @@ def generateInitialBlockController(courseGroupDict, initialTerm, controller):
     controller.write("""$scope.render = function(courseName) {
     that.updateObjFields($scope.selectedPlan, $scope.selectedTerm, courseName);
     that.checkOverlaps($scope.selectedPlan, $scope.selectedTerm);
+    that.setAllCourses($scope.selectedPlan, $scope.selectedTerm);
 };\n""")
 
     generateCheckOverlaps(controller)
     generateUpdateObjFields(controller)
+    generateSetAllCourses(controller)
 
     controller.write("""var radios = document.querySelectorAll("input[type=radio][name=planselector]");
 Array.prototype.forEach.call(radios, function (radio) {
@@ -213,7 +215,11 @@ def generateCheckOverlaps(controller):
             if (courseObj.enabled) {
                 for (const [checkID, checkObj] of Object.entries($scope.coursesobj[plan][term][day])) {
                     if ((courseID != checkID) && (checkObj.enabled)) {
-                        if (((courseObj.end > checkObj.start) && (courseObj.start <= checkObj.start)) || ((checkObj.end > courseObj.start) && (checkObj.start <= courseObj.start))) {
+                        let courseStart = Number(courseObj.start);
+                        let courseEnd = Number(courseObj.end);
+                        let checkStart = Number(checkObj.start);
+                        let checkEnd = Number(checkObj.end);
+                        if (((courseEnd > checkStart) && (courseStart <= checkStart)) || ((checkEnd > courseStart) && (checkStart <= courseStart))) {
                             if (!overlapsList.includes(courseObj)) {
                                 overlapsList.push(courseObj);
                             }
@@ -236,9 +242,7 @@ def generateCheckOverlaps(controller):
                 for (const [index, overlapObj] of Object.entries(list[i])) {
                     if (321/list.length < overlapObj.width) {
                         overlapObj.width = 321/list.length;
-                        overlapObj.left = (321/list.length)*i;
-                        document.getElementById(overlapObj.courseID.replace("_", "-")).style.width = String(321/list.length) + "px";
-                        document.getElementById(overlapObj.courseID.replace("_","-")).style.left = String((321/list.length)*index) + "px";
+                        overlapObj.left = (321/list.length)*index;
                     }
                 }
             }
@@ -256,6 +260,18 @@ def generateUpdateObjFields(controller):
             if (courseID.includes(idName)) {
                 courseObj.enabled = true;
             }
+        }
+    }
+};\n"""
+
+    controller.write(formattedFunctionStatement)
+
+def generateSetAllCourses(controller):
+    formattedFunctionStatement = """this.setAllCourses = function(plan, term) {
+    for (const [day, dayList] of Object.entries($scope.coursesobj[plan][term])) {
+        for (const [courseID, courseObj] of Object.entries($scope.coursesobj[plan][term][day])) {
+            document.getElementById(courseObj.courseID.replace("_", "-")).style.width = String(courseObj.width) + "px";
+            document.getElementById(courseObj.courseID.replace("_","-")).style.left = String(courseObj.left) + "px";
         }
     }
 };\n"""
