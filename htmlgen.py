@@ -36,7 +36,8 @@ def switchTitle(titleTag, topTitleTag, deptName):
 def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, soup):
     for plan in sequenceDict:
         # radio inputs for selecting plan, can ng-model directly to selectedPlan
-        radioInput = soup.new_tag("input", attrs={"type":"radio", 
+        radioInput = soup.new_tag("input", attrs={"ng-change":"render()",
+                                                  "type":"radio", 
                                                   "name":"planselector", 
                                                   "ng-model":"selectedPlan",
                                                   "value": cleaner.cleanString(plan),
@@ -54,7 +55,7 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, so
             radioInput = soup.new_tag("input", attrs={"type":"radio", 
                                                   "name":cleaner.cleanString(plan) + "termselector", 
                                                   "ng-model":"selectedTerm",
-                                                  "ng-change":"updateTerm(\"" + cleaner.cleanString(term) + "\")",
+                                                  "ng-change":"render(\"" + cleaner.cleanString(term) + "\")",
                                                   "value": cleaner.cleanString(term),
                                                   "id": cleaner.cleanString(term)})
             labelTag = soup.new_tag("label", attrs={"for": cleaner.cleanString(term)})
@@ -86,7 +87,7 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, so
         #         wrapperDiv.append(courseGroupWrapper)
             courseSectionWrapper = soup.new_tag("div")
             for course in seqDict[plan][term]:
-                if len(course) == 1 and type(course[0]) != []:
+                if (len(course) == 1) and (type(course[0]) != type([])):
                     sectionWrapper = soup.new_tag("div")
                     sectionSelectWrapper = soup.new_tag("select", attrs={"ng-change":"render()",
                                                                     "name":cleaner.cleanString(plan) + 
@@ -106,7 +107,7 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, so
                         sectionSelectWrapper.append(sectionRadio)
                     sectionWrapper.append(sectionSelectWrapper)
                     courseSectionWrapper.append(sectionWrapper)
-                elif len(course) > 1 and type(course[0]) == type([]):
+                elif (len(course) > 1) and (type(course[0]) == type([])):
                     for opt in course:
                         # or course wrapped in course group
                         if len(opt) != 2:
@@ -123,6 +124,7 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, so
                             sectionWrapper.append(str(opt[0]))
                             breakTag = soup.new_tag("br")
                             sectionWrapper.append(breakTag)
+                            courseGroupName = opt[1]
                             sectionSelectWrapper = soup.new_tag("select", attrs={"ng-change":"render()",
                                                                         "name":cleaner.cleanString(plan) + 
                                                                            cleaner.cleanString(term)+
@@ -130,7 +132,8 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, so
                                                                            "ng-model":cleaner.cleanString(plan) + 
                                                                                cleaner.cleanString(term) +
                                                                                "obj."+
-                                                                               cleaner.cleanString(str(opt[0]))})
+                                                                               cleaner.cleanString(str(opt[0])) + 
+                                                                               "__cgoption" + courseGroupName})
                             for section in opt[0].sections:
                                 sectionRadio = soup.new_tag("option", attrs={"value": str(section),
                                                                             "id": str(section)})
@@ -144,7 +147,8 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, so
                     # append to coursegroup form
                     courseGroupWrapper = soup.new_tag("div", attrs={"id":course.getOptionName()})
                     for option in course.options:
-                        courseGroupRadio = soup.new_tag("input", attrs={"type":"radio",
+                        courseGroupRadio = soup.new_tag("input", attrs={"ng-change":"render()",
+                                                                    "type":"radio",
                                                                     "name":cleaner.cleanString(plan) + 
                                                                            cleaner.cleanString(term) + 
                                                                            course.getOptionName(),
@@ -272,8 +276,7 @@ def generateDisplayDiv(soup, courseGroupList):
     for element in courseGroupList:
         switchVariable += "+" + formattedCourseGroupVar.format(number=element)
     switchVariable += "+selectedTerm"  # switch on term selection
-    return soup.new_tag("div", attrs={"class":"display",
-                                      "ng-switch":switchVariable})
+    return soup.new_tag("div", attrs={"class":"display"})
 
 # Function that places the outer divs for the course group selection 
 # radio inputs for each plan
@@ -338,7 +341,7 @@ def placePlanDivs(displayTag, sequenceDict, soup, controller):
         for term in sequenceDict[plan]:
             controller.write("$scope.coursesobj." + cleaner.cleanString(plan) + "." + cleaner.cleanString(term) + " = {};\n")
             switchInput = soup.new_tag("div", attrs={"id":cleaner.cleanString(plan) + cleaner.cleanString(term),
-                                                    "ng-switch-when":cleaner.cleanString(plan) + cleaner.cleanString(term),
+                                                    "ng-show":"selectedPlan+selectedTerm == \"" + cleaner.cleanString(plan) + cleaner.cleanString(term) + "\"",
                                                     "style":"height:fit-content; display:flex; flex-direction:row; flex-wrap:column;"})
             placeTermDivs(switchInput, sequenceDict[plan], soup, plan, term, controller)
             displayTag.append(switchInput)
@@ -496,7 +499,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                                                            "px; height:" + 
                                                            str((135.35/60)*minutesLong) + 
                                                            "px",
-                                                           "ng-show":cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(course))
+                                                           "ng-show":cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(course))+"__cgoption"+courseGroupSubName
                                                            +"==\""+str(section)+"\"" +
                                                            "&&"+
                                                            cleaner.cleanString(plan)
@@ -520,7 +523,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                                                            "px; height:" + 
                                                            str((135.35/60)*minutesLong) + 
                                                            "px",
-                                                           "ng-show":cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(course))
+                                                           "ng-show":cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(course))+"__cgoption"+courseGroupSubName
                                                            +"==\""+str(section)+"\"" +
                                                            "&&"+
                                                            cleaner.cleanString(plan)

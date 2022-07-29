@@ -52,17 +52,21 @@ def generateInitialBlockController(courseGroupDict, initialTerm, controller):
     controller.write("$scope.selectedPlan = \"" + cleaner.cleanString(planList[0])+ "\";\n")
     controller.write("$scope.selectedTerm = \"" + cleaner.cleanString(initialTerm) + "\";\n")
 
-    # Writing function that updates the currently selected term. Functions are called when changing
-    # radio inputs. Note: selectedPlan can be altered directly, this var needs a helper function
-    controller.write("""$scope.updateTerm = function(term) {
-  $scope.selectedTerm = term;
-}\n""")
     controller.write("var that = this;\n")  # allows access to the above variables inside any function by using 'that'
 
-    controller.write("""$scope.render = function() {
+    controller.write("""$scope.render = function(term) {
+    if (term != undefined) {
+        that.updateTerm(term);
+    }
     that.updateObjFields($scope.selectedPlan, $scope.selectedTerm);
     that.checkOverlaps($scope.selectedPlan, $scope.selectedTerm);
     that.setAllCourses($scope.selectedPlan, $scope.selectedTerm);
+};\n""")
+
+    # Writing function that updates the currently selected term. Functions are called when changing
+    # radio inputs. Note: selectedPlan can be altered directly, this var needs a helper function
+    controller.write("""this.updateTerm = function(term) {
+    $scope.selectedTerm = term;
 };\n""")
 
     generateCheckOverlaps(controller)
@@ -263,11 +267,22 @@ def generateUpdateObjFields(controller):
     for (const [day, dayList] of Object.entries($scope.coursesobj[plan][term])) {
         for (const [courseID, courseObj] of Object.entries($scope.coursesobj[plan][term][day])) {
             let found = false;
+            let groupName = "";
             for (const [plainName, fullName] of Object.entries($scope[plan + term + "obj"])) {
                 if (!plainName.includes("group")) {
-                    if (courseID.includes(fullName.replace(/ /g, ""))) {
-                        found = true;
+                    if (plainName.includes("__cgoption") && (plainName.slice(-2) == groupName)) {
+                        if (courseID.includes(fullName.replace(/ /g, ""))) {
+                            found = true;
+                        }
                     }
+                    else if (!plainName.includes("__cgoption")) {
+                        if (courseID.includes(fullName.replace(/ /g, ""))) {
+                            found = true;
+                        }
+                    }
+                }
+                else {
+                    groupName = fullName;
                 }
             }
             courseObj.enabled = found;

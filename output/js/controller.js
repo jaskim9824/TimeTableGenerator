@@ -2,14 +2,17 @@ var app = angular.module("main", []);
 app.controller("main", function($scope) { 
 $scope.selectedPlan = "TraditionalPlan";
 $scope.selectedTerm = "FallTerm3";
-$scope.updateTerm = function(term) {
-  $scope.selectedTerm = term;
-}
 var that = this;
-$scope.render = function() {
+$scope.render = function(term) {
+    if (term != undefined) {
+        that.updateTerm(term);
+    }
     that.updateObjFields($scope.selectedPlan, $scope.selectedTerm);
     that.checkOverlaps($scope.selectedPlan, $scope.selectedTerm);
     that.setAllCourses($scope.selectedPlan, $scope.selectedTerm);
+};
+this.updateTerm = function(term) {
+    $scope.selectedTerm = term;
 };
 this.checkOverlaps = function(plan, term) {
     allOverlaps = {};
@@ -64,11 +67,22 @@ this.updateObjFields = function(plan, term) {
     for (const [day, dayList] of Object.entries($scope.coursesobj[plan][term])) {
         for (const [courseID, courseObj] of Object.entries($scope.coursesobj[plan][term][day])) {
             let found = false;
+            let groupName = "";
             for (const [plainName, fullName] of Object.entries($scope[plan + term + "obj"])) {
                 if (!plainName.includes("group")) {
-                    if (courseID.includes(fullName.replace(/ /g, ""))) {
-                        found = true;
+                    if (plainName.includes("__cgoption") && (plainName.slice(-2) == groupName)) {
+                        if (courseID.includes(fullName.replace(/ /g, ""))) {
+                            found = true;
+                        }
                     }
+                    else if (!plainName.includes("__cgoption")) {
+                        if (courseID.includes(fullName.replace(/ /g, ""))) {
+                            found = true;
+                        }
+                    }
+                }
+                else {
+                    groupName = fullName;
                 }
             }
             courseObj.enabled = found;
