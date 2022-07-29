@@ -88,7 +88,8 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, so
             for course in seqDict[plan][term]:
                 if len(course) == 1 and type(course[0]) != []:
                     sectionWrapper = soup.new_tag("div")
-                    sectionSelectWrapper = soup.new_tag("select", attrs={"name":cleaner.cleanString(plan) + 
+                    sectionSelectWrapper = soup.new_tag("select", attrs={"ng-change":"render(\"" + cleaner.cleanString(str(course[0])) + "\")",
+                                                                    "name":cleaner.cleanString(plan) + 
                                                                            cleaner.cleanString(term)+
                                                                            cleaner.cleanString(str(course[0])),
                                                                    "ng-model":cleaner.cleanString(plan) + 
@@ -192,7 +193,8 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, so
                                                                                course.getOptionName() + "==" + 
                                                                                option + ")"})
                             sectionWrapper.append(option)
-                            sectionSelectWrapper = soup.new_tag("select", attrs={"name":cleaner.cleanString(plan) + 
+                            sectionSelectWrapper = soup.new_tag("select", attrs={"ng-change":"render(\"" + cleaner.cleanString(str(opt[0])) + "\")",
+                                                                        "name":cleaner.cleanString(plan) + 
                                                                            cleaner.cleanString(term)+
                                                                            option,"ng-model":cleaner.cleanString(plan) + 
                                                                                cleaner.cleanString(term) +
@@ -436,7 +438,7 @@ def createDailyDivs(plan, term, soup, controller):
 #   controller - file handle for controller.js
 def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
 
-    adjustOverlapping(termList)  # check for overlapping courses, set position field if overlap
+    # adjustOverlapping(termList)  # check for overlapping courses, set position field if overlap
 
 
     for courseWrapperList in termList:
@@ -494,7 +496,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                                                            "px; height:" + 
                                                            str((135.35/60)*minutesLong) + 
                                                            "px",
-                                                           "ng-if":cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(course))
+                                                           "ng-show":cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(course))
                                                            +"==\""+str(section)+"\"" +
                                                            "&&"+
                                                            cleaner.cleanString(plan)
@@ -518,7 +520,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                                                            "px; height:" + 
                                                            str((135.35/60)*minutesLong) + 
                                                            "px",
-                                                           "ng-if":cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(course))
+                                                           "ng-show":cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(course))
                                                            +"==\""+str(section)+"\"" +
                                                            "&&"+
                                                            cleaner.cleanString(plan)
@@ -587,7 +589,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                                                            "px; height:" + 
                                                            str((135.35/60)*minutesLong) + 
                                                            "px",
-                                                           "ng-if":cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(courseWrapper))
+                                                           "ng-show":cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(courseWrapper))
                                                            +"==\""+str(course)+"\""+
                                                            "&&"+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+
                                                            orName+"==\""+str(courseWrapper)+"\""})
@@ -599,7 +601,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                                                            "px; height:" + 
                                                            str((135.35/60)*minutesLong) + 
                                                            "px",
-                                                           "ng-if":cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(courseWrapper))
+                                                           "ng-show":cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(courseWrapper))
                                                            +"==\""+str(course)+"\""})
 
                     courseDisc = soup.new_tag("div", attrs={"id":courseID+"desc",

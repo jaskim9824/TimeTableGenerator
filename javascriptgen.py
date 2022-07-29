@@ -213,7 +213,7 @@ def generateCheckOverlaps(controller):
             if (courseObj.enabled) {
                 for (const [checkID, checkObj] of Object.entries($scope.coursesobj[plan][term][day])) {
                     if ((courseID != checkID) && (checkObj.enabled)) {
-                        if (((courseObj.start < checkObj.end) && (courseObj.start >= checkObj.start)) || ((checkObj.end > courseObj.start) && (checkObj.start <= courseObj.start))) {
+                        if (((courseObj.end > checkObj.start) && (courseObj.start <= checkObj.start)) || ((checkObj.end > courseObj.start) && (checkObj.start <= courseObj.start))) {
                             if (!overlapsList.includes(courseObj)) {
                                 overlapsList.push(courseObj);
                             }
@@ -237,8 +237,8 @@ def generateCheckOverlaps(controller):
                     if (321/list.length < overlapObj.width) {
                         overlapObj.width = 321/list.length;
                         overlapObj.left = (321/list.length)*i;
-                        document.getElementById(overlapObj.courseID.replace("_", "-")).style.width = 321/list.length;
-                        document.getElementById(overlapObj.courseID.replace("_","-")).style.left = (321/list.length)*i;
+                        document.getElementById(overlapObj.courseID.replace("_", "-")).style.width = String(321/list.length) + "px";
+                        document.getElementById(overlapObj.courseID.replace("_","-")).style.left = String((321/list.length)*index) + "px";
                     }
                 }
             }
@@ -250,9 +250,10 @@ def generateCheckOverlaps(controller):
 
 def generateUpdateObjFields(controller):
     formattedFunctionStatement = """this.updateObjFields = function(plan, term, courseName) {
+    let idName = $scope[plan + term + "obj"][courseName].replace(/ /g, "");
     for (const [day, dayList] of Object.entries($scope.coursesobj[plan][term])) {
         for (const [courseID, courseObj] of Object.entries($scope.coursesobj[plan][term][day])) {
-            if (courseID.includes(courseName)) {
+            if (courseID.includes(idName)) {
                 courseObj.enabled = true;
             }
         }
