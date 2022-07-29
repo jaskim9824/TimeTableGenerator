@@ -59,8 +59,8 @@ def generateInitialBlockController(courseGroupDict, initialTerm, controller):
 }\n""")
     controller.write("var that = this;\n")  # allows access to the above variables inside any function by using 'that'
 
-    controller.write("""$scope.render = function(courseName) {
-    that.updateObjFields($scope.selectedPlan, $scope.selectedTerm, courseName);
+    controller.write("""$scope.render = function() {
+    that.updateObjFields($scope.selectedPlan, $scope.selectedTerm);
     that.checkOverlaps($scope.selectedPlan, $scope.selectedTerm);
     that.setAllCourses($scope.selectedPlan, $scope.selectedTerm);
 };\n""")
@@ -253,12 +253,18 @@ def generateCheckOverlaps(controller):
     controller.write(functionStatement)
 
 def generateUpdateObjFields(controller):
-    formattedFunctionStatement = """this.updateObjFields = function(plan, term, courseName) {
-    let idName = $scope[plan + term + "obj"][courseName].replace(/ /g, "");
+    formattedFunctionStatement = """this.updateObjFields = function(plan, term) {
     for (const [day, dayList] of Object.entries($scope.coursesobj[plan][term])) {
         for (const [courseID, courseObj] of Object.entries($scope.coursesobj[plan][term][day])) {
-            if (courseID.includes(idName)) {
-                courseObj.enabled = true;
+            for (const [plainName, fullName] of Object.entries($scope[plan + term + "obj"])) {
+                if (!plainName.includes("group")) {
+                    if (courseID.includes(fullName.replace(/ /g, ""))) {
+                        courseObj.enabled = true;
+                    }
+                    else {
+                        courseObj.enabled = false;
+                    }
+                }
             }
         }
     }

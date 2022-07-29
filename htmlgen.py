@@ -88,7 +88,7 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, so
             for course in seqDict[plan][term]:
                 if len(course) == 1 and type(course[0]) != []:
                     sectionWrapper = soup.new_tag("div")
-                    sectionSelectWrapper = soup.new_tag("select", attrs={"ng-change":"render(\"" + cleaner.cleanString(str(course[0])) + "\")",
+                    sectionSelectWrapper = soup.new_tag("select", attrs={"ng-change":"render()",
                                                                     "name":cleaner.cleanString(plan) + 
                                                                            cleaner.cleanString(term)+
                                                                            cleaner.cleanString(str(course[0])),
@@ -123,7 +123,7 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, so
                             sectionWrapper.append(str(opt[0]))
                             breakTag = soup.new_tag("br")
                             sectionWrapper.append(breakTag)
-                            sectionSelectWrapper = soup.new_tag("select", attrs={"ng-change":"render(\"" + cleaner.cleanString(str(opt[0])) + "\")",
+                            sectionSelectWrapper = soup.new_tag("select", attrs={"ng-change":"render()",
                                                                         "name":cleaner.cleanString(plan) + 
                                                                            cleaner.cleanString(term)+
                                                                            cleaner.cleanString(str(opt[0])),
@@ -193,7 +193,7 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, so
                                                                                course.getOptionName() + "==" + 
                                                                                option + ")"})
                             sectionWrapper.append(option)
-                            sectionSelectWrapper = soup.new_tag("select", attrs={"ng-change":"render(\"" + cleaner.cleanString(str(opt[0])) + "\")",
+                            sectionSelectWrapper = soup.new_tag("select", attrs={"ng-change":"render()",
                                                                         "name":cleaner.cleanString(plan) + 
                                                                            cleaner.cleanString(term)+
                                                                            option,"ng-model":cleaner.cleanString(plan) + 
