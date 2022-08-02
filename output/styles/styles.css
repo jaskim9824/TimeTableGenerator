@@ -232,12 +232,12 @@ h3#planhead {
 }
 
 /* Courses that are very narrow need smaller font */
-.narrowclass .embed {
+.narrowcourse .embed {
     font-size: 40%;
 }
 
 /* Course box */
-.course {
+.course, .narrowcourse {
     width: 321px;
     box-sizing: border-box;
     border-style: solid;
@@ -248,23 +248,7 @@ h3#planhead {
 }
 
 /* Default course hover */
-.course:hover {
-    background-color: #f2cd00;
-    border-color:#f2cd00;
-}
-
-/* Default course selected */
-.course-highlighted {
-    border-style: solid;
-    border-color: black;
-    border-width: 2px;
-    height: 50px;
-    width: 150px;
-    background-color: #f2cd00;
-}
-
-/* Default highlighted hover */
-.course-highlighted:hover {
+.course:hover, .narrowcourse:hover {
     background-color: #f2cd00;
     border-color:#f2cd00;
 }

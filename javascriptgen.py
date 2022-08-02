@@ -310,6 +310,12 @@ def generateSetAllCourses(controller):
         for (const [courseID, courseObj] of Object.entries($scope.coursesobj[plan][term][day])) {
             document.getElementById(courseObj.courseID.replace("_", "-")).style.width = String(courseObj.width) + "px";
             document.getElementById(courseObj.courseID.replace("_","-")).style.left = String(courseObj.left) + "px";
+            if (courseObj.width < 60) {
+                if (document.getElementById(courseObj.courseID.replace("_", "-")).classList.contains("course")) {
+                    document.getElementById(courseObj.courseID.replace("_", "-")).classList.remove("course");
+                    document.getElementById(courseObj.courseID.replace("_", "-")).classList.add("narrowcourse");
+                }
+            }
         }
     }
 };\n"""
