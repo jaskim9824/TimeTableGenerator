@@ -513,8 +513,17 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                                                            "px; height:" + 
                                                            str((135.35/60)*minutesLong) + 
                                                            "px",
-                                                           "ng-show":cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(course))+"__cgoption"+courseGroupSubName
-                                                           +"==\""+str(section)+"\"" +
+                                                           "ng-show":"("+cleaner.cleanString(plan)+
+                                                           cleaner.cleanString(term)+"obj."+
+                                                           cleaner.cleanString(str(course))+
+                                                           "__cgoption"+courseGroupSubName
+                                                           +"==\""+str(section)+"\" ||"+
+                                                           cleaner.cleanString(plan)+
+                                                           cleaner.cleanString(term)+"obj."+
+                                                           cleaner.cleanString(str(course))+
+                                                           "__cgoption"+courseGroupSubName+
+                                                           "==\"ALL\""+
+                                                           ")"+
                                                            "&&"+
                                                            cleaner.cleanString(plan)
                                                            +cleaner.cleanString(term)+
@@ -528,8 +537,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                                                            +cleaner.cleanString(term)+
                                                            "obj."+
                                                            orName+
-                                                           "=="+"\""+str(course)+"\""+"||"+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+
-                                                           cleaner.cleanString(str(course))+"__cgoption"+courseGroupSubName+"\""+"==\"ALL\""})
+                                                           "=="+"\""+str(course)+"\""})
                         else:
                             courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", 
                                                            "style":"position:absolute; top:" + 
@@ -538,9 +546,10 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                                                            "px; height:" + 
                                                            str((135.35/60)*minutesLong) + 
                                                            "px",
-                                                           "ng-show":cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(course))+"__cgoption"+courseGroupSubName
-                                                           +"==\""+str(section)+"\"" +
-                                                           "&&"+
+                                                           "ng-show":"("+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(course))+"__cgoption"+courseGroupSubName
+                                                           +"==\""+str(section)+"\""+"||"+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+
+                                                           cleaner.cleanString(str(course))+"__cgoption"+courseGroupSubName+"==\"ALL\")"
+                                                           +"&&"+
                                                            cleaner.cleanString(plan)
                                                            +cleaner.cleanString(term)+
                                                            "obj.group"+
@@ -548,8 +557,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                                                            "=="+
                                                            "\""+
                                                            courseGroupSubName+
-                                                           "\""+"||"+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+
-                                                           cleaner.cleanString(str(course))+"__cgoption"+courseGroupSubName+"==\"ALL\""})
+                                                           "\""})
 
                         
                         courseDisc = soup.new_tag("div", attrs={"id":courseID+"desc",
@@ -608,11 +616,11 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                                                            "px; height:" + 
                                                            str((135.35/60)*minutesLong) + 
                                                            "px",
-                                                           "ng-show":cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(courseWrapper))
-                                                           +"==\""+str(course)+"\""+
+                                                           "ng-show":"("+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(courseWrapper))
+                                                           +"==\""+str(course)+"\""+"||"+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+
+                                                           cleaner.cleanString(str(courseWrapper))+"==\"ALL\")"+
                                                            "&&"+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+
-                                                           orName+"==\""+str(courseWrapper)+"\""+"||"+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+
-                                                           cleaner.cleanString(str(courseWrapper))+"==\"ALL\""})
+                                                           orName+"==\""+str(courseWrapper)+"\""})
                     else:
                         courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", 
                                                            "style":"position:absolute; top:" + 
