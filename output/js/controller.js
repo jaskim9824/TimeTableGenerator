@@ -72,7 +72,9 @@ this.updateObjFields = function(plan, term) {
                 if (!plainName.includes("group")) {
                     if (plainName.includes("__cgoption") && (plainName.slice(-2) == groupName)) {
                         if (fullName == "ALL") {
-                            if (courseID.includes(plainName.replace("__cgoption", ""))) {
+                            let removeIndex = plainName.indexOf("__cgoption");
+                            let strippedName = plainName.substring(0, removeIndex);
+                            if (courseID.includes(strippedName)) {
                                 found = true;
                             }
                         }
