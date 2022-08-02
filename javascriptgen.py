@@ -54,6 +54,8 @@ def generateInitialBlockController(courseGroupDict, initialTerm, controller):
 
     controller.write("var that = this;\n")  # allows access to the above variables inside any function by using 'that'
 
+    # Render function called any time something on the page changes
+    # (change plan, term, section, or course group)
     controller.write("""$scope.render = function(term) {
     if (term != undefined) {
         that.updateTerm(term);
@@ -196,20 +198,60 @@ def generateInitialOptionObjects(planOptionDict, controller):
                     controller.write(",")
             controller.write("};\n")
 
+# Function that writes the JS function that updates the ".enabled" field of the course
+# objects on the currently displayed page
+# Parameters:
+#   controller - file handle for controller.js
+def generateUpdateObjFields(controller):
+    # For each courseObj on the currently displayed page, search through the elements in the
+    # [plan + term + "obj"] object. The course group name (if there is one) should be stored
+    # under the key "groupX" & should be the first entry. After this, check if the entry is
+    # for a course group and if it is, check if the fullName (includes section name) is a substring
+    # in courseID & if the course group matches groupName. If the entry is not for a course group, 
+    # simply check if fullName is a substring of courseID.
+    # After this search, update the ".enabled" field with the value of 'found'
+    formattedFunctionStatement = """this.updateObjFields = function(plan, term) {
+    for (const [day, dayList] of Object.entries($scope.coursesobj[plan][term])) {
+        for (const [courseID, courseObj] of Object.entries($scope.coursesobj[plan][term][day])) {
+            let found = false;
+            let groupName = "";
+            for (const [plainName, fullName] of Object.entries($scope[plan + term + "obj"])) {
+                if (!plainName.includes("group")) {
+                    if (plainName.includes("__cgoption") && (plainName.slice(-2) == groupName)) {
+                        if (courseID.includes(fullName.replace(/ /g, ""))) {
+                            found = true;
+                        }
+                    }
+                    else if (!plainName.includes("__cgoption")) {
+                        if (courseID.includes(fullName.replace(/ /g, ""))) {
+                            found = true;
+                        }
+                    }
+                }
+                else {
+                    groupName = fullName;
+                }
+            }
+            courseObj.enabled = found;
+        }
+    }
+};\n"""
+
+    controller.write(formattedFunctionStatement)
+
 # Function that writes the JS function to check for overlapping courses on the currently displayed page.
 # Compares all enabled courses in a day, if there is an overlap, the width & left fields of the
 # course object are modified to prevent an overlap
 # Parameters:
 #   controller - file handle for controller.js
 def generateCheckOverlaps(controller):
-    # first main loop: for each day, compare each course to every other course
-    # (for a given dayList[i] object, compare it to dayList[j] for j sweeping all course objects).
-    # If there is an overlap, store the course objects in a list. For each dayList[i] that has an overlap,
-    # store the overlapsList in another list (allOverlaps[day]).
+    # first main loop: for each day, compare a given course to every other course
+    # in that day, if there is an overlap, append the overlapping course object to a list.
+    # If no overlap is found, the width and left fields are reset to defaults.
     #
-    # second main loop: for each overlapsList and for each course in overlapsList, if 
-    # changing the course width makes the course narrower, modify the course object fields
-    # of .width & .left
+    # second main loop: iterating through the list of overlapping courses created previously,
+    # update the width and left fields of each course object based on how many courses it is 
+    # overlapping with
     functionStatement = """this.checkOverlaps = function(plan, term) {
     allOverlaps = {};
     for (const [day, dayList] of Object.entries($scope.coursesobj[plan][term])) {
@@ -262,37 +304,14 @@ def generateCheckOverlaps(controller):
 
     controller.write(functionStatement)
 
-def generateUpdateObjFields(controller):
-    formattedFunctionStatement = """this.updateObjFields = function(plan, term) {
-    for (const [day, dayList] of Object.entries($scope.coursesobj[plan][term])) {
-        for (const [courseID, courseObj] of Object.entries($scope.coursesobj[plan][term][day])) {
-            let found = false;
-            let groupName = "";
-            for (const [plainName, fullName] of Object.entries($scope[plan + term + "obj"])) {
-                if (!plainName.includes("group")) {
-                    if (plainName.includes("__cgoption") && (plainName.slice(-2) == groupName)) {
-                        if (courseID.includes(fullName.replace(/ /g, ""))) {
-                            found = true;
-                        }
-                    }
-                    else if (!plainName.includes("__cgoption")) {
-                        if (courseID.includes(fullName.replace(/ /g, ""))) {
-                            found = true;
-                        }
-                    }
-                }
-                else {
-                    groupName = fullName;
-                }
-            }
-            courseObj.enabled = found;
-        }
-    }
-};\n"""
-
-    controller.write(formattedFunctionStatement)
-
+# Funtion that writes the JS function that updates the styling of all courses
+# on the currently displayed page
+# Parameters:
+#   controller - file handle for controller.js
 def generateSetAllCourses(controller):
+    # For each course on the currently displayed page, update the "width" & "left"
+    # styles with the values stored in the course objects (which were updated in 
+    # updateObjFields() & checkOverlaps())
     formattedFunctionStatement = """this.setAllCourses = function(plan, term) {
     for (const [day, dayList] of Object.entries($scope.coursesobj[plan][term])) {
         for (const [courseID, courseObj] of Object.entries($scope.coursesobj[plan][term][day])) {

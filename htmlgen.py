@@ -5,7 +5,7 @@
 # This file contains all the functions needed to generate the required
 # HTML elements to produce the MEC E Program Visualizer webpage
 
-# Dependencies: cleaner, linegen, html
+# Dependencies: cleaner, html, copy, coursegroupparsing
 
 from re import S
 import cleaner
@@ -107,7 +107,7 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, so
                         sectionSelectWrapper.append(sectionRadio)
                     sectionWrapper.append(sectionSelectWrapper)
                     courseSectionWrapper.append(sectionWrapper)
-                elif (len(course) > 1) and (type(course[0]) == type([])):
+                elif len(course) > 1 and type(course[0]) == type([]):
                     for opt in course:
                         # or course wrapped in course group
                         if len(opt) != 2:
@@ -446,7 +446,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
 
     for courseWrapperList in termList:
         orCase = False
-        if len(courseWrapperList) > 2 and type(courseWrapperList[0]) != []:
+        if len(courseWrapperList) > 2 and type(courseWrapperList[0]) != type([]):
             orCase = True
             orName = ""
             for courseWrapper in courseWrapperList:
@@ -554,9 +554,9 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                         courseDiv.append(courseDisc)
 
                         courseContDiv.append(courseDiv)
-                        appendToEachDay(tagsList, courseContDiv, section.position, plan, term, minutesFromEight, minutesLong, controller)  # course may occur on multiple days, need to append to each day
+                        appendToEachDay(tagsList, courseContDiv, plan, term, minutesFromEight, minutesLong, controller)  # course may occur on multiple days, need to append to each day
  
-            elif (type(courseWrapper) == type([])) and (len(courseWrapper) == 1):
+            elif type(courseWrapper) == type([]) and len(courseWrapper) == 1:
                 # courseWrapper is for an elective, not used in timetable
                 continue
             else:
@@ -625,7 +625,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                     courseDiv.append(courseDisc)
 
                     courseContDiv.append(courseDiv)
-                    appendToEachDay(tagsList, courseContDiv, course.position, plan, term, minutesFromEight, minutesLong, controller)  # course may occur on multiple days, need to append to each day
+                    appendToEachDay(tagsList, courseContDiv, plan, term, minutesFromEight, minutesLong, controller)  # course may occur on multiple days, need to append to each day
 
 # Checks termList for overlapping courses and updates pushLeft/pushRight attributes
 # if there is a time overlap.
@@ -848,14 +848,13 @@ def formatCourseDescriptionForRegular(soup, course, courseDisc):
 #   tagsList - list of HTML tags of days we need to append to. Every day the course
 #   occurs on, that day's tag will appear in this list
 #   courseContDiv - container for an entire course, everything to do with one course is in this div
-#   position - position field of Course object (course.position), dict with keys as days of week.
 #   Values as another dict with "width" & "left" keys used to format the course
 #   plan - name of the current plan
 #   term - name of the current term
 #   startTime - start time for course
 #   courseLength - length of course in minutes
 #   controller - file handle for controller.js
-def appendToEachDay(tagsList, courseContDiv, position, plan, term, startTime, courseLength, controller):
+def appendToEachDay(tagsList, courseContDiv, plan, term, startTime, courseLength, controller):
     for dayTag in tagsList:
         # if the course occurs on multiple days, append to each dayDiv (mondayDiv, tuesdayDiv, etc.)
         if dayTagInLateWeek(dayTag) and ("class=\"tooltiptextright\"") in str(courseContDiv):
@@ -877,9 +876,6 @@ def appendToEachDay(tagsList, courseContDiv, position, plan, term, startTime, co
             day = "friday"
 
         if day != "":  # guard, every course should have a day
-            # set the width & relative position from left
-            newDiv.find(class_="course tooltip")["style"] += ";position:relative;width:" + str(position[day]["width"]) + \
-            "px;left:" + str(position[day]["left"]) + "px"
             newDiv.find(class_="course tooltip")["id"] += "-" + day  # id should be unique identifier, different for each day
 
             objectName = "$scope.coursesobj." + cleaner.cleanString(plan) + "." + cleaner.cleanString(term) + "." + day + "."  + newDiv.find(class_="course tooltip")["id"].replace("-", "_")
@@ -891,9 +887,6 @@ def appendToEachDay(tagsList, courseContDiv, position, plan, term, startTime, co
             controller.write(objectName + ".left = 0;\n")
             controller.write(objectName + ".enabled = false;\n")
 
-        if position[day]["width"] <= 64.2:
-            # if course is very narrow, different styling applies
-            newDiv.find(class_="course tooltip")["class"].append("narrowclass")
         dayTag.append(newDiv)
 
 # Checks if a dayTag is late in the week (thursday or friday)

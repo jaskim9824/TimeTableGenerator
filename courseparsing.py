@@ -21,8 +21,7 @@ class Course:
     classType = "", capEnrl = "", totEnrl = "", campus = "", location = "", 
     notesNbr = "", noteNbr = "", note = "", rqGroup = "", openTo = "", approvedHrs = "", 
     duration = "", career = "", consent = "", calendarDescr = "", maxUnits = "", calendarPrint = "",
-    courseGroup = "", position = {"monday":{"width":321, "left":0}, "tuesday":{"width":321, "left":0}, 
-    "wednesday":{"width":321, "left":0}, "thursday":{"width":321, "left":0}, "friday":{"width":321, "left":0}}):
+    courseGroup = ""):
 
         self.name = str(name)
         self.plainName = str(plainName)
@@ -72,7 +71,6 @@ class Course:
         self.maxUnits = str(maxUnits)
         self.calendarPrint = str(calendarPrint)
         self.courseGroup = str(courseGroup)
-        self.position = position
     def __str__(self) -> str:
         return self.name
 
