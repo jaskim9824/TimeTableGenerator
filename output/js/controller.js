@@ -54,9 +54,9 @@ this.checkOverlaps = function(plan, term) {
         for (let i = 0; i < list.length; i++) {
             if (list[i].length > 0) {
                 for (const [index, overlapObj] of Object.entries(list[i])) {
-                    if (321/list.length < overlapObj.width) {
-                        overlapObj.width = 321/list.length;
-                        overlapObj.left = (321/list.length)*index;
+                    if (321/list[i].length < overlapObj.width) {
+                        overlapObj.width = 321/list[i].length;
+                        overlapObj.left = (321/list[i].length)*index;
                     }
                 }
             }
@@ -71,12 +71,22 @@ this.updateObjFields = function(plan, term) {
             for (const [plainName, fullName] of Object.entries($scope[plan + term + "obj"])) {
                 if (!plainName.includes("group")) {
                     if (plainName.includes("__cgoption") && (plainName.slice(-2) == groupName)) {
-                        if (courseID.includes(fullName.replace(/ /g, ""))) {
+                        if (fullName == "ALL") {
+                            if (courseID.includes(plainName.replace("__cgoption", ""))) {
+                                found = true;
+                            }
+                        }
+                        else if (courseID.includes(fullName.replace(/ /g, ""))) {
                             found = true;
                         }
                     }
                     else if (!plainName.includes("__cgoption")) {
-                        if (courseID.includes(fullName.replace(/ /g, ""))) {
+                        if (fullName == "ALL") {
+                            if (courseID.includes(plainName)) {
+                                found = true;
+                            }
+                        }
+                        else if (courseID.includes(fullName.replace(/ /g, ""))) {
                             found = true;
                         }
                     }

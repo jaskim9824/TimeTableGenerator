@@ -199,12 +199,22 @@ def generateUpdateObjFields(controller):
             for (const [plainName, fullName] of Object.entries($scope[plan + term + "obj"])) {
                 if (!plainName.includes("group")) {
                     if (plainName.includes("__cgoption") && (plainName.slice(-2) == groupName)) {
-                        if (courseID.includes(fullName.replace(/ /g, ""))) {
+                        if (fullName == "ALL") {
+                            if (courseID.includes(plainName.replace("__cgoption", ""))) {
+                                found = true;
+                            }
+                        }
+                        else if (courseID.includes(fullName.replace(/ /g, ""))) {
                             found = true;
                         }
                     }
                     else if (!plainName.includes("__cgoption")) {
-                        if (courseID.includes(fullName.replace(/ /g, ""))) {
+                        if (fullName == "ALL") {
+                            if (courseID.includes(plainName)) {
+                                found = true;
+                            }
+                        }
+                        else if (courseID.includes(fullName.replace(/ /g, ""))) {
                             found = true;
                         }
                     }
@@ -227,10 +237,10 @@ def generateUpdateObjFields(controller):
 #   controller - file handle for controller JS file
 def generateCheckOverlaps(controller):
     # first main loop: for each day, compare a given course to every other course
-    # in that day, if there is an overlap, append the overlapping course object to a list.
+    # in that day. If there is an overlap, append the overlapping course object to a list.
     # If no overlap is found, the width and left fields are reset to defaults.
     #
-    # second main loop: iterating through the list of overlapping courses created previously,
+    # second main loop: iterating through the list of overlapping courses created previously;
     # update the width and left fields of each course object based on how many courses it is 
     # overlapping with
     functionStatement = """this.checkOverlaps = function(plan, term) {
@@ -273,9 +283,9 @@ def generateCheckOverlaps(controller):
         for (let i = 0; i < list.length; i++) {
             if (list[i].length > 0) {
                 for (const [index, overlapObj] of Object.entries(list[i])) {
-                    if (321/list.length < overlapObj.width) {
-                        overlapObj.width = 321/list.length;
-                        overlapObj.left = (321/list.length)*index;
+                    if (321/list[i].length < overlapObj.width) {
+                        overlapObj.width = 321/list[i].length;
+                        overlapObj.left = (321/list[i].length)*index;
                     }
                 }
             }
