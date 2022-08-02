@@ -500,7 +500,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                             tagsList.append(daysTagsDict["thursday"])
                         if section.fri == 'Y':
                             tagsList.append(daysTagsDict["friday"])
-                        courseID = cleaner.cleanString(section.name)+cleaner.cleanString(plan)
+                        courseID = cleaner.cleanString(section.name)+cleaner.cleanString(plan)+cleaner.cleanString(term)
                         adjustmentFactor = 0
                         if minutesFromEight != 0:
                             adjustmentFactor = -3
@@ -564,7 +564,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                                                         "class":"tooltiptextright",
                                                         "ng-click":"$event.stopPropagation()"})
 
-                        courseDiv = createCourseDiv(soup, 
+                        courseDiv = createCourseDiv(soup,
                                                     courseID, 
                                                     minutesFromEight,
                                                     minutesLong) 
@@ -600,7 +600,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                         tagsList.append(daysTagsDict["thursday"])
                     if course.fri == 'Y':
                         tagsList.append(daysTagsDict["friday"])
-                    courseID = cleaner.cleanString(course.name)+cleaner.cleanString(plan)  # id of html element
+                    courseID = cleaner.cleanString(course.name)+cleaner.cleanString(plan)+cleaner.cleanString(term)  # id of html element
                 
                     # helps align courses to the grid
                     adjustmentFactor = 0
@@ -637,7 +637,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                                                 "class":"tooltiptextright",
                                                 "ng-click":"$event.stopPropagation()"})
 
-                    courseDiv = createCourseDiv(soup, 
+                    courseDiv = createCourseDiv(soup,
                                             courseID, 
                                             minutesFromEight,
                                             minutesLong) 

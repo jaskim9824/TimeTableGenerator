@@ -251,6 +251,8 @@ def generateCheckOverlaps(controller):
         allOverlaps[day] = [];
         for (const [courseID, courseObj] of Object.entries($scope.coursesobj[plan][term][day])) {
             let overlapsList = [];
+            courseObj.width = 321;
+            courseObj.left = 0;
             if (courseObj.enabled) {
                 let foundOverlap = false;
                 for (const [checkID, checkObj] of Object.entries($scope.coursesobj[plan][term][day])) {
@@ -315,6 +317,10 @@ def generateSetAllCourses(controller):
                     document.getElementById(courseObj.courseID.replace("_", "-")).classList.remove("course");
                     document.getElementById(courseObj.courseID.replace("_", "-")).classList.add("narrowcourse");
                 }
+            }
+            else if (document.getElementById(courseObj.courseID.replace("_", "-")).classList.contains("narrowcourse")) {
+                document.getElementById(courseObj.courseID.replace("_", "-")).classList.remove("narrowcourse");
+                document.getElementById(courseObj.courseID.replace("_", "-")).classList.add("course");
             }
         }
     }
