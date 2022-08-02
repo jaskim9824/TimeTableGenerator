@@ -35,8 +35,9 @@ def switchTitle(titleTag, topTitleTag, deptName):
 #   soup - soup object, used to create HTML tags
 def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, soup):
     for plan in sequenceDict:
+        firstTermInPlan = cleaner.cleanString((list(sequenceDict[plan].keys()))[0])  # name of first term in current plan
         # radio inputs for selecting plan, can ng-model directly to selectedPlan
-        radioInput = soup.new_tag("input", attrs={"ng-change":"render()",
+        radioInput = soup.new_tag("input", attrs={"ng-change":"render(\"" + firstTermInPlan + "\")",
                                                   "type":"radio", 
                                                   "name":"planselector", 
                                                   "ng-model":"selectedPlan",
@@ -266,8 +267,6 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, so
                             optionWrapper.append(labelTag)
                         wrapperDiv.append(optionWrapper)
             courseGroupTag.append(wrapperDiv)
-
-
 
 # Function that generates the display div which holds the plan diagram
 # Parameters:

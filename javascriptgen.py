@@ -31,7 +31,6 @@ def intializeControllerJavaScript(sequenceDict, courseGroupDict, courseGroupList
 def closeControllerJavaScript(controller):
     controller.write("});\n")
     writeRightClickDirective(controller)
-    writeRadioChangeDirective(controller)
     controller.close()
 
 # Function that generates the initial block of Javascript in controller.js
@@ -40,7 +39,7 @@ def closeControllerJavaScript(controller):
 #   courseGroupDict - dict that maps plans to a dict that maps course groups to the 
 #   options avaiable in that course group
 #   initialTerm - First term to occur in the first plan
-#   controller - file handle to controller.js
+#   controller - file handle for controller JS file
 def generateInitialBlockController(courseGroupDict, initialTerm, controller):
     planList = list(courseGroupDict.keys())  # used to access first occurring plan
 
@@ -65,8 +64,8 @@ def generateInitialBlockController(courseGroupDict, initialTerm, controller):
     that.setAllCourses($scope.selectedPlan, $scope.selectedTerm);
 };\n""")
 
-    # Writing function that updates the currently selected term. Functions are called when changing
-    # radio inputs. Note: selectedPlan can be altered directly, this var needs a helper function
+    # Writing function that updates the currently selected term. Function is called when changing
+    # radio inputs. Note: selectedPlan can be altered with ngModel, this var needs a helper function
     controller.write("""this.updateTerm = function(term) {
     $scope.selectedTerm = term;
 };\n""")
@@ -97,7 +96,7 @@ def generatePlanBasedBlocksController(sequenceDict, courseGroupDict, courseGroup
 # Function that appends the custom Angular directive used to handle right click
 # events to the end of the controller JS file
 # Parameters:
-#   controller - file handle for controller JS
+#   controller - file handle for controller JS file
 def writeRightClickDirective(controller):
     rightClickDirective = """app.directive('ngRightClick', function($parse) {
     return function(scope, element, attrs) {
@@ -112,24 +111,6 @@ def writeRightClickDirective(controller):
     });"""
     controller.write(rightClickDirective)
 
-# Function that appends the custom Angular directive used to handle radio input changing
-# to the end of the controller JS file
-# Parameters:
-#   controller - file handle for controller JS
-def writeRadioChangeDirective(controller):
-    radioChangeDirective = """app.directive('ngChangeRadio', function($parse) {
-    return function(scope, element, attrs) {
-        var fn = $parse(attrs.ngChangeRadio);
-        element.bind('change', function(event) {
-            scope.$apply(function() {
-                event.preventDefault();
-                fn(scope, {$event:event});
-            });
-        });
-    };
-    });"""
-    controller.write(radioChangeDirective)
-
 # Function that writes the setDefaults function based on the plans and course groups.
 # The JS generated sets the default term and course group options for each plan. 
 # Reverts to these defaults when switching between plans.
@@ -138,7 +119,7 @@ def writeRadioChangeDirective(controller):
 #   options avaiable in that course group
 #   courseGroupList - list of course groups taken overall in the program
 #   initialTerm - First term to occur in the first plan
-#   controller - file handle to controller.js
+#   controller - file handle for controller JS file
 def generateSetDefaults(courseGroupDict, courseGroupList, initialTerm, controller):
     controller.write("this.setDefaults = function(plan) { \n")
     controller.write("  switch(plan) { \n")  # different term and course group options in each plan
@@ -166,7 +147,7 @@ def generateSetDefaults(courseGroupDict, courseGroupList, initialTerm, controlle
 # radio inputs
 # Parameters:
 #   courseGroupList - list of course groups taken in this program
-#   controller - file handle to controller.js          
+#   controller - file handle for controller JS file   
 def generateSubRadioListener(courseGroupList, controller):
     planString = generatePlanString(courseGroupList)
     controller.write("$scope.globalSubGroupChange = function () { \n")
@@ -187,7 +168,7 @@ def generatePlanString(courseGroupList):
 # Function that generates the object variables storing which course groups 
 # can be taken in a given plan & term. The objects are simply key-value pairs
 # planOptionDict - dict mapping plan & term to the course group options available in that plan & term
-# controller - file handle to controller.js
+# controller - file handle for controller JS file
 def generateInitialOptionObjects(planOptionDict, controller):
     for plan in planOptionDict:
         for term in planOptionDict[plan]:
@@ -201,7 +182,7 @@ def generateInitialOptionObjects(planOptionDict, controller):
 # Function that writes the JS function that updates the ".enabled" field of the course
 # objects on the currently displayed page
 # Parameters:
-#   controller - file handle for controller.js
+#   controller - file handle for controller JS file
 def generateUpdateObjFields(controller):
     # For each courseObj on the currently displayed page, search through the elements in the
     # [plan + term + "obj"] object. The course group name (if there is one) should be stored
@@ -243,7 +224,7 @@ def generateUpdateObjFields(controller):
 # Compares all enabled courses in a day, if there is an overlap, the width & left fields of the
 # course object are modified to prevent an overlap
 # Parameters:
-#   controller - file handle for controller.js
+#   controller - file handle for controller JS file
 def generateCheckOverlaps(controller):
     # first main loop: for each day, compare a given course to every other course
     # in that day, if there is an overlap, append the overlapping course object to a list.
@@ -307,7 +288,7 @@ def generateCheckOverlaps(controller):
 # Funtion that writes the JS function that updates the styling of all courses
 # on the currently displayed page
 # Parameters:
-#   controller - file handle for controller.js
+#   controller - file handle for controller JS file
 def generateSetAllCourses(controller):
     # For each course on the currently displayed page, update the "width" & "left"
     # styles with the values stored in the course objects (which were updated in 
