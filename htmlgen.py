@@ -107,6 +107,11 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, so
                                                                       "id": str(section)})
                         sectionRadio.append(str(section))
                         sectionSelectWrapper.append(sectionRadio)
+                    sectionRadio = soup.new_tag("option", attrs={"value": "ALL",
+                                                                        "id":"ALL"})
+                    sectionRadio.append("ALL")
+                    sectionSelectWrapper.append(sectionRadio)
+                    sectionWrapper.append(sectionSelectWrapper)
                     sectionWrapper.append(sectionSelectWrapper)
                     courseSectionWrapper.append(sectionWrapper)
                 elif len(course) > 1 and type(course[0]) == type([]):
@@ -216,6 +221,11 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, so
                                                                             "id": section})
                                 sectionRadio.append(section)
                                 sectionSelectWrapper.append(sectionRadio)
+                            sectionRadio = soup.new_tag("option", attrs={"value": "ALL",
+                                                                        "id":"ALL"})
+                            sectionRadio.append("ALL")
+                            sectionSelectWrapper.append(sectionRadio)
+                            sectionWrapper.append(sectionSelectWrapper)
                             sectionWrapper.append(sectionSelectWrapper)
                             courseSectionWrapper.append(sectionWrapper)    
                             labelTag.append(option)
@@ -609,7 +619,8 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                                                            str((135.35/60)*minutesLong) + 
                                                            "px",
                                                            "ng-show":cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(courseWrapper))
-                                                           +"==\""+str(course)+"\""})
+                                                           +"==\""+str(course)+"\""+"||"+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+
+                                                           cleaner.cleanString(str(courseWrapper))+"==\"ALL\""})
 
                     courseDisc = soup.new_tag("div", attrs={"id":courseID+"desc",
                                                 "class":"tooltiptextright",
