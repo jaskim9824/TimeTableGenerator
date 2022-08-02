@@ -86,6 +86,7 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, so
         #         courseGroupWrapper.append(labelTag)
         #         wrapperDiv.append(courseGroupWrapper)
             courseSectionWrapper = soup.new_tag("div")
+            courseSectionWrapper.append("Course Sections")
             for course in seqDict[plan][term]:
                 if (len(course) == 1) and (type(course[0]) != type([])):
                     sectionWrapper = soup.new_tag("div")
@@ -139,6 +140,10 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, so
                                                                             "id": str(section)})
                                 sectionRadio.append(str(section))
                                 sectionSelectWrapper.append(sectionRadio)
+                            sectionRadio = soup.new_tag("option", attrs={"value": "ALL",
+                                                                        "id":"ALL"})
+                            sectionRadio.append("ALL")
+                            sectionSelectWrapper.append(sectionRadio)
                             sectionWrapper.append(sectionSelectWrapper)
                             courseSectionWrapper.append(sectionWrapper)
             wrapperDiv.append(courseSectionWrapper)
