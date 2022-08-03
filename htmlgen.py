@@ -74,7 +74,9 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, soup):
             # div to switch course sections displayed for a given plan & term
             wrapperDiv = soup.new_tag("div", attrs={"ng-switch-when": cleaner.cleanString(plan) + cleaner.cleanString(term)})
             courseSectionWrapper = soup.new_tag("div")
-            courseSectionWrapper.append("Course Sections")
+            courseSectionHeader = soup.new_tag("h3")
+            courseSectionHeader.append("Course Sections")
+            courseSectionWrapper.append(courseSectionHeader)
             for course in seqDict[plan][term]:
                 if len(course) == 1 and type(course[0]) != type([]):
                     # Case: course is not in a course group
@@ -153,11 +155,16 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, soup):
 
             wrapperDiv.append(courseSectionWrapper)
             courseGroupWrapperDiv = soup.new_tag("div")
-            courseGroupWrapperDiv.append("Course Groups")
+            courseGroupHeader = soup.new_tag("h3")
+            courseGroupWrapperDiv.append(courseGroupHeader)
             ORCourseWrapperDiv = soup.new_tag("div")
-            ORCourseWrapperDiv.append("Switchable Courses")
+            ORCourseHeader = soup.new_tag("h3")
+            ORCourseWrapperDiv.append(ORCourseHeader)
+            courseGroupsPresent = False
+            ORCourseCoursesPresent = False
             for course in optionDict[plan][term]:
                 if type(course) == type(CourseGroupOption()):
+                    courseGroupsPresent = True
                     # Case: course is for a course group option
                     courseGroupWrapper = soup.new_tag("div", attrs={"id":course.getOptionName()})
 
@@ -182,6 +189,7 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, soup):
                             
                 else:
                     # Case: course is for OR courses
+                    ORCourseCoursesPresent = True
                     if course.isWithCourseGroup:
                         # this OR course is bound to a course group
                         optionOutsideWrapper = soup.new_tag("div", attrs={"ng-switch":cleaner.cleanString(plan) + 
@@ -281,6 +289,10 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, soup):
                             optionWrapper.append(optionRadio)
                             optionWrapper.append(labelTag)
                         ORCourseWrapperDiv.append(optionWrapper)
+            if ORCourseCoursesPresent:
+                ORCourseHeader.append("Switchable Courses")
+            if courseGroupsPresent:
+                courseGroupHeader.append("Course Groups")
             wrapperDiv.append(courseGroupWrapperDiv)
             wrapperDiv.append(ORCourseWrapperDiv)
             inputWrapper.append(wrapperDiv)
