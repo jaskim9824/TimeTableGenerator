@@ -456,31 +456,22 @@ def createDailyDivs(plan, term, soup, controller):
 #   plan - name of plan whose terms are being placed
 #   controller - file handle for controller.js
 def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
-
-    # adjustOverlapping(termList)  # check for overlapping courses, set position field if overlap
-
-
     for courseWrapperList in termList:
+
+        # checking if this is an OR case
         orCase = False
         if len(courseWrapperList) > 2 and type(courseWrapperList[0]) != type([]):
             orCase = True
             orName = ""
             for courseWrapper in courseWrapperList:
                 orName += courseWrapper.name
+
         for courseWrapper in courseWrapperList:
             if (type(courseWrapper) == type([])):
+                # Case: courseWrapper is for a course group
                 orCase = False
-                # courseWrapper is for a course group
                 courseGroupSubName = courseWrapper[-1]
                 courseGroupCourseList = courseWrapper[:-1]
-                # outsideDiv = soup.new_tag("div", attrs={"ng-if":cleaner.cleanString(plan)+
-                #                                                 cleaner.cleanString(term)
-                #                                                 +"obj."
-                #                                                 +"group"+
-                #                                                 courseGroupName[0]
-                #                                                 +"== \""
-                #                                                 +courseGroupName+
-                #                                                 "\""})
                 courseGroupName = courseGroupSubName[0]
                 if len(courseGroupCourseList) > 1:
                     orCase = True
@@ -492,6 +483,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                         tagsList = []
                         minutesFromEight = calcMinutes(section.hrsFrom)  # minutes from 8:00 to start of class
                         minutesLong = calcClassDuration(section.hrsFrom, section.hrsTo)  # duration of class
+                        # save the tags we will need to append to for later
                         if section.mon == 'Y':
                             tagsList.append(daysTagsDict["monday"])
                         if section.tues == 'Y':
@@ -503,11 +495,16 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                         if section.fri == 'Y':
                             tagsList.append(daysTagsDict["friday"])
                         courseID = cleaner.cleanString(section.name)+cleaner.cleanString(plan)+cleaner.cleanString(term)
+
+                        # helps align courses to the grid
                         adjustmentFactor = 0
                         if minutesFromEight != 0:
                             adjustmentFactor = -3
-                         # outer course container used for absolute vertical positioning
+
+                         # courseContDiv = outer course container used for absolute vertical positioning
                         if orCase:
+                            # ng-show requires additional condition for OR case
+                            # (that the corresponding radio button is selected)
                             courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", 
                                                            "style":"position:absolute; top:" + 
                                                            str(37 + (135.35/60)*minutesFromEight 
@@ -560,12 +557,14 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                                                            "\""+
                                                            courseGroupSubName+
                                                            "\""})
-
                         
+                        # courseDisc = text description which appears on hover
                         courseDisc = soup.new_tag("div", attrs={"id":courseID+"desc",
                                                         "class":"tooltiptextright",
                                                         "ng-click":"$event.stopPropagation()"})
 
+                        # courseDiv = container for course, width & position determined in
+                        # JS if there is an overlap
                         courseDiv = createCourseDiv(soup,
                                                     courseID, 
                                                     minutesFromEight,
@@ -580,14 +579,16 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                         courseDiv.append(courseDisc)
 
                         courseContDiv.append(courseDiv)
-                        appendToEachDay(tagsList, courseContDiv, plan, term, minutesFromEight, minutesLong, controller)  # course may occur on multiple days, need to append to each day
+                        # need to append courseContDiv to each day that course occurs on
+                        appendToEachDay(tagsList, courseContDiv, plan, term, minutesFromEight, minutesLong, controller)
  
             elif type(courseWrapper) == type([]) and len(courseWrapper) == 1:
-                # courseWrapper is for an elective, not used in timetable
+                # Case: courseWrapper is for an elective, not used in timetable
                 continue
+            
             else:
+                # Case: courseWrapper is for a regular course (not in course group, not an elective)
                 for course in courseWrapper.sections:
-                    # placing an individual course on the timetable
                     tagsList = []
                     minutesFromEight = calcMinutes(course.hrsFrom)  # minutes from 8:00 to start of class
                     minutesLong = calcClassDuration(course.hrsFrom, course.hrsTo)  # duration of class
@@ -609,7 +610,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                     if minutesFromEight != 0:
                         adjustmentFactor = -3
 
-                    # outer course container used for absolute vertical positioning
+                    # courseContDiv = outer course container used for absolute vertical positioning
                     if orCase:
                         courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", 
                                                            "style":"position:absolute; top:" + 
@@ -635,10 +636,13 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                                                            +"==\""+str(course)+"\""+"||"+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+
                                                            cleaner.cleanString(str(courseWrapper))+"==\"ALL\""})
 
+                    # courseDisc = text description which appears on hover
                     courseDisc = soup.new_tag("div", attrs={"id":courseID+"desc",
                                                 "class":"tooltiptextright",
                                                 "ng-click":"$event.stopPropagation()"})
 
+                    # courseDiv = container for course, width & position determined in
+                    # JS if there is an overlap
                     courseDiv = createCourseDiv(soup,
                                             courseID, 
                                             minutesFromEight,
@@ -653,7 +657,8 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                     courseDiv.append(courseDisc)
 
                     courseContDiv.append(courseDiv)
-                    appendToEachDay(tagsList, courseContDiv, plan, term, minutesFromEight, minutesLong, controller)  # course may occur on multiple days, need to append to each day
+                    # need to append courseContDiv to each day that course occurs on
+                    appendToEachDay(tagsList, courseContDiv, plan, term, minutesFromEight, minutesLong, controller)
 
 # Checks termList for overlapping courses and updates pushLeft/pushRight attributes
 # if there is a time overlap.
