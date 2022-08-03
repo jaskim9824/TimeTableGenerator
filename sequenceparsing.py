@@ -327,7 +327,7 @@ def courseParseCourseGroups(nameList, course_obj_dict, plainNameList):
         courseGroupNameIndexStart = name.find("(")
         courseGroupNameIndexEnd = name.find(")")
         if courseGroupNameIndexEnd == -1 or courseGroupNameIndexStart == -1:
-            raise ValueError("Course group name improperly formatted")
+            raise ValueError("Course group name improperly formatted: " + name)
         courseGroupName = name[courseGroupNameIndexStart+1:courseGroupNameIndexEnd]
         strippedCourses = name[0:courseGroupNameIndexStart]
 

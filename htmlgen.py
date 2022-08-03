@@ -78,6 +78,10 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
             courseSectionWrapper.append(courseSectionHeader)
             colorCount = 0
             for course in seqDict[plan][term]:
+                # guard to prevent index out of range of hexcolorlist
+                if colorCount >= len(hexcolorlist):
+                    colorCount = 0
+
                 if len(course) == 1 and type(course[0]) != type([]):
                     # Case: course is not in a course group
                     sectionWrapper = soup.new_tag("div")
@@ -497,6 +501,10 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
                 orName += courseWrapper.name
 
         for courseWrapper in courseWrapperList:
+            # guard to prevent index out of range of hexcolorlist
+            if colorCount >= len(hexcolorlist):
+                colorCount = 0
+
             if (type(courseWrapper) == type([])):
                 # Case: courseWrapper is for a course group
                 orCase = False
