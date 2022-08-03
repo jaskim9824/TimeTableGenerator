@@ -33,8 +33,9 @@ def switchTitle(titleTag, topTitleTag, deptName):
 #   courseGroupDict - dict that maps the plans to the course groups in it
 #   optionDict - dict that holds all the options present in a term
 #   seqDict - dict that contains the sequence information
+#   hexcolorlist - list of hex color codes for distinguishing between courses
 #   soup - soup object, used to create HTML tags
-def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, soup):
+def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcolorlist, soup):
     for plan in optionDict:
         # name of first term in current plan
         firstTermInPlan = cleaner.cleanString((list(optionDict[plan].keys()))[0])  
@@ -77,6 +78,7 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, soup):
             courseSectionHeader = soup.new_tag("h3")
             courseSectionHeader.append("Course Sections")
             courseSectionWrapper.append(courseSectionHeader)
+            colorCount = 0
             for course in seqDict[plan][term]:
                 if len(course) == 1 and type(course[0]) != type([]):
                     # Case: course is not in a course group
@@ -88,7 +90,8 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, soup):
                                                                     "ng-model":cleaner.cleanString(plan) + 
                                                                            cleaner.cleanString(term) +
                                                                            "obj."+
-                                                                           cleaner.cleanString(str(course[0]))})
+                                                                           cleaner.cleanString(str(course[0])),
+                                                                    "style":"background:" + hexcolorlist[colorCount] + ";"})
                     sectionWrapper.append(str(course[0]))
                     breakTag = soup.new_tag("br")
                     sectionWrapper.append(breakTag)
@@ -136,7 +139,8 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, soup):
                                                                                cleaner.cleanString(term) +
                                                                                "obj."+
                                                                                cleaner.cleanString(str(opt[0])) + 
-                                                                               "__cgoption" + courseGroupName})
+                                                                               "__cgoption" + courseGroupName,
+                                                                        "style":"background:" + hexcolorlist[colorCount] + ";"})
                             
                             # for each available section of a course, add a dropdown option
                             for section in opt[0].sections:
@@ -152,6 +156,8 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, soup):
                             sectionSelectWrapper.append(sectionRadio)
                             sectionWrapper.append(sectionSelectWrapper)
                             courseSectionWrapper.append(sectionWrapper)
+
+                colorCount += 1
 
             wrapperDiv.append(courseSectionWrapper)
             courseGroupWrapperDiv = soup.new_tag("div")
@@ -365,9 +371,10 @@ def placeCourseGroupRadioInputsForSubPlan(subPlanTag, soup, subPlanOptionList, s
 # Parameters:
 #   displayTag - HTML tag representing outer display div where the different plan sequences are placed
 #   sequenceDict - dict that maps plan name to a dict that represents the plan sequence
+#   hexcolorlist - list of hex color codes for distinguishing between courses
 #   soup - soup object, used to create HTML tags
 #   controller - file handle for controller.js
-def placePlanDivs(displayTag, sequenceDict, soup, controller):
+def placePlanDivs(displayTag, sequenceDict, hexcolorlist, soup, controller):
     controller.write("$scope.coursesobj = {};\n")
     for plan in sequenceDict:
         controller.write("$scope.coursesobj." + cleaner.cleanString(plan) + " = {};\n")
@@ -376,7 +383,7 @@ def placePlanDivs(displayTag, sequenceDict, soup, controller):
             switchInput = soup.new_tag("div", attrs={"id":cleaner.cleanString(plan) + cleaner.cleanString(term),
                                                     "ng-show":"selectedPlan+selectedTerm == \"" + cleaner.cleanString(plan) + cleaner.cleanString(term) + "\"",
                                                     "style":"height:fit-content; display:flex; flex-direction:row; flex-wrap:column;"})
-            placeTermDivs(switchInput, sequenceDict[plan], soup, plan, term, controller)
+            placeTermDivs(switchInput, sequenceDict[plan], soup, plan, term, hexcolorlist, controller)
             displayTag.append(switchInput)
 
 # Function that places the column divs which represent the terms within a certain plan
@@ -386,8 +393,9 @@ def placePlanDivs(displayTag, sequenceDict, soup, controller):
 #   soup - soup object, used to create HTML tags
 #   plan - name of plan whose terms are being placed
 #   term - name of the term whose courses are being placed
+#   hexcolorlist - list of hex color codes for distinguishing between courses
 #   controller - file handle for controller.js
-def placeTermDivs(planTag, planDict, soup, plan, term, controller):
+def placeTermDivs(planTag, planDict, soup, plan, term, hexcolorlist, controller):
     termDiv = soup.new_tag("div", attrs={"class":"coursegrid"})  # grid of flexboxes that displays timetable
 
     timeDiv = createTimeGridDivs(soup)  # writes text for each hour & draws horizontal dividing lines
@@ -397,7 +405,7 @@ def placeTermDivs(planTag, planDict, soup, plan, term, controller):
     daysTagsDict = createDailyDivs(plan, term, soup, controller)
 
     # placing courses on mondayDiv, tuesdayDiv, etc. then appending to termDiv
-    placeCourses(daysTagsDict, planDict[term], soup, plan, term, controller)
+    placeCourses(daysTagsDict, planDict[term], soup, plan, term, hexcolorlist, controller)
     for dayTag in daysTagsDict.values():
         termDiv.append(dayTag)
     planTag.append(termDiv)
@@ -470,9 +478,12 @@ def createDailyDivs(plan, term, soup, controller):
 #   for that day of the week. Useful to shortcut to the div one requires
 #   termList - list of courses being taken that term
 #   soup - soup object, used to create HTML tags
-#   plan - name of plan whose terms are being placed
+#   plan - name of plan whose courses are being placed
+#   term - name of term whose courses are being placed
+#   hexcolorlist - list of hex color codes for distinguishing between courses
 #   controller - file handle for controller.js
-def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
+def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, controller):
+    colorCount = 0
     for courseWrapperList in termList:
 
         # checking if this is an OR case
@@ -585,7 +596,8 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                         courseDiv = createCourseDiv(soup,
                                                     courseID, 
                                                     minutesFromEight,
-                                                    minutesLong) 
+                                                    minutesLong,
+                                                    hexcolorlist[colorCount]) 
                         formatCourseDescriptionForRegular(soup, section, courseDisc)
 
                         # text appearing in course box (eg: CHEM 103)
@@ -663,7 +675,8 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                     courseDiv = createCourseDiv(soup,
                                             courseID, 
                                             minutesFromEight,
-                                            minutesLong) 
+                                            minutesLong,
+                                            hexcolorlist[colorCount]) 
                     formatCourseDescriptionForRegular(soup, course, courseDisc)
 
                     # text appearing in course box (eg: CHEM 103)
@@ -676,6 +689,8 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, controller):
                     courseContDiv.append(courseDiv)
                     # need to append courseContDiv to each day that course occurs on
                     appendToEachDay(tagsList, courseContDiv, plan, term, minutesFromEight, minutesLong, controller)
+
+        colorCount += 1
 
 # Checks termList for overlapping courses and updates pushLeft/pushRight attributes
 # if there is a time overlap.
@@ -692,11 +707,10 @@ def adjustOverlapping(termList):
     courseTimes["friday"] = []
     for courseWrapperList in termList:
         for courseWrapper in courseWrapperList:
-            if (type(courseWrapper) == type([])) and (len(courseWrapper) == 2):
+            if type(courseWrapper) == type([]) and len(courseWrapper) == 2:
                 # courseWrapper is for a course group
-                courseGroupName = courseWrapper[1]
                 courseWrapper = courseWrapper[0]
-            if (type(courseWrapper) == type([])) and (len(courseWrapper) == 1):
+            if type(courseWrapper) == type([]) and len(courseWrapper) == 1:
                 # courseWrapper is for an elective, not used in timetable
                 continue
 
@@ -796,9 +810,10 @@ def calcClassDuration(startTime, endTime):
 #   courseID - ID of the course being placed (str)
 #   minutesFromEight - minutes from 8:00am to start of class
 #   minutesLong - length in minutes of class, rounded to the nearest 30 minutes
+#   courseColor - hex code for color of current course
 # Returns:
 #   courseDiv - HTML tag for the container of the course
-def createCourseDiv(soup, courseID, minutesFromEight, minutesLong):
+def createCourseDiv(soup, courseID, minutesFromEight, minutesLong, courseColor):
     # adjustmentFactor helps format vertical position of courses
     adjustmentFactor = -2
     if minutesFromEight == 0:
@@ -815,7 +830,8 @@ def createCourseDiv(soup, courseID, minutesFromEight, minutesLong):
                                         "id": courseID,
                                         "ng-click":courseID+"Listener()",
                                         "ng-right-click":courseID+"RCListener()",
-                                        "style":"height:" + str((135.35/60)*minutesLong + adjustmentFactor) + "px"})
+                                        "style":"height:" + str((135.35/60)*minutesLong + adjustmentFactor) + 
+                                            "px; background-color:" + courseColor + ";"})
 
 # Function that constructs the course description tooltip for a regular course
 # Parameters:

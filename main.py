@@ -52,10 +52,11 @@ def main():
 
             courseGroupTag = mainTag.find(id = "optionlegend")
            
- 
+           # list of colors for distinguishing between courses
+            hexcolorlist = ["#6aa2fc", "#fcaeae", "#d13d3d", "#faab4b", "#ede387", "#bced87", "#87edae", "#87eaed", "#6494ed", "#c664ed"]
 
             # radio inputs for plan, term, and course group
-            htmlgen.placeRadioInputs(formTag, termTag, courseGroupTag, optionDict, sequenceDict, soup)
+            htmlgen.placeRadioInputs(formTag, termTag, courseGroupTag, optionDict, sequenceDict, hexcolorlist, soup)
             # htmlgen.placeSectionRadioInputs(sequenceDict, courseSectionWrapper, soup)
             # main tag holding timetable itself
             displayTag = htmlgen.generateDisplayDiv(soup, courseGroupList)
@@ -64,7 +65,8 @@ def main():
 
             # generating html for each plan & each term
             htmlgen.placePlanDivs(displayTag, 
-                                  sequenceDict, 
+                                  sequenceDict,
+                                  hexcolorlist, 
                                   soup,
                                   controller)
 
