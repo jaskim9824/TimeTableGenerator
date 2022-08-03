@@ -158,12 +158,15 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
                 colorCount += 1
 
             wrapperDiv.append(courseSectionWrapper)
+            # Generating div to wrap course group radio inputs
             courseGroupWrapperDiv = soup.new_tag("div")
             courseGroupHeader = soup.new_tag("h3")
             courseGroupWrapperDiv.append(courseGroupHeader)
+            # Generating div to wrap OR course radio inputs
             ORCourseWrapperDiv = soup.new_tag("div")
             ORCourseHeader = soup.new_tag("h3")
             ORCourseWrapperDiv.append(ORCourseHeader)
+            # Flag to check for OR and course groups 
             courseGroupsPresent = False
             ORCourseCoursesPresent = False
             for course in optionDict[plan][term]:
@@ -293,6 +296,7 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
                             optionWrapper.append(optionRadio)
                             optionWrapper.append(labelTag)
                         ORCourseWrapperDiv.append(optionWrapper)
+            # Only add header if OR courses or course groups present
             if ORCourseCoursesPresent:
                 ORCourseHeader.append("Switchable Courses")
             if courseGroupsPresent:
