@@ -10,9 +10,7 @@
 import cleaner
 import html
 from copy import deepcopy
-
-from coursegroupparsing import CourseGroupOption, ORCourseOption
-from sequenceparsing import CourseSectionWrapper
+from coursegroupparsing import CourseGroupOption
 
 # Changes the header title to include deptName, which is pulled
 # from Sequncing Excel file
