@@ -11,7 +11,7 @@ import cleaner
 import html
 from copy import deepcopy
 
-from coursegroupparsing import CourseGroupOption
+from coursegroupparsing import CourseGroupOption, ORCourseOption
 from sequenceparsing import CourseSectionWrapper
 
 # Changes the header title to include deptName, which is pulled
@@ -152,7 +152,10 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, soup):
                             courseSectionWrapper.append(sectionWrapper)
 
             wrapperDiv.append(courseSectionWrapper)
-
+            courseGroupWrapperDiv = soup.new_tag("div")
+            courseGroupWrapperDiv.append("Course Groups")
+            ORCourseWrapperDiv = soup.new_tag("div")
+            ORCourseWrapperDiv.append("Switchable Courses")
             for course in optionDict[plan][term]:
                 if type(course) == type(CourseGroupOption()):
                     # Case: course is for a course group option
@@ -175,7 +178,7 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, soup):
                         labelTag.append(option)
                         courseGroupWrapper.append(courseGroupRadio)
                         courseGroupWrapper.append(labelTag)
-                    wrapperDiv.append(courseGroupWrapper)
+                    courseGroupWrapperDiv.append(courseGroupWrapper)
                             
                 else:
                     # Case: course is for OR courses
@@ -234,7 +237,7 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, soup):
                             optionWrapper.append(optionRadio)
                             optionWrapper.append(labelTag)
                         optionOutsideWrapper.append(optionWrapper)
-                        wrapperDiv.append(optionOutsideWrapper)
+                        ORCourseWrapperDiv.append(optionOutsideWrapper)
                             
                     else:
                         # this OR course is indep of a course group
@@ -277,7 +280,9 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, soup):
                             labelTag.append(option)
                             optionWrapper.append(optionRadio)
                             optionWrapper.append(labelTag)
-                        wrapperDiv.append(optionWrapper)
+                        ORCourseWrapperDiv.append(optionWrapper)
+            wrapperDiv.append(courseGroupWrapperDiv)
+            wrapperDiv.append(ORCourseWrapperDiv)
             inputWrapper.append(wrapperDiv)
 
 # Function that generates the display div which holds the plan diagram
