@@ -7,7 +7,6 @@
 
 # Dependencies: cleaner, html, copy, coursegroupparsing
 
-from re import S
 import cleaner
 import html
 from copy import deepcopy
@@ -30,12 +29,15 @@ def switchTitle(titleTag, topTitleTag, deptName):
 # Parameters:
 #   formTag - form HTML tag where the plan radio inputs will be placed
 #   termTag - div HTML tag where the term radio inputs will be placed
-#   courseGroupTag - div HTML tag where the course group radio inputs will be placed
+#   inputWrapper - div HTML tag that holds the corresponding inputs
 #   courseGroupDict - dict that maps the plans to the course groups in it
+#   optionDict - dict that holds all the options present in a term
+#   seqDict - dict that contains the sequence information
 #   soup - soup object, used to create HTML tags
-def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, soup):
-    for plan in sequenceDict:
-        firstTermInPlan = cleaner.cleanString((list(sequenceDict[plan].keys()))[0])  # name of first term in current plan
+def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, soup):
+    for plan in optionDict:
+        # name of first term in current plan
+        firstTermInPlan = cleaner.cleanString((list(optionDict[plan].keys()))[0])  
         # radio inputs for selecting plan, can ng-model directly to selectedPlan
         radioInput = soup.new_tag("input", attrs={"ng-change":"render(\"" + firstTermInPlan + "\")",
                                                   "type":"radio", 
@@ -49,9 +51,9 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, so
         formTag.append(labelTag)
         breakTag = soup.new_tag("br")
         formTag.append(breakTag)
-
+        # div to hold radio inputs to select term for that plan in question
         planWrapper = soup.new_tag("div", attrs={"ng-switch-when": cleaner.cleanString(plan)})
-        for term in sequenceDict[plan]:
+        for term in optionDict[plan]:
             # ng-change used to update $scope.selectedTerm
             radioInput = soup.new_tag("input", attrs={"type":"radio", 
                                                   "name":cleaner.cleanString(plan) + "termselector", 
@@ -67,25 +69,6 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, so
             planWrapper.append(breakTag)
             termTag.append(planWrapper)
             wrapperDiv = soup.new_tag("div", attrs={"ng-switch-when": cleaner.cleanString(plan) + cleaner.cleanString(term)})
-        
-        # for courseGroupList in courseGroupDict[plan].values():
-        #     # courseGroupList is a list fo course groups that go together (eg: ["2A", "2B"] or ["4A", "4B"])
-        #     totalCourseGroup = "".join(courseGroupList)
-        #     courseGroupWrapper = soup.new_tag("div", attrs={"id": "OR" + totalCourseGroup})
-        #     for indivCourseGroup in courseGroupList:
-        #         # indivCourseGroup is one of the options in a group (eg: "2A" or "3B")
-        #         # ng-change used to update $scope.fieldX.groupX
-        #         radioInput = soup.new_tag("input", attrs={"type":"radio", 
-        #                                 "name":cleaner.cleanString(plan) + totalCourseGroup + "optionselector",
-        #                                 "ng-model":"field" + indivCourseGroup[0] + ".group" + indivCourseGroup[0], 
-        #                                 "ng-change": "updateField" + indivCourseGroup[0] + "(\"" + indivCourseGroup + "\")",
-        #                                 "value":indivCourseGroup,
-        #                                 "id":indivCourseGroup})
-        #         labelTag = soup.new_tag("label", attrs={"for":indivCourseGroup})
-        #         labelTag.append(indivCourseGroup)
-        #         courseGroupWrapper.append(radioInput)
-        #         courseGroupWrapper.append(labelTag)
-        #         wrapperDiv.append(courseGroupWrapper)
             courseSectionWrapper = soup.new_tag("div")
             courseSectionWrapper.append("Course Sections")
             for course in seqDict[plan][term]:
@@ -153,7 +136,7 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, so
                             sectionWrapper.append(sectionSelectWrapper)
                             courseSectionWrapper.append(sectionWrapper)
             wrapperDiv.append(courseSectionWrapper)
-            for course in sequenceDict[plan][term]:
+            for course in optionDict[plan][term]:
                 if type(course) == type(CourseGroupOption()):
                     # append to coursegroup form
                     courseGroupWrapper = soup.new_tag("div", attrs={"id":course.getOptionName()})
@@ -276,7 +259,7 @@ def placeRadioInputs(formTag, termTag, courseGroupTag, sequenceDict, seqDict, so
                             optionWrapper.append(optionRadio)
                             optionWrapper.append(labelTag)
                         wrapperDiv.append(optionWrapper)
-            courseGroupTag.append(wrapperDiv)
+            inputWrapper.append(wrapperDiv)
 
 # Function that generates the display div which holds the plan diagram
 # Parameters:
