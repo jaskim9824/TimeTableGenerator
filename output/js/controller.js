@@ -125,8 +125,8 @@ this.setAllCourses = function(plan, term) {
 var radios = document.querySelectorAll("input[type=radio][name=planselector]");
 Array.prototype.forEach.call(radios, function (radio) {
     radio.addEventListener("change", function () { 
-that.setDefaults($scope.selectedPlan);
-   });
+        that.setDefaults($scope.selectedPlan);
+    });
 });
 $scope.TraditionalPlanFallTerm1obj = {};
 $scope.TraditionalPlanWinterTerm2obj = {};
@@ -201,34 +201,31 @@ this.setDefaults = function(plan) {
   switch(plan) { 
       case "TraditionalPlan": 
             $scope.selectedTerm = "FallTerm1";
-          $scope.$apply();
-          break;
+            $scope.$apply();
+            break;
       case "AlternatePlan": 
             $scope.selectedTerm = "FallTerm1";
-          $scope.$apply();
-          break;
+            $scope.$apply();
+            break;
       case "CoopPlan1": 
             $scope.selectedTerm = "FallTerm1";
-          $scope.$apply();
-          break;
+            $scope.$apply();
+            break;
       case "CoopPlan2": 
             $scope.selectedTerm = "FallTerm1";
-          $scope.$apply();
-          break;
+            $scope.$apply();
+            break;
       case "CoopPlan3Biomedical": 
             $scope.selectedTerm = "FallTerm1";
-          $scope.$apply();
-          break;
+            $scope.$apply();
+            break;
       case "CoopPlan4": 
             $scope.selectedTerm = "FallTerm1";
-          $scope.$apply();
-          break;
+            $scope.$apply();
+            break;
     default:
     console.log("shouldn't be here");
     }
-};
-$scope.globalSubGroupChange = function () { 
-that.render($scope.selectedPlan+$scope.selectedTerm);
 };
 $scope.coursesobj = {};
 $scope.coursesobj.TraditionalPlan = {};

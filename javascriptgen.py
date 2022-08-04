@@ -77,8 +77,8 @@ def generateInitialBlockController(courseGroupDict, initialTerm, controller):
     controller.write("""var radios = document.querySelectorAll("input[type=radio][name=planselector]");
 Array.prototype.forEach.call(radios, function (radio) {
     radio.addEventListener("change", function () { \n""")
-    controller.write("that.setDefaults($scope.selectedPlan);\n")
-    controller.write("""   });
+    controller.write("        that.setDefaults($scope.selectedPlan);\n")
+    controller.write("""    });
 });\n""")
 
 # Function that generates the blocks of the controller JS file that are dependent
@@ -91,7 +91,6 @@ Array.prototype.forEach.call(radios, function (radio) {
 #   controller - file handle for controller JS file
 def generatePlanBasedBlocksController(sequenceDict, courseGroupDict, courseGroupList, controller):
     generateSetDefaults(courseGroupDict, courseGroupList, list(list(sequenceDict.values())[0].keys())[0], controller)
-    generateSubRadioListener(courseGroupList, controller)
 
 # Function that appends the custom Angular directive used to handle right click
 # events to the end of the controller JS file
@@ -139,43 +138,24 @@ def generateSetDefaults(courseGroupDict, courseGroupList, initialTerm, controlle
                 controller.write("\"\";\n")
             else:
                 controller.write("\""+str(element)+"A\";\n")
-        controller.write("          $scope.$apply();\n")
-        controller.write("          break;\n")
+        controller.write("            $scope.$apply();\n")
+        controller.write("            break;\n")
     controller.write(switchEndString)
 
-# Function that generates the listener that listens to course group
-# radio inputs
+# Function that generates the object variables initially storing which course groups 
+# can be taken in a given plan & term. The objects are simply key-value pairs.
 # Parameters:
-#   courseGroupList - list of course groups taken in this program
-#   controller - file handle for controller JS file   
-def generateSubRadioListener(courseGroupList, controller):
-    planString = generatePlanString(courseGroupList)
-    controller.write("$scope.globalSubGroupChange = function () { \n")
-    controller.write("that.render(" + planString + ");\n")
-    controller.write("};\n")
-
-# Statement that gets the full name of the currently selected plan
-# Parameters:
-#   courseGroupList - list of all course groups taken that term
-def generatePlanString(courseGroupList):
-    planString = "$scope.selectedPlan"
-    formattedCourseGroup = "$scope.field{number}.group{number}"
-    for courseGroup in courseGroupList:
-        planString += "+"+formattedCourseGroup.format(number=courseGroup)
-    planString += "+$scope.selectedTerm"
-    return planString
-
-# Function that generates the object variables storing which course groups 
-# can be taken in a given plan & term. The objects are simply key-value pairs
-# planOptionDict - dict mapping plan & term to the course group options available in that plan & term
-# controller - file handle for controller JS file
+#   planOptionDict - dict mapping plan & term to the course group options available in that plan & term
+#   controller - file handle for controller JS file
 def generateInitialOptionObjects(planOptionDict, controller):
     for plan in planOptionDict:
         for term in planOptionDict[plan]:
+            # new object for each plan & term combo
             controller.write("$scope."+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj = {")
             for count, optionGroup in enumerate(planOptionDict[plan][term]):
                 controller.write(optionGroup.getOptionName() + ":\"" + optionGroup.options[0] + "\"")
                 if count != len(planOptionDict[plan][term]) - 1:
+                    # still more options to go, add comma as separator
                     controller.write(",")
             controller.write("};\n")
 
@@ -189,7 +169,7 @@ def generateUpdateObjFields(controller):
     # under the key "groupX" & should be the first entry. After this, check if the entry is
     # for a course group and if it is, check if the fullName (includes section name) is a substring
     # in courseID & if the course group matches groupName. If the entry is not for a course group, 
-    # simply check if fullName is a substring of courseID.
+    # simply check if fullName is a substring of courseID. If the conditions are met, set 'found' to true.
     # After this search, update the ".enabled" field with the value of 'found'
     formattedFunctionStatement = """this.updateObjFields = function(plan, term) {
     for (const [day, dayList] of Object.entries($scope.coursesobj[plan][term])) {
@@ -238,7 +218,8 @@ def generateUpdateObjFields(controller):
 # Parameters:
 #   controller - file handle for controller JS file
 def generateCheckOverlaps(controller):
-    # first main loop: for each day, compare a given course to every other course
+    # first main loop: Reset each courses width & left values to default. 
+    # For each day, compare a given course to every other course
     # in that day. If there is an overlap, search through the existing list of overlaps
     # and if either of the overlapping courses is already in a list and the other isn't,
     # append the missing course to the list. If neither are present in any list, append
@@ -309,7 +290,8 @@ def generateCheckOverlaps(controller):
 def generateSetAllCourses(controller):
     # For each course on the currently displayed page, update the "width" & "left"
     # styles with the values stored in the course objects (which were updated in 
-    # updateObjFields() & checkOverlaps())
+    # updateObjFields() & checkOverlaps()). If a course is < 65px wide, set the
+    # class to 'narrowcourse' (otherwise revert the class to 'course') 
     formattedFunctionStatement = """this.setAllCourses = function(plan, term) {
     for (const [day, dayList] of Object.entries($scope.coursesobj[plan][term])) {
         for (const [courseID, courseObj] of Object.entries($scope.coursesobj[plan][term][day])) {
