@@ -163,7 +163,7 @@ def parseCourses(filename, sequenceFileName, accredFileName, deptName):
             rqGroup, openTo, approvedHrs, duration, career, consent, calendarDescr,
             maxUnits, calendarPrint, courseGroup, accredUnits)
 
-        parseAcred(courseObjDict, accredFileName, deptName)
+        parseAccred(courseObjDict, accredFileName, deptName)
 
         courseSeqDict = sequenceparsing.parseSeq(sequenceFileName, courseObjDict, plainNameList)  # organize courses by plan & by term
 
@@ -174,20 +174,35 @@ def parseCourses(filename, sequenceFileName, accredFileName, deptName):
     except xlrd.biffh.XLRDError:
         raise ValueError("Error reading data from Course information Excel sheet. Ensure it is formatted exactly as specified")
 
-def parseAcred(courseObjDict, acredFileName, deptName):
+# Parses the accredFileName file for information on accreditation
+# units satisfied by the courses in courseObjDict.
+# Parameters:
+#   courseObjDict (dict): dict with course name for key and 
+#   Course object as value
+#   accredFileName (string): name of the .xls file containing 
+#   accreditation info
+#   deptName (string): name of the department, should match the header
+#   on one of the sheets in the accreditation info Excel file
+def parseAccred(courseObjDict, accredFileName, deptName):
     try:
-        book = xlrd.open_workbook(acredFileName)
+        book = xlrd.open_workbook(accredFileName)
+
+        # open each sheet and check if header matches deptName
         sheet = None
         for i in range(0, book.nsheets):
             if book.sheet_by_index(i).cell_value(0, 1) == deptName:
                 sheet = book.sheet_by_index(i)
         
+        # if no matching department name found, display error message and continue execution
         if sheet is None:
-            raise ValueError("Department name: " + deptName + " does not match any sheet in the accreditation file")
+            print("Department name: " + deptName + " does not match any sheet in the accreditation file")
+            print("No accreditation unit information will be available on the generated webpage")
+            return
 
         for row in range(4, sheet.nrows):
             for course in courseObjDict:
-                if sheet.cell_value(row, 1) == courseObjDict[course].plainName:
+                if sheet.cell_value(row, 1) == courseObjDict[course].plainName:  # see if the Excel entry matches a plainName
+                    # if there is a match, update the accredUnits field with corresponding values
                     courseObjDict[course].accredUnits["Math"] = sheet.cell_value(row, 8)
                     courseObjDict[course].accredUnits["Natural Sciences"] = sheet.cell_value(row, 9)
                     courseObjDict[course].accredUnits["Math and Natural Sciences"] = sheet.cell_value(row, 10)
@@ -196,8 +211,6 @@ def parseAcred(courseObjDict, acredFileName, deptName):
                     courseObjDict[course].accredUnits["Engineering Design"] = sheet.cell_value(row, 13)
                     courseObjDict[course].accredUnits["Engineering Science and Engineering Design"] = sheet.cell_value(row, 14)
                     courseObjDict[course].accredUnits["Other"] = sheet.cell_value(row, 15)
-                    if courseObjDict["CHEM 103 T01"].accredUnits["Engineering Science"] == 18.9:
-                        print("test")
 
     except FileNotFoundError:
         raise FileNotFoundError("Excel accreditation information file not found, ensure it is present and the name is correct")

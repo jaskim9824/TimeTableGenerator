@@ -260,7 +260,7 @@ h3#planhead {
 }
  
 /* Most properties taken from Calendar */
-.tooltip .tooltiptextright, .tooltip .tooltiptextleft, .tooltiptextright-locked, .tooltiptextleft-locked {
+.tooltip .tooltiptextleft, .tooltip .tooltiptextright {
     visibility: hidden;
     width: 46vw;
     max-width: 900px;
@@ -295,20 +295,8 @@ h3#planhead {
     right: 50%;
 }
 
-.tooltiptextright-locked {
-    visibility: visible;
-    opacity: 1;
-    left: 50%;
-}
-
-.tooltiptextleft-locked {
-    visibility: visible;
-    opacity: 1;
-    right: 50%;
-}
-
 /* After hovering, set content to empty */
-.tooltip .tooltiptextright::after, .tooltip .tooltiptextright-locked::after {
+.tooltip .tooltiptextright::after {
     content: "";         
     top: 100%;
     left: 50%;
@@ -319,7 +307,7 @@ h3#planhead {
 }
 
 /* After hovering, set content to empty */
-.tooltip .tooltiptextleft::after, .tooltip .tooltiptextleft-locked::after {
+.tooltip .tooltiptextleft::after {
     content: "";         
     top: 100%;
     right: 50%;

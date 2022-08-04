@@ -909,7 +909,7 @@ def formatCourseDescriptionForRegular(soup, course, courseDisc):
     courseAccreditationHeader.append("Accreditation Units")
     courseAccreditationUnits = soup.new_tag("div", attrs={"class":"accreditationunits"})
     for accredCat in course.accredUnits:
-        if course.accredUnits[accredCat] != 0:
+        if course.accredUnits[accredCat] != 0:  # only display if units are not zero
             courseAccreditationUnits.append(accredCat + ": " + str(course.accredUnits[accredCat]) + " Units\n")
 
     # appending info to disc tag
