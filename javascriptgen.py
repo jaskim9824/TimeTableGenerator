@@ -240,7 +240,6 @@ def generateUpdateObjFields(controller):
 def generateCheckOverlaps(controller):
     # first main loop: for each day, compare a given course to every other course
     # in that day. If there is an overlap, append the overlapping course object to a list.
-    # If no overlap is found, the width and left fields are reset to defaults.
     #
     # second main loop: iterating through the list of overlapping courses created previously;
     # update the width and left fields of each course object based on how many courses it is 
@@ -250,11 +249,9 @@ def generateCheckOverlaps(controller):
     for (const [day, dayList] of Object.entries($scope.coursesobj[plan][term])) {
         allOverlaps[day] = [];
         for (const [courseID, courseObj] of Object.entries($scope.coursesobj[plan][term][day])) {
-            let overlapsList = [];
             courseObj.width = 321;
             courseObj.left = 0;
             if (courseObj.enabled) {
-                let foundOverlap = false;
                 for (const [checkID, checkObj] of Object.entries($scope.coursesobj[plan][term][day])) {
                     if ((courseID != checkID) && (checkObj.enabled)) {
                         let courseStart = Number(courseObj.start);
@@ -262,23 +259,23 @@ def generateCheckOverlaps(controller):
                         let checkStart = Number(checkObj.start);
                         let checkEnd = Number(checkObj.end);
                         if (((courseEnd > checkStart) && (courseStart <= checkStart)) || ((checkEnd > courseStart) && (checkStart <= courseStart))) {
-                            foundOverlap = true;
-                            if (!overlapsList.includes(courseObj)) {
-                                overlapsList.push(courseObj);
+                            let appendedToExisting = false;
+                            for (let i = 0; i < allOverlaps[day].length; i++) {
+                                if (allOverlaps[day][i].includes(courseObj) && !allOverlaps[day][i].includes(checkObj)) {
+                                    appendedToExisting = true;
+                                    allOverlaps[day][i].push(checkObj);
+                                }
+                                else if (!allOverlaps[day][i].includes(courseObj) && allOverlaps[day][i].includes(checkObj)) {
+                                    appendedToExisting = true;
+                                    allOverlaps[day][i].push(courseObj);
+                                }
                             }
-                            if (!overlapsList.includes(checkObj)) {
-                                overlapsList.push(checkObj);
+                            if (!appendedToExisting) {
+                                allOverlaps[day].push([courseObj, checkObj]);
                             }
                         }
                     }
                 }
-                if (!foundOverlap) {
-                    courseObj.width = 321;
-                    courseObj.left = 0;
-                }
-            }
-            if (overlapsList.length > 0) {
-                allOverlaps[day].push(overlapsList);
             }
         }
     }
@@ -312,7 +309,7 @@ def generateSetAllCourses(controller):
         for (const [courseID, courseObj] of Object.entries($scope.coursesobj[plan][term][day])) {
             document.getElementById(courseObj.courseID.replace("_", "-")).style.width = String(courseObj.width) + "px";
             document.getElementById(courseObj.courseID.replace("_","-")).style.left = String(courseObj.left) + "px";
-            if (courseObj.width < 60) {
+            if (courseObj.width < 65) {
                 if (document.getElementById(courseObj.courseID.replace("_", "-")).classList.contains("course")) {
                     document.getElementById(courseObj.courseID.replace("_", "-")).classList.remove("course");
                     document.getElementById(courseObj.courseID.replace("_", "-")).classList.add("narrowcourse");
