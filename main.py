@@ -22,9 +22,10 @@ def main():
             controller = open("./output/js/controller.js", "w")
             soup = BeautifulSoup(input, 'html.parser')
 
+            deptName = "Mechanical Engineering"  # hardcoded for now
+
             # parsing the Excel files
-            sequenceDict = courseparsing.parseCourses("TimeTable.xls", "Sequencing.xls")
-            deptName = "Test Department"  # hardcoded for now
+            sequenceDict = courseparsing.parseCourses("TimeTable.xls", "Sequencing.xls", "AU_Counts.xls", deptName)
 
             # extracting course group information
             courseGroupDict = coursegroupparsing.extractPlanCourseGroupDict(sequenceDict)

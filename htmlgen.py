@@ -904,6 +904,14 @@ def formatCourseDescriptionForRegular(soup, course, courseDisc):
     courseEnrolled = soup.new_tag("div", attrs={"class":"enrolled"})
     courseEnrolled.append(course.totEnrl + " enrolled out of " + course.capEnrl + " total seats")
 
+    # adding accreditation info
+    courseAccreditationHeader = soup.new_tag("b", attrs={"class":"accreditationheader"})
+    courseAccreditationHeader.append("Accreditation Units")
+    courseAccreditationUnits = soup.new_tag("div", attrs={"class":"accreditationunits"})
+    for accredCat in course.accredUnits:
+        if course.accredUnits[accredCat] != 0:
+            courseAccreditationUnits.append(accredCat + ": " + str(course.accredUnits[accredCat]) + " Units\n")
+
     # appending info to disc tag
     courseDisc.append(courseTitle)
     courseDisc.append(courseLine)
@@ -917,6 +925,8 @@ def formatCourseDescriptionForRegular(soup, course, courseDisc):
     courseDisc.append(courseLocation)
     courseDisc.append(courseTime)
     courseDisc.append(courseEnrolled)
+    courseDisc.append(courseAccreditationHeader)
+    courseDisc.append(courseAccreditationUnits)
 
 # Appends courseContDiv to all of the days that course occurs on, 
 # sets the width & relative position based on Course object fields

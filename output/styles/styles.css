@@ -103,7 +103,7 @@ header {
     .coursecontainer .descriptionalphahours, .coursecontainer .descriptionavailability, 
     .coursecontainer .descriptioncredits, .coursecontainer .descriptionfeeindex, .coursecontainer .fulldescription,
     .coursecontainer .instructorname, .coursecontainer .instructoremail, .coursecontainer .location, .coursecontainer .coursetime,
-    .coursecontainer .enrolled {
+    .coursecontainer .enrolled, .coursecontainer .accreditationheader, .coursecontainer .accreditationunits {
         font-size: 12px;
     }
 }
@@ -373,6 +373,14 @@ h3#planhead {
 
 .building, .endtime {
     margin-left: 50px;
+}
+
+.accreditationheader {
+    font-size: 105%;
+}
+
+.enrolled {
+    margin: 0px 0px 10px 0px;
 }
 
 /* footer formatting */

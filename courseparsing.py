@@ -21,7 +21,7 @@ class Course:
     classType = "", capEnrl = "", totEnrl = "", campus = "", location = "", 
     notesNbr = "", noteNbr = "", note = "", rqGroup = "", openTo = "", approvedHrs = "", 
     duration = "", career = "", consent = "", calendarDescr = "", maxUnits = "", calendarPrint = "",
-    courseGroup = ""):
+    courseGroup = "", accredUnits = {}):
 
         self.name = str(name)
         self.plainName = str(plainName)
@@ -71,6 +71,7 @@ class Course:
         self.maxUnits = str(maxUnits)
         self.calendarPrint = str(calendarPrint)
         self.courseGroup = str(courseGroup)
+        self.accredUnits = accredUnits
     def __str__(self) -> str:
         return self.name
 
@@ -80,13 +81,15 @@ class Course:
 # Parameters:
 #   filename (string): name of the Excel file with course info
 #   sequenceFileName (string): name of the Exel file with sequencing info
+#   acredFileName (string): name of the Excel file with acreditation info
+#   deptName (string): name of the department, must match accreditation sheet entry
 #
 # Returns:
 #   courseObjDict (dict): dict with course name for key and 
 #   Course object as value
 #   courseSeqDict (dict): Key is plan name, value is another dict with 
 #   term name as the key and a list of the Course objects taken in that term as value
-def parseCourses(filename, sequenceFileName):
+def parseCourses(filename, sequenceFileName, accredFileName, deptName):
     try:
         book = xlrd.open_workbook(filename)
         sheet = book.sheet_by_index(0)
@@ -144,13 +147,23 @@ def parseCourses(filename, sequenceFileName):
             plainNameList.append(plainName)  # allows easy search in parseSeq
             courseName = subject + " " + catalog + " " + sect  # with section number
 
+            # initializing vars to make sure unique memory location for every field
+            # (i.e. no two courses have courseGroup fields with the same pointer)
+            courseGroup = ""
+            calendarPrint = ""
+            accredUnits = {"Math":0, "Natural Sciences":0, "Math and Natural Sciences":0,
+            "Complimentary Studies":0, "Engineering Science":0, "Engineering Design":0, 
+            "Engineering Science and Engineering Design":0, "Other":0}
+
             courseObjDict[courseName] = Course(courseName, plainName, acadOrg, term, shortDesc, classNbr,
             subject, catalog, component, sect, classStatus, descr, crsStatus,
             facilID, place, pat, startDate, endDate, hrsFrom, hrsTo,
             mon, tues, wed, thurs, fri, sat, sun, name, instructor, email,
             classType, capEnrl, totEnrl, campus, location, notesNbr, noteNbr, note,
             rqGroup, openTo, approvedHrs, duration, career, consent, calendarDescr,
-            maxUnits)
+            maxUnits, calendarPrint, courseGroup, accredUnits)
+
+        parseAcred(courseObjDict, accredFileName, deptName)
 
         courseSeqDict = sequenceparsing.parseSeq(sequenceFileName, courseObjDict, plainNameList)  # organize courses by plan & by term
 
@@ -160,3 +173,33 @@ def parseCourses(filename, sequenceFileName):
         raise FileNotFoundError("Excel course information file not found, ensure it is present and the name is correct.")
     except xlrd.biffh.XLRDError:
         raise ValueError("Error reading data from Course information Excel sheet. Ensure it is formatted exactly as specified")
+
+def parseAcred(courseObjDict, acredFileName, deptName):
+    try:
+        book = xlrd.open_workbook(acredFileName)
+        sheet = None
+        for i in range(0, book.nsheets):
+            if book.sheet_by_index(i).cell_value(0, 1) == deptName:
+                sheet = book.sheet_by_index(i)
+        
+        if sheet is None:
+            raise ValueError("Department name: " + deptName + " does not match any sheet in the accreditation file")
+
+        for row in range(4, sheet.nrows):
+            for course in courseObjDict:
+                if sheet.cell_value(row, 1) == courseObjDict[course].plainName:
+                    courseObjDict[course].accredUnits["Math"] = sheet.cell_value(row, 8)
+                    courseObjDict[course].accredUnits["Natural Sciences"] = sheet.cell_value(row, 9)
+                    courseObjDict[course].accredUnits["Math and Natural Sciences"] = sheet.cell_value(row, 10)
+                    courseObjDict[course].accredUnits["Complimentary Studies"] = sheet.cell_value(row, 11)
+                    courseObjDict[course].accredUnits["Engineering Science"] = sheet.cell_value(row, 12)
+                    courseObjDict[course].accredUnits["Engineering Design"] = sheet.cell_value(row, 13)
+                    courseObjDict[course].accredUnits["Engineering Science and Engineering Design"] = sheet.cell_value(row, 14)
+                    courseObjDict[course].accredUnits["Other"] = sheet.cell_value(row, 15)
+                    if courseObjDict["CHEM 103 T01"].accredUnits["Engineering Science"] == 18.9:
+                        print("test")
+
+    except FileNotFoundError:
+        raise FileNotFoundError("Excel accreditation information file not found, ensure it is present and the name is correct")
+    except xlrd.biffh.XLRDError:
+        raise ValueError("Error reading data from accreditation information Excel sheet. Ensure it is formatted exactly as specified")
