@@ -29,18 +29,21 @@ this.checkOverlaps = function(plan, term) {
                         let checkStart = Number(checkObj.start);
                         let checkEnd = Number(checkObj.end);
                         if (((courseEnd > checkStart) && (courseStart <= checkStart)) || ((checkEnd > courseStart) && (checkStart <= courseStart))) {
-                            let appendedToExisting = false;
+                            let found = false;
                             for (let i = 0; i < allOverlaps[day].length; i++) {
-                                if (allOverlaps[day][i].includes(courseObj) && !allOverlaps[day][i].includes(checkObj)) {
-                                    appendedToExisting = true;
+                                if (allOverlaps[day][i].includes(courseObj) && allOverlaps[day][i].includes(checkObj)) {
+                                    found = true;
+                                }
+                                else if (allOverlaps[day][i].includes(courseObj) && !allOverlaps[day][i].includes(checkObj)) {
+                                    found = true;
                                     allOverlaps[day][i].push(checkObj);
                                 }
                                 else if (!allOverlaps[day][i].includes(courseObj) && allOverlaps[day][i].includes(checkObj)) {
-                                    appendedToExisting = true;
+                                    found = true;
                                     allOverlaps[day][i].push(courseObj);
                                 }
                             }
-                            if (!appendedToExisting) {
+                            if (!found) {
                                 allOverlaps[day].push([courseObj, checkObj]);
                             }
                         }

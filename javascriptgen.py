@@ -239,7 +239,10 @@ def generateUpdateObjFields(controller):
 #   controller - file handle for controller JS file
 def generateCheckOverlaps(controller):
     # first main loop: for each day, compare a given course to every other course
-    # in that day. If there is an overlap, append the overlapping course object to a list.
+    # in that day. If there is an overlap, search through the existing list of overlaps
+    # and if either of the overlapping courses is already in a list and the other isn't,
+    # append the missing course to the list. If neither are present in any list, append
+    # a new list to allOverlaps[day] containing both course objects.
     #
     # second main loop: iterating through the list of overlapping courses created previously;
     # update the width and left fields of each course object based on how many courses it is 
@@ -259,18 +262,21 @@ def generateCheckOverlaps(controller):
                         let checkStart = Number(checkObj.start);
                         let checkEnd = Number(checkObj.end);
                         if (((courseEnd > checkStart) && (courseStart <= checkStart)) || ((checkEnd > courseStart) && (checkStart <= courseStart))) {
-                            let appendedToExisting = false;
+                            let found = false;
                             for (let i = 0; i < allOverlaps[day].length; i++) {
-                                if (allOverlaps[day][i].includes(courseObj) && !allOverlaps[day][i].includes(checkObj)) {
-                                    appendedToExisting = true;
+                                if (allOverlaps[day][i].includes(courseObj) && allOverlaps[day][i].includes(checkObj)) {
+                                    found = true;
+                                }
+                                else if (allOverlaps[day][i].includes(courseObj) && !allOverlaps[day][i].includes(checkObj)) {
+                                    found = true;
                                     allOverlaps[day][i].push(checkObj);
                                 }
                                 else if (!allOverlaps[day][i].includes(courseObj) && allOverlaps[day][i].includes(checkObj)) {
-                                    appendedToExisting = true;
+                                    found = true;
                                     allOverlaps[day][i].push(courseObj);
                                 }
                             }
-                            if (!appendedToExisting) {
+                            if (!found) {
                                 allOverlaps[day].push([courseObj, checkObj]);
                             }
                         }
