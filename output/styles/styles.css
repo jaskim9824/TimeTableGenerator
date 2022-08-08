@@ -363,12 +363,13 @@ h3#planhead {
     margin-left: 50px;
 }
 
-.accreditationheader {
-    font-size: 105%;
-}
-
+/* Separation between enrolled and accreditation info */
 .enrolled {
     margin: 0px 0px 10px 0px;
+}
+
+.accreditationheader {
+    font-size: 105%;
 }
 
 /* footer formatting */

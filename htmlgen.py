@@ -3,7 +3,7 @@
 # University of Alberta, Summer 2022, Curriculum Development Co-op Term
 
 # This file contains all the functions needed to generate the required
-# HTML elements to produce the MEC E Program Visualizer webpage
+# HTML elements of the TimeTable webpage
 
 # Dependencies: cleaner, html, copy, coursegroupparsing
 
@@ -12,8 +12,8 @@ import html
 from copy import deepcopy
 from coursegroupparsing import CourseGroupOption
 
-# Changes the header title to include deptName, which is pulled
-# from Sequncing Excel file
+# Changes the header title to include deptName, which is entered
+# by the user in the GUI
 # Parameters:
 #   titleTag - "site-title" HTML tag at the top of the page
 #   topTitleTag - title appearing as name of tab
@@ -104,7 +104,7 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
                                                                      "id": str(section)})
                         sectionRadio.append(str(section))
                         sectionSelectWrapper.append(sectionRadio)
-                    # last option is to display all course sections
+                    # last dropdown option is to display all course sections
                     sectionRadio = soup.new_tag("option", attrs={"value": "ALL",
                                                                         "id":"ALL"})
                     sectionRadio.append("ALL")
@@ -150,7 +150,7 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
                                                                              "id": str(section)})
                                 sectionRadio.append(str(section))
                                 sectionSelectWrapper.append(sectionRadio)
-                            # last option is to display all course sections
+                            # last dropdown option is to display all course sections
                             sectionRadio = soup.new_tag("option", attrs={"value": "ALL",
                                                                          "id":"ALL"})
                             sectionRadio.append("ALL")
@@ -170,7 +170,7 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
             ORCourseWrapperDiv = soup.new_tag("div")
             ORCourseHeader = soup.new_tag("h3")
             ORCourseWrapperDiv.append(ORCourseHeader)
-            # Flag to check for OR and course groups 
+            # Flags to check for OR and course groups 
             courseGroupsPresent = False
             ORCourseCoursesPresent = False
             for course in optionDict[plan][term]:
@@ -323,7 +323,7 @@ def generateDisplayDiv(soup, courseGroupList):
     switchVariable += "+selectedTerm"  # switch on term selection
     return soup.new_tag("div", attrs={"class":"display"})
 
-# Function that places the outer divs for the course group selection 
+# Function that places the outer divs for the course group
 # radio inputs for each plan
 # Parameters:
 #   courseGroupSelectTag - HTML tag representing outer div used to hold the course group selection menu
@@ -942,23 +942,22 @@ def formatCourseDescriptionForRegular(soup, course, courseDisc):
 #   controller - file handle for controller.js
 def appendToEachDay(tagsList, courseContDiv, plan, term, startTime, courseLength, controller):
     for dayTag in tagsList:
-        # if the course occurs on multiple days, append to each dayDiv (mondayDiv, tuesdayDiv, etc.)
-        if dayTagInLateWeek(dayTag) and ("class=\"tooltiptextright\"") in str(courseContDiv):
-            # if course on thursday or friday, move tooltip to left of course (so not off page)
+        # if course on thursday or friday, move tooltip to left of course (so not off page)
+        if dayTagInLateWeek(dayTag) and courseContDiv.find(class_="tooltiptextright") is not None:
             courseContDiv.find(class_="tooltiptextright")["class"] = "tooltiptextleft"
         newDiv = deepcopy(courseContDiv)
 
         # determining which day we are placing on (should only be one)
         day = ""
-        if "class=\"monday\"" in str(dayTag):
+        if "monday" in dayTag["class"]:
             day = "monday"
-        elif "class=\"tuesday\"" in str(dayTag):
+        elif "tuesday" in dayTag["class"]:
             day = "tuesday"
-        elif "class=\"wednesday\"" in str(dayTag):
+        elif "wednesday" in dayTag["class"]:
             day= "wednesday"
-        elif "class=\"thursday\"" in str(dayTag):
+        elif "thursday" in dayTag["class"]:
             day = "thursday"
-        elif "class=\"friday\"" in str(dayTag):
+        elif "friday" in dayTag["class"]:
             day = "friday"
 
         if day != "":  # guard, every course should have a day
@@ -981,9 +980,9 @@ def appendToEachDay(tagsList, courseContDiv, plan, term, startTime, courseLength
 # Returns:
 #   boolean - True if dayTag is for thursday or friday, False otherwise
 def dayTagInLateWeek(dayTag):
-    if "class=\"thursday\"" in str(dayTag):
+    if "thursday" in dayTag["class"]:
         return True
-    elif "class=\"friday\"" in str(dayTag):
+    elif "friday" in dayTag["class"]:
         return True
     else:
         return False

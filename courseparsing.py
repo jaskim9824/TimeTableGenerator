@@ -163,7 +163,7 @@ def parseCourses(filename, sequenceFileName, accredFileName, deptName):
             rqGroup, openTo, approvedHrs, duration, career, consent, calendarDescr,
             maxUnits, calendarPrint, courseGroup, accredUnits)
 
-        parseAccred(courseObjDict, accredFileName, deptName)
+        parseAccred(courseObjDict, accredFileName, deptName)  # fill in accredUnits field
 
         courseSeqDict = sequenceparsing.parseSeq(sequenceFileName, courseObjDict, plainNameList)  # organize courses by plan & by term
 
