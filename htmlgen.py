@@ -851,7 +851,15 @@ def createCourseDiv(soup, courseID, minutesFromEight, minutesLong, courseColor):
 def formatCourseDescriptionForRegular(soup, course, courseDisc):
     # formatting title in course description
     courseTitle = soup.new_tag("b", attrs={"class":"descriptiontitle"})
-    courseTitle.append(course.plainName + " (" + course.sect + ")" + " - " + course.descr)
+    courseTitle.append(course.plainName 
+                     + " (" 
+                     + course.sect 
+                     + ")" 
+                     + " - " 
+                     + course.descr 
+                     + " (" 
+                     + course.component 
+                     + ")")
 
     # adding line seperating title and description
     courseLine = soup.new_tag("hr", attrs={"class":"descriptionline"})
