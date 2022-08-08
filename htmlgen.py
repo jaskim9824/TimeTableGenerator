@@ -777,7 +777,8 @@ def adjustOverlapping(termList):
 #   minutesFromEight - amount of minutes from 8:00am to startTime
 def calcMinutes(startTime):
     colonIndex = startTime.find(":")
-    assert colonIndex != -1, "Error in start time, ensure the Excel file is properly formatted in the Hrs From column"
+    if colonIndex == -1:
+        raise ValueError("Error in start time, ensure the Excel file is properly formatted in the Hrs From column")
     hours = int(startTime[:colonIndex])
     minutes = int(startTime[colonIndex + 1:])
     return (hours*60 + minutes) - 8*60
@@ -791,8 +792,10 @@ def calcMinutes(startTime):
 def calcClassDuration(startTime, endTime):
     startColonIndex = startTime.find(":")
     endColonIndex = startTime.find(":")
-    assert startColonIndex != -1, "Error in start time, ensure the Excel file is properly formatted in the Hrs From column"
-    assert endColonIndex != -1, "Error in end time, ensure the Excel file is properly formatted in the Hrs To column"
+    if startColonIndex == -1:
+        raise ValueError("Error in start time, ensure the Excel file is properly formatted in the Hrs From column")
+    if endColonIndex == -1:
+        raise ValueError("Error in end time, ensure the Excel file is properly formatted in the Hrs To column")
 
     startHours = int(startTime[:startColonIndex])
     startMinutes = int(startTime[startColonIndex + 1:])
