@@ -786,12 +786,12 @@ def calcMinutes(startTime):
 # Calculates the amount of minutes long a class is, rounded to the nearest 30 minutes
 # Parameters:
 #   startTime - time the class starts. String in 24 hour clock notation (eg: "8:00")
-#   endTime - time the class starts. String in 24 hour clock notation (eg: "21:04")
+#   endTime - time the class ends. String in 24 hour clock notation (eg: "21:04")
 # Returns:
 #   roundedTime - amount of minutes from startTime to endTime, rounded to the nearest 30 minutes
 def calcClassDuration(startTime, endTime):
     startColonIndex = startTime.find(":")
-    endColonIndex = startTime.find(":")
+    endColonIndex = endTime.find(":")
     if startColonIndex == -1:
         raise ValueError("Error in start time, ensure the Excel file is properly formatted in the Hrs From column")
     if endColonIndex == -1:
