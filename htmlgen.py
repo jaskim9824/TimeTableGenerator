@@ -102,7 +102,7 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
                     for section in course[0].sections:
                         sectionRadio = soup.new_tag("option", attrs={"value": str(section),
                                                                      "id": str(section)})
-                        sectionRadio.append(str(section))
+                        sectionRadio.append(str(section) + " (" + section.component + ")")
                         sectionSelectWrapper.append(sectionRadio)
                     # last dropdown option is to display all course sections
                     sectionRadio = soup.new_tag("option", attrs={"value": "ALL",
@@ -148,7 +148,7 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
                             for section in opt[0].sections:
                                 sectionRadio = soup.new_tag("option", attrs={"value": str(section),
                                                                              "id": str(section)})
-                                sectionRadio.append(str(section))
+                                sectionRadio.append(str(section) + " (" + section.component + ")")
                                 sectionSelectWrapper.append(sectionRadio)
                             # last dropdown option is to display all course sections
                             sectionRadio = soup.new_tag("option", attrs={"value": "ALL",
@@ -243,7 +243,7 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
                             for section in option.sections:
                                 sectionRadio = soup.new_tag("option", attrs={"value": section,
                                                                              "id": section})
-                                sectionRadio.append(section)
+                                sectionRadio.append(str(section) + " (" + section.component + ")")
                                 sectionSelectWrapper.append(sectionRadio)
                             sectionRadio = soup.new_tag("option", attrs={"value": "ALL",
                                                                          "id":"ALL"})
@@ -291,7 +291,7 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
                                                                             "value": section,
                                                                             "id": section})
                                 labelTag = soup.new_tag("label", attrs={"for":section})
-                                labelTag.append(section)
+                                labelTag.append(str(section) + " (" + section.component + ")")
                                 sectionWrapper.append(sectionRadio)
                                 sectionWrapper.append(labelTag)
                             courseSectionWrapper.append(sectionWrapper)                                             
