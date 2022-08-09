@@ -1,5 +1,4 @@
-# Authors: Jason Kim, Zachary Schmidt
-# Collaborators: Moaz Abdelmonem
+# Authors: Jason Kim, Zachary Schmidt, Moaz Abdelmonem
 # Oversight: Dr. David Nobes
 # University of Alberta, Summer 2022, Curriculum Development Co-op Term
 
@@ -39,7 +38,25 @@ canvas = Canvas(
 canvas.place(x = 0, y = 0)
 window.resizable(False, False)
 
-#new window
+######progress Bar#####
+def add_progbar():
+    global progbar
+    progbar = ttk.Progressbar(
+    window,
+    orient='horizontal',
+    mode='determinate',
+    length=280
+    )
+    progbar.place(
+    x=661, y=560
+    )
+
+def progress():
+    progbar['value']+= 7.7
+    window.update_idletasks()
+    return progbar['value']
+
+####new window####
 def new_window():
 
     global new_img1, new_img2, new_img3, new_tutorial, new_web_img, new_header, new_footer
@@ -217,6 +234,8 @@ def writingHTML(soup):
         raise FileNotFoundError("The directory you are in does not have a directory named output.")
 
 def main():
+    #progress bar to be finished soon
+    #add_progbar()
     try:
         with open("template.html") as input:
             controller = open("./output/js/controller.js", "w")
