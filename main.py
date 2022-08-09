@@ -38,23 +38,6 @@ canvas = Canvas(
 canvas.place(x = 0, y = 0)
 window.resizable(False, False)
 
-######progress Bar#####
-def add_progbar():
-    global progbar
-    progbar = ttk.Progressbar(
-    window,
-    orient='horizontal',
-    mode='determinate',
-    length=280
-    )
-    progbar.place(
-    x=661, y=560
-    )
-
-def progress():
-    progbar['value']+= 7.7
-    window.update_idletasks()
-    return progbar['value']
 
 ####new window####
 def new_window():
@@ -234,8 +217,6 @@ def writingHTML(soup):
         raise FileNotFoundError("The directory you are in does not have a directory named output.")
 
 def main():
-    #progress bar to be finished soon
-    #add_progbar()
     try:
         with open("template.html") as input:
             controller = open("./output/js/controller.js", "w")
