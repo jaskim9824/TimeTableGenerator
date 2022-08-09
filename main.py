@@ -15,6 +15,28 @@ import courseparsing
 import coursegroupparsing
 import htmlgen
 import javascriptgen
+import tkinter
+from tkinter import *
+from tkinter import messagebox
+from tkinter import ttk
+from tkinter import filedialog
+from PIL import ImageTk, Image
+
+window = Tk()
+window.title('Timetable Generator')
+window.iconbitmap('output/images/favicon.ico')
+window.geometry("1130x595")
+window.configure(bg = "#ffffff")
+canvas = Canvas(
+    window,
+    bg = "#ffffff",
+    height = 595,
+    width = 1130,
+    bd = 0,
+    highlightthickness = 0,
+    relief = "ridge")
+canvas.place(x = 0, y = 0)
+window.resizable(False, False)
 
 def main():
     try:
@@ -92,5 +114,6 @@ def writingHTML(soup):
         raise FileNotFoundError("The directory you are in does not have a directory named output.")
 
 if __name__ == "__main__":
+    window.mainloop()
     soup = main()
     writingHTML(soup)
