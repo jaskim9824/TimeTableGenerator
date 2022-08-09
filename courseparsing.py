@@ -10,6 +10,7 @@
 
 import xlrd
 import sequenceparsing
+from tkinter import messagebox
 
 class Course:
     # Data storage for info parsed from Excel files
@@ -170,6 +171,7 @@ def parseCourses(filename, sequenceFileName, accredFileName, deptName):
         return courseSeqDict
         
     except FileNotFoundError:
+        messagebox.showerror("Error", "Excel course information file not found, ensure it is present and the name is correct.")
         raise FileNotFoundError("Excel course information file not found, ensure it is present and the name is correct.")
     except xlrd.biffh.XLRDError:
         raise ValueError("Error reading data from Course information Excel sheet. Ensure it is formatted exactly as specified")
@@ -213,6 +215,7 @@ def parseAccred(courseObjDict, accredFileName, deptName):
                     courseObjDict[course].accredUnits["Other"] = sheet.cell_value(row, 15)
 
     except FileNotFoundError:
+        messagebox.showerror("Error", "Excel accreditation information file not found, ensure it is present and the name is correct")
         raise FileNotFoundError("Excel accreditation information file not found, ensure it is present and the name is correct")
     except xlrd.biffh.XLRDError:
         raise ValueError("Error reading data from accreditation information Excel sheet. Ensure it is formatted exactly as specified")

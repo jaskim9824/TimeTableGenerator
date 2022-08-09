@@ -9,6 +9,7 @@
 # Dependencies: copy, xlrd
 
 from copy import deepcopy
+from tkinter import messagebox
 import xlrd
 
 # Parses an Excel file with program sequencing information (when courses are taken)
@@ -65,6 +66,7 @@ def parseSeq(filename, course_obj_dict, plainNameList):
         # course_seq = checkReqs(course_seq)
 
     except FileNotFoundError:
+        messagebox.showerror("Error", "Excel accreditation information file not found, ensure it is present and the name is correct")
         raise FileNotFoundError("Excel sequencing file not found, ensure it is present and the name is correct.")
     except xlrd.biffh.XLRDError:
         raise ValueError("Error reading data from sequencing Excel sheet. Ensure it is formatted exactly as specified")

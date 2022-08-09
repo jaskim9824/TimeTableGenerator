@@ -279,6 +279,7 @@ def main():
        " the output directory is not organized correctly or does not exist")
        else:
         raise FileNotFoundError(str(err))
+        
 
     writingHTML(soup)
     messagebox.showinfo('Status',message="Webpage successfully generated!")
