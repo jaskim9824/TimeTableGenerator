@@ -142,11 +142,12 @@ h3#planhead {
     width: fit-content;
     position: relative;
     left: 58rem;
+    bottom: 3rem;
 }
 
 /* Wrapper div for the term names and course boxes, the main content */
 #main {
-    height: 2550px;
+    height: 2650px;
     width: fit-content;
 }
 
