@@ -39,6 +39,174 @@ canvas = Canvas(
 canvas.place(x = 0, y = 0)
 window.resizable(False, False)
 
+#new window
+def new_window():
+
+    global new_img1, new_img2, new_img3, new_tutorial, new_web_img, new_header, new_footer
+    helpWin = Toplevel()
+    helpWin.geometry('1400x700')
+    helpWin.title("Manual")
+    helpWin.iconbitmap('output/images/favicon.ico')
+    helpWin.resizable(0,0)
+
+    #### Scroll bar ####
+    # Create A Main Frame
+    main_frame = Frame(helpWin)
+    main_frame.pack(fill=BOTH, expand=1)
+
+    # Create A Canvas
+    my_canvas = Canvas(main_frame)
+    my_canvas.pack(side=LEFT, fill=BOTH, expand=1)
+
+    # Add A Scrollbar To The Canvas
+    my_scrollbar = ttk.Scrollbar(main_frame, orient=VERTICAL, command=my_canvas.yview)
+    my_scrollbar.pack(side=RIGHT, fill=Y)
+
+    # Configure The Canvas
+    my_canvas.configure(yscrollcommand=my_scrollbar.set)
+    my_canvas.bind('<Configure>', lambda e: my_canvas.configure(scrollregion = my_canvas.bbox("all")))
+
+    # Create ANOTHER Frame INSIDE the Canvas
+    second_frame = Frame(my_canvas)
+
+    # Add that New frame To a Window In The Canvas
+    my_canvas.create_window((0,0), window=second_frame, anchor="nw")
+
+    header_img = Image.open("GUI_images/helpbg.png")
+    header_resize = header_img.resize((1600,100))
+    new_header = ImageTk.PhotoImage(header_resize)
+    header_label = Label(second_frame,image=new_header, anchor=W)
+    header_label.place(x=0, y=0)
+
+    header = Message(second_frame, 
+    text="Timetable WebGen\nUser Manual",
+    aspect=800,
+    justify=CENTER,
+    font= ('Helvetica 15 underline'),
+    bg='#275D38',
+    fg='white'
+    )
+    header.grid(row=0, column=1, pady=25)
+
+
+    message1 = Label(second_frame, 
+    text="1- Make sure the directory you are in has a directory named output and a template.html file."
+    )
+    message1.grid(row=1, column=0,padx=20, pady=20)
+
+    message2 = Label(second_frame, 
+    text="2- Make sure you have the following Excel files (All Excel files must be in the .xls format): "
+    )
+    message2.grid(row=2, column=0,padx=20, pady=20)
+
+    #timetable.xls image
+    excel_pic1 = Image.open("GUI_images/tableExcel.png")
+    resized1 = excel_pic1.resize((100,100))
+    new_img1 = ImageTk.PhotoImage(resized1)
+    img_label = Label(second_frame,image=new_img1)
+    img_label.grid(row=3, column=0)
+
+    #sequencing.xls image
+    excel_pic2 = Image.open("GUI_images/seqexcel.png")
+    resized2 = excel_pic2.resize((100,100))
+    new_img2 = ImageTk.PhotoImage(resized2)
+    img_label2 = Label(second_frame,image=new_img2)
+    img_label2.grid(row=3, column=1)
+
+
+    #AU_Count.xls image
+    accreditation_img = Image.open("GUI_images/AU_count.png")
+    resized_img = accreditation_img.resize((100,100))
+    new_img3 = ImageTk.PhotoImage(resized_img)
+    img_label4 = Label(second_frame,image=new_img3)
+    img_label4.grid(row=3, column=2, padx=150)
+
+
+    #excel file descriptions
+    pic1_description = Label(second_frame, text="This Excel file must contain\nall individual course information.")
+    pic1_description.grid(row=4, column=0)
+
+    pic2_description = Label(second_frame, text="This Excel file must contain\nall possible plan sequences.")
+    pic2_description.grid(row=4, column=1)
+
+    pic3_description = Label(second_frame, text="This Excel file must contain\nall accreditation unit information.")
+    pic3_description.grid(row=4, column=2)
+
+
+    message3 = Label(second_frame, 
+    text="3- Type in the Excel file name (if it's present in the same directory as the program files) or\n provide it's path:"
+    )
+    message3.grid(row=5, column=0,padx=20, pady=25)
+
+    #GUI image 
+    tutorial_img = Image.open("GUI_images/tutorial.png")
+    resized_img = tutorial_img.resize((500,300))
+    new_tutorial = ImageTk.PhotoImage(resized_img)
+    tut_label = Label(second_frame,image=new_tutorial)
+    tut_label.grid(row=6, column=1, padx=10, pady=20)
+
+    message4 = Label(second_frame, 
+    text="4- Refresh the webpage and the timetable webpage will be generated! "
+    )
+    message4.grid(row=7, column=0,padx=20, pady=25)
+
+    web_img = Image.open("GUI_images/website.png")
+    resized_webImg = web_img.resize((500, 300))
+    new_web_img = ImageTk.PhotoImage(resized_webImg)
+    web_label = Label(second_frame, image=new_web_img)
+    web_label.grid(row=8, column=1)
+
+    footer_img = Image.open("GUI_images/helpbg.png")
+    footer_resize = footer_img.resize((1630,200))
+    new_footer = ImageTk.PhotoImage(footer_resize)
+    footer_label = Label(second_frame,image=new_footer, anchor=W)
+    footer_label.place(x = 0, y=1180)
+    footer = Message(second_frame, 
+    text="Developers:\nJason Kim, Summer 2022\n Moaz Abdelmonem, Summer 2022\n Zachary Schmidt, Summer 2022\n\n Supervised by: Dr. David Nobes ",
+    aspect=800,
+    justify=CENTER,
+    font= ('Helvetica 12'),
+    bg='#275D38',
+    fg='white'
+    )
+    footer.grid(row=9, column=1, pady=25)
+
+########## Menu ##########
+menubar = Menu(window)
+window.config(menu=menubar)
+
+# create the Help menu
+help_menu = Menu(
+    menubar,
+    tearoff=0
+)
+
+menubar = Menu(window)
+window.config(menu=menubar)
+# create the Help menu
+help_menu = Menu(
+    menubar,
+    tearoff=0
+)
+
+# adding the Help menu to the menubar
+menubar.add_cascade(
+    label="Help",
+    menu=help_menu
+)
+
+help_menu.add_command(
+    label='About...',
+    command=new_window
+
+)
+help_menu.add_separator()
+help_menu.add_command(
+    label='Version1-2022',
+    font='Times 10'
+    
+)
+
 def writingHTML(soup):
     # writing output string to an output html file
     try:
@@ -54,10 +222,10 @@ def main():
             controller = open("./output/js/controller.js", "w")
             soup = BeautifulSoup(input, 'html.parser')
 
-            deptName = "Mechanical Engineering"  # hardcoded for now
+            deptName = department.get()
 
             # parsing the Excel files
-            sequenceDict = courseparsing.parseCourses("TimeTable.xls", "Sequencing.xls", "AU_Counts.xls", deptName)
+            sequenceDict = courseparsing.parseCourses(tableExcel.get(), seqExcel.get(), accrExcel.get(), deptName)
 
             # extracting course group information
             courseGroupDict = coursegroupparsing.extractPlanCourseGroupDict(sequenceDict)
@@ -113,6 +281,7 @@ def main():
         raise FileNotFoundError(str(err))
 
     writingHTML(soup)
+    messagebox.showinfo('Status',message="Webpage successfully generated!")
     
 
 
@@ -213,9 +382,6 @@ background = canvas.create_image(
     467.5, 297.5,
     image=background_img)
 
-
-def btn_clicked():
-    print("Button Clicked")
 
 ######browse functions######
 def tableBrowse():
