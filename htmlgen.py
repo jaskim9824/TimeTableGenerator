@@ -7,6 +7,7 @@
 
 # Dependencies: cleaner, html, copy, coursegroupparsing
 
+from msilib.schema import Component
 import cleaner
 import html
 from copy import deepcopy
@@ -85,32 +86,32 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
                 if len(course) == 1 and type(course[0]) != type([]):
                     # Case: course is not in a course group
                     sectionWrapper = soup.new_tag("div")
-                    sectionSelectWrapper = soup.new_tag("select", attrs={"ng-change":"render()",
+                    compDict= {}
+                    for section in course[0].sections:
+                        sectionRadio = soup.new_tag("option", attrs={"value": str(section),
+                                                                     "id": str(section)})
+                        sectionRadio.append(str(section))
+                        if section.component not in compDict:
+                            compDict[section.component] = soup.new_tag("select", attrs={"ng-change":"render()",
                                                                     "name":cleaner.cleanString(plan) + 
                                                                            cleaner.cleanString(term)+
                                                                            cleaner.cleanString(str(course[0])),
                                                                     "ng-model":cleaner.cleanString(plan) + 
                                                                            cleaner.cleanString(term) +
                                                                            "obj."+
-                                                                           cleaner.cleanString(str(course[0])),
+                                                                           cleaner.cleanString(str(course[0])) + section.component,
                                                                     "style":"background:" + hexcolorlist[colorCount] + ";"})
-                    sectionWrapper.append(str(course[0]))
-                    breakTag = soup.new_tag("br")
-                    sectionWrapper.append(breakTag)
-
-                    # for each available section of a course, add a dropdown option
-                    for section in course[0].sections:
-                        sectionRadio = soup.new_tag("option", attrs={"value": str(section),
-                                                                     "id": str(section)})
-                        sectionRadio.append(str(section) + " (" + section.component + ")")
-                        sectionSelectWrapper.append(sectionRadio)
-                    # last dropdown option is to display all course sections
-                    sectionRadio = soup.new_tag("option", attrs={"value": "ALL",
+                        compDict[section.component].append(sectionRadio)
+                    for comp in compDict:
+                        sectionWrapper.append(str(course[0]) + " (" + comp  + ")")
+                        breakTag = soup.new_tag("br")
+                        sectionWrapper.append(breakTag)
+                        sectionRadio = soup.new_tag("option", attrs={"value": "ALL",
                                                                         "id":"ALL"})
-                    sectionRadio.append("ALL")
-                    sectionSelectWrapper.append(sectionRadio)
-                    sectionWrapper.append(sectionSelectWrapper)
-                    sectionWrapper.append(sectionSelectWrapper)
+                        compDict[comp].append(sectionRadio)
+                        sectionWrapper.append(compDict[comp])
+                        breakTag = soup.new_tag("br")
+                        sectionWrapper.append(breakTag)
                     courseSectionWrapper.append(sectionWrapper)
 
                 elif len(course) > 1 and type(course[0]) == type([]):
