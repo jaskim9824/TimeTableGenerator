@@ -6,7 +6,7 @@
 # This file contains the functions neccesary to parse the Excel file
 # containing the information for each course (instructor, location, time, etc.)
 
-# Dependencies: xlrd, sequenceparsing
+# Dependencies: xlrd, sequenceparsing, tkinter
 
 import xlrd
 from . import sequenceparsing
@@ -82,8 +82,8 @@ class Course:
 # Parameters:
 #   filename (string): name of the Excel file with course info
 #   sequenceFileName (string): name of the Exel file with sequencing info
-#   acredFileName (string): name of the Excel file with acreditation info
-#   deptName (string): name of the department, must match accreditation sheet entry
+#   acredFileName (string): name of the Excel file with accreditation info
+#   deptName (string): name of the department, must match an entry at top of accred Excel sheet
 #
 # Returns:
 #   courseObjDict (dict): dict with course name for key and 
@@ -164,9 +164,11 @@ def parseCourses(filename, sequenceFileName, accredFileName, deptName):
             rqGroup, openTo, approvedHrs, duration, career, consent, calendarDescr,
             maxUnits, calendarPrint, courseGroup, accredUnits)
 
-        parseAccred(courseObjDict, accredFileName, deptName)  # fill in accredUnits field
+        # fill in accredUnits field
+        parseAccred(courseObjDict, accredFileName, deptName)
 
-        courseSeqDict = sequenceparsing.parseSeq(sequenceFileName, courseObjDict, plainNameList)  # organize courses by plan & by term
+        # organize courses by plan & by term
+        courseSeqDict = sequenceparsing.parseSeq(sequenceFileName, courseObjDict, plainNameList)
 
         return courseSeqDict
         
@@ -174,10 +176,12 @@ def parseCourses(filename, sequenceFileName, accredFileName, deptName):
         messagebox.showerror("Error", "Excel course information file not found, ensure it is present and the name is correct.")
         raise FileNotFoundError("Excel course information file not found, ensure it is present and the name is correct.")
     except xlrd.biffh.XLRDError:
+        messagebox.showerror("Error", "Error reading data from Course information Excel sheet. Ensure it is formatted exactly as specified")
         raise ValueError("Error reading data from Course information Excel sheet. Ensure it is formatted exactly as specified")
 
-# Parses the accredFileName file for information on accreditation
+# Parses a file for information on accreditation
 # units satisfied by the courses in courseObjDict.
+#
 # Parameters:
 #   courseObjDict (dict): dict with course name for key and 
 #   Course object as value
@@ -185,6 +189,9 @@ def parseCourses(filename, sequenceFileName, accredFileName, deptName):
 #   accreditation info
 #   deptName (string): name of the department, should match the header
 #   on one of the sheets in the accreditation info Excel file
+#
+# Returns:
+#   None. The accredUnits field of Course objects in courseObjDict should be filled in.
 def parseAccred(courseObjDict, accredFileName, deptName):
     try:
         book = xlrd.open_workbook(accredFileName)
@@ -218,4 +225,5 @@ def parseAccred(courseObjDict, accredFileName, deptName):
         messagebox.showerror("Error", "Excel accreditation information file not found, ensure it is present and the name is correct")
         raise FileNotFoundError("Excel accreditation information file not found, ensure it is present and the name is correct")
     except xlrd.biffh.XLRDError:
+        messagebox.showerror("Error", "Error reading data from accreditation information Excel sheet. Ensure it is formatted exactly as specified")
         raise ValueError("Error reading data from accreditation information Excel sheet. Ensure it is formatted exactly as specified")

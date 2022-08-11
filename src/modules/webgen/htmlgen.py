@@ -2,12 +2,10 @@
 # Oversight: Dr. David Nobes
 # University of Alberta, Summer 2022, Curriculum Development Co-op Term
 
-# This file contains all the functions needed to generate the required
+# This file contains all the functions needed to generate the
 # HTML elements of the TimeTable webpage
 
 # Dependencies: cleaner, html, copy, coursegroupparsing
-
-
 
 from .. import cleaner
 import html
@@ -89,32 +87,10 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
                     sectionWrapper = soup.new_tag("div")
                     compDict= {}
                     for section in course[0].sections:
-                        sectionRadio = soup.new_tag("option", attrs={"value": str(section),
-                                                                     "id": str(section)})
-                        sectionRadio.append(str(section))
-                        if section.component not in compDict:
-                            compDict[section.component] = soup.new_tag("select", attrs={"ng-change":"render()",
-                                                                    "name":cleaner.cleanString(plan) + 
-                                                                           cleaner.cleanString(term)+
-                                                                           cleaner.cleanString(str(course[0])),
-                                                                    "ng-model":cleaner.cleanString(plan) + 
-                                                                           cleaner.cleanString(term) +
-                                                                           "obj."+
-                                                                           cleaner.cleanString(str(course[0])) + section.component,
-                                                                    "style":"background:" + hexcolorlist[colorCount] + ";"})
-                        compDict[section.component].append(sectionRadio)
-                    for comp in compDict:
-                        sectionWrapper.append(str(course[0]) + " (" + comp  + ")")
-                        breakTag = soup.new_tag("br")
-                        sectionWrapper.append(breakTag)
-                        sectionRadio = soup.new_tag("option", attrs={"value": "ALL",
-                                                                        "id":"ALL"})
-                        sectionRadio.append("ALL")
-                        compDict[comp].append(deepcopy(sectionRadio))
-                        sectionWrapper.append(compDict[comp])
-                        breakTag = soup.new_tag("br")
-                        sectionWrapper.append(breakTag)
-                    courseSectionWrapper.append(sectionWrapper)
+                        # create a dropdown option for each section in a course
+                        createDropdownOptions(section, compDict, hexcolorlist, plan, term, str(course[0]), colorCount, soup)
+                    # fill in title and "ALL" options
+                    populateSectionDropdown(compDict, sectionWrapper, courseSectionWrapper, str(course[0]), soup)
 
                 elif len(course) > 1 and type(course[0]) == type([]):
                     # Case: course is in a course group
@@ -134,33 +110,10 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
                                                                            "\""})
                             compDict= {}
                             for section in opt[0].sections:
-                                sectionRadio = soup.new_tag("option", attrs={"value": str(section),
-                                                                     "id": str(section)})
-                                sectionRadio.append(str(section))
-                                if section.component not in compDict:
-                                    compDict[section.component] = soup.new_tag("select", attrs={"ng-change":"render()",
-                                                                    "name":cleaner.cleanString(plan) + 
-                                                                           cleaner.cleanString(term)+
-                                                                           cleaner.cleanString(str(course[0])),
-                                                                    "ng-model":cleaner.cleanString(plan) + 
-                                                                           cleaner.cleanString(term) +
-                                                                           "obj."+
-                                                                           cleaner.cleanString(str(course[0])) + section.component,
-                                                                    "style":"background:" + hexcolorlist[colorCount] + ";"})
-                                compDict[section.component].append(sectionRadio)
-                        for comp in compDict:
-                            sectionWrapper.append(str(opt[0]) + " (" + comp  + ")")
-                            breakTag = soup.new_tag("br")
-                            sectionWrapper.append(breakTag)
-                            sectionRadio = soup.new_tag("option", attrs={"value": "ALL",
-                                                                        "id":"ALL"})
-                            sectionRadio.append("ALL")
-                            compDict[comp].append(deepcopy(sectionRadio))
-                            sectionWrapper.append(compDict[comp])
-                            breakTag = soup.new_tag("br")
-                            sectionWrapper.append(breakTag)
-                        courseSectionWrapper.append(sectionWrapper)
-
+                                # create a dropdown option for each section in a course 
+                                createDropdownOptions(section, compDict, hexcolorlist, plan, term, str(course[0]), colorCount, soup)
+                        # fill in title and "ALL" option
+                        populateSectionDropdown(compDict, sectionWrapper, courseSectionWrapper, str(opt[0]), soup)
                 colorCount += 1
 
             wrapperDiv.append(courseSectionWrapper)
@@ -182,23 +135,7 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
                     courseGroupWrapper = soup.new_tag("div", attrs={"id":course.getOptionName()})
 
                     # for each course group option, add a radio button
-                    for option in course.options:
-                        courseGroupRadio = soup.new_tag("input", attrs={"ng-change":"render()",
-                                                                    "type":"radio",
-                                                                    "name":cleaner.cleanString(plan) + 
-                                                                           cleaner.cleanString(term) + 
-                                                                           course.getOptionName(),
-                                                                    "ng-model":cleaner.cleanString(plan) + 
-                                                                            cleaner.cleanString(term) +
-                                                                            "obj."+
-                                                                            course.getOptionName(),
-                                                                    "value": option,
-                                                                    "id": option})
-                        labelTag = soup.new_tag("label", attrs={"for":option})
-                        labelTag.append(option)
-                        courseGroupWrapper.append(courseGroupRadio)
-                        courseGroupWrapper.append(labelTag)
-                    courseGroupWrapperDiv.append(courseGroupWrapper)
+                    createCourseGroupRadioButtons(course, plan, term, courseGroupWrapper, courseGroupWrapperDiv, soup)
                             
                 else:
                     # Case: course is for OR courses
@@ -310,6 +247,88 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
             wrapperDiv.append(courseGroupWrapperDiv)
             wrapperDiv.append(ORCourseWrapperDiv)
             inputWrapper.append(wrapperDiv)
+
+# Creates the html elements for options in the course section dropdowns.
+# Html tags are appended to compDict under either "LEC", "SEM", or "LAB"
+# Parameters:
+#   section - Course object for an individual course section
+#   compDict - dict storing html tags under "LEC", "SEM", or "LAB"
+#   hexcolorlist - list of colors used to color code courses
+#   plan - name of the plan currently being placed
+#   term - name fo the term currently being placed
+#   courseName - name of the course (with section number on the end)
+#   colorCount - counter used to index hexcolorlist for selecting a color for a course
+#   soup - soup object, used to create HTML tags
+def createDropdownOptions(section, compDict, hexcolorlist, plan, term, courseName, colorCount, soup):
+    # individual dropdown option
+    sectionRadio = soup.new_tag("option", attrs={"value": str(section),
+                        "id": str(section)})
+    sectionRadio.append(str(section))
+
+    if section.component not in compDict:
+        compDict[section.component] = soup.new_tag("select", attrs={"ng-change":"render()",
+                                                "name":cleaner.cleanString(plan) + 
+                                                        cleaner.cleanString(term)+
+                                                        cleaner.cleanString(courseName),
+                                                "ng-model":cleaner.cleanString(plan) + 
+                                                        cleaner.cleanString(term) +
+                                                        "obj."+
+                                                        cleaner.cleanString(courseName) + section.component,
+                                                "style":"background:" + hexcolorlist[colorCount] + ";"})
+    compDict[section.component].append(sectionRadio)
+
+# Fills in title and "ALL" option for each component (LEC, SEM, LAB)
+# for the dropdown menus
+# Parameters:
+#   compDict - dict storing html tags under "LEC", "SEM", or "LAB"
+#   sectionWrapper - html div holding one dropdown menu
+#   courseSectionWrapper - html div holding all dropdown menus
+#   courseName - name of the course (without section)
+#   soup - soup object, used to create HTML tags
+def populateSectionDropdown(compDict, sectionWrapper, courseSectionWrapper, courseName, soup):
+    for comp in compDict:
+        # title above  
+        sectionWrapper.append(courseName + " (" + comp  + ")")
+        breakTag = soup.new_tag("br")
+        sectionWrapper.append(breakTag)
+
+        # ALL option
+        sectionRadio = soup.new_tag("option", attrs={"value": "ALL",
+                                                    "id":"ALL"})
+        sectionRadio.append("ALL")
+        compDict[comp].append(deepcopy(sectionRadio))
+
+        sectionWrapper.append(compDict[comp])
+        breakTag = soup.new_tag("br")
+        sectionWrapper.append(breakTag)
+    courseSectionWrapper.append(sectionWrapper)
+
+# Creates the radio buttons for switching between course group options
+# Parameters:
+#   course - object holding all course group options
+#   plan - name of the plan currently being placed
+#   term - name of the term currently being placed
+#   courseGroupWrapper - html div holding radio options within one course group
+#   courseGroupWrapperDiv - html div holding all courseGroupWrappers (if more than one course group)
+#   soup - soup object, used to create HTML tags
+def createCourseGroupRadioButtons(course, plan, term, courseGroupWrapper, courseGroupWrapperDiv, soup):
+    for option in course.options:
+        courseGroupRadio = soup.new_tag("input", attrs={"ng-change":"render()",
+                                                    "type":"radio",
+                                                    "name":cleaner.cleanString(plan) + 
+                                                            cleaner.cleanString(term) + 
+                                                            course.getOptionName(),
+                                                    "ng-model":cleaner.cleanString(plan) + 
+                                                            cleaner.cleanString(term) +
+                                                            "obj."+
+                                                            course.getOptionName(),
+                                                    "value": option,
+                                                    "id": option})
+        labelTag = soup.new_tag("label", attrs={"for":option})
+        labelTag.append(option)
+        courseGroupWrapper.append(courseGroupRadio)
+        courseGroupWrapper.append(labelTag)
+    courseGroupWrapperDiv.append(courseGroupWrapper)
 
 # Function that generates the display div which holds the plan diagram
 # Parameters:

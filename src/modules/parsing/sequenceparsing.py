@@ -6,7 +6,7 @@
 # This file contains the functions neccesary to parse the Excel file
 # containing the sequencing information
 
-# Dependencies: copy, xlrd
+# Dependencies: copy, tkinter, xlrd
 
 from copy import deepcopy
 from tkinter import messagebox
@@ -47,6 +47,8 @@ def parseSeq(filename, course_obj_dict, plainNameList):
                         # Cell in Excel is empty, skip over this cell
                         continue
                     parsedCourseObj = courseParse(name, course_obj_dict, plainNameList)
+
+                    # removing/skipping over empty entries
                     if type(parsedCourseObj) == type([]):
                         for obj in parsedCourseObj:
                             if obj is None:
@@ -54,27 +56,27 @@ def parseSeq(filename, course_obj_dict, plainNameList):
                     else:
                         if parsedCourseObj is None:
                             continue
+
                     term_list.append(parsedCourseObj)
             
-                plan_dict[term_name] = term_list  # store each list in a dict (key is term name)
+                # store each list in a dict (key is term name)
+                plan_dict[term_name] = term_list
                 col += 1
-            course_seq[sheet.name] = plan_dict  # store each term dict in a plan dict (key is plan name (traditional, co-op plan 1, etc.))
-
-        # Not in use, overrides Calendar description
-        # Make sure that co-reqs are only for courses in the same term
-        # Had to do this after pulling from Sequencing.xls
-        # course_seq = checkReqs(course_seq)
+            # store each term dict in a plan dict (key is plan name (traditional, co-op plan 1, etc.))
+            course_seq[sheet.name] = plan_dict
 
     except FileNotFoundError:
-        messagebox.showerror("Error", "Excel accreditation information file not found, ensure it is present and the name is correct")
-        raise FileNotFoundError("Excel sequencing file not found, ensure it is present and the name is correct.")
+        messagebox.showerror("Error", "Excel sequencing information file not found, ensure it is present and the name is correct")
+        raise FileNotFoundError("Excel sequencing file not found, ensure it is present and the name is correct")
     except xlrd.biffh.XLRDError:
-        raise ValueError("Error reading data from sequencing Excel sheet. Ensure it is formatted exactly as specified")
+        messagebox.showerror("Error", "Error reading data from sequencing Excel file. Ensure it is formatted exactly as specified")
+        raise ValueError("Error reading data from sequencing Excel file. Ensure it is formatted exactly as specified")
 
     return course_seq
 
-# Searches through course_obj_dict for courses with plainNames that match input courseName
-# Returns a list of names of courses in course_obj_dict with matching plainName
+# Searches through course_obj_dict for courses with plainNames that match input courseName.
+# Returns a list of names of courses in course_obj_dict with matching plainName.
+# i.e. returns a list of all sections of a course (CHEM 103 A1, CHEM 103 B2 have same plainName)
 #
 # Parameters:
 #   course_obj_dict (dictionary): dict with course name for key and 
@@ -94,6 +96,7 @@ def findFullNames(course_obj_dict, courseName):
 
     return fullNames
 
+# DEFUNCT
 # Checks that all coreqs for a course are taken in the same term,
 # if not, the coreq is changed to become a prereq. Similarly,
 # if a coreq is actually taken before a course in a certain plan,
@@ -106,12 +109,7 @@ def findFullNames(course_obj_dict, courseName):
 #       value: dict with key as term name ("Term 1", "Term 2", etc.)
 #
 # Returns:
-#   course_seq (dict): Stores course data in proper sequence:
-#       key: Plan Name (string): name of the sheet from "Sequencing.xls"
-#       ("Traditional", "Co-op Plan 1", etc.)
-#       value: dict with key as term name ("Term 1", "Term 2", etc.)
-#       and value as a list of Course objects to be taken in that term.
-#       The coreq and prereq attributes may or may not have been modified.
+#   course_seq (dict): the coreq and prereq attributes may or may not have been modified.
 def checkReqs(course_seq):
     # We have to check the sequencing for each plan as courses are taken
     # at different times in different plans
@@ -258,32 +256,6 @@ def courseParse(name, course_obj_dict, plainNameList):
     else:
         return [createCourseSection(nameList[0].upper(), course_obj_dict, plainNameList)]
 
-# Function that reads in text and returns the respective list that 
-# gets placed in the sequenceDict. Used for testing
-# If the cell contains a single course name, what is returned is a list with a single
-# CourseSectionWrapper object
-# If the cell contains mutiple courses sepearted by OR, what is returned is a list of
-#  CourseSectionWrapper objects
-# If the cell contains a course group desigination, what is returned is a list of lists,
-# with each list contains CourseSectionWrapper object(s) and the name of the course group
-# as the last item
-# Parameters:
-#   name - text within cell that is parsed
-#   course_obj_dict - dict containing course info
-def courseParseTest(name, course_obj_dict):
-    name = name.strip().replace("  "," ")
-    nameList = name.split("OR")
-    if len(nameList) > 1:
-        # course group case
-        if "{" in nameList[0]:
-            return courseParseCourseGroupsTest(nameList, course_obj_dict)
-        # non course group case
-        else:
-            return [createCourseSectionTest(item.upper().strip(), course_obj_dict) for item in nameList]
-    #single course
-    else:
-        return [createCourseSectionTest(nameList[0].upper(), course_obj_dict)]
-
 # Creates and returns a CourseSectionWrapper object holding all of the
 # Course objects for each section. eg: if Math 100 has sections A1 & A2
 # then the returned wrapper will contain 2 course objects, one for each section.
@@ -298,14 +270,6 @@ def createCourseSection(course, course_obj_dict, plainNameList):
     if course not in plainNameList:
         return None
     fullNames = findFullNames(course_obj_dict, course)  # fullNames include section numbers
-    wrapper = CourseSectionWrapper(course)
-    for fullName in fullNames:
-        curr_course = deepcopy(course_obj_dict[fullName])
-        wrapper.addSection(curr_course)
-    return wrapper
-
-def createCourseSectionTest(course, course_obj_dict):
-    fullNames = findFullNames(course_obj_dict, course)
     wrapper = CourseSectionWrapper(course)
     for fullName in fullNames:
         curr_course = deepcopy(course_obj_dict[fullName])
@@ -339,25 +303,8 @@ def courseParseCourseGroups(nameList, course_obj_dict, plainNameList):
             if course.upper().strip() not in plainNameList:
                 # course info was not parsed from the course info Excel file
                 continue
-            courseGroupList.append(createCourseSection(course.upper().strip(), course_obj_dict, plainNameList))  # create courseSectionWrapper
-        courseGroupList.append(courseGroupName)
-        courseGroups.append(courseGroupList)
-    return courseGroups
-
-def courseParseCourseGroupsTest(nameList, course_obj_dict):
-    courseGroups = []
-    for name in nameList:
-        name = name.replace("{","").replace("}","")
-        courseGroupNameIndexStart = name.find("(")
-        courseGroupNameIndexEnd = name.find(")")
-        if courseGroupNameIndexEnd == -1 or courseGroupNameIndexStart == -1:
-            raise ValueError("Course group name inproperly formatted")
-        courseGroupName = name[courseGroupNameIndexStart+1:courseGroupNameIndexEnd]
-        strippedCourses = name[0:courseGroupNameIndexStart]
-        courseList = strippedCourses.split("or")
-        courseGroupList = []
-        for course in courseList:
-            courseGroupList.append(createCourseSectionTest(course.upper().strip(), course_obj_dict))
+            # create courseSectionWrapper
+            courseGroupList.append(createCourseSection(course.upper().strip(), course_obj_dict, plainNameList))
         courseGroupList.append(courseGroupName)
         courseGroups.append(courseGroupList)
     return courseGroups

@@ -4,67 +4,7 @@
 # University of Alberta, Summer 2022, Curriculum Development Co-op Term
 
 # This file contains the functions needed to extract the course group 
-# information needed to generate the web page
-
-# Function that finds the list of all course groups available in that term
-# Parameters:
-#   courseGroupDict - dict that maps plans to the course groups that exist in each plan
-# Returns a list of course groups taken in that program
-def findListofAllCourseGroups(courseGroupDict):
-    currentList = []
-    for plan in courseGroupDict:
-        for element in courseGroupDict[plan]:
-            if element not in currentList:
-                currentList.append(element)
-    return currentList
-
-# Function that constructs a dict that maps plans to the course groups existing in that plan
-# and their options
-# Parameters:
-#   sequenceDict - dict that maps plan names to the plan dict containing sequencing info about that plan
-# Returns a dict that maps plans to the course groups that exist in each plan
-def extractPlanCourseGroupDict(sequenceDict):
-    courseGroupDict = {}
-    for plan in sequenceDict:
-        index = plan.find("{")  # course groups must appear in curly braces
-        if index != -1:
-            shortenedPlanName = plan[0:index].strip()
-        else:
-            shortenedPlanName = plan
-        if shortenedPlanName not in courseGroupDict:
-            courseGroupDict[shortenedPlanName] = {}
-        courseGroupList = extractCourseGroupListFromString(plan)
-        if courseGroupList == []:
-            # no course groups available
-            continue
-        planCourseGroupsDict = courseGroupDict[shortenedPlanName]
-        courseGroupDict[shortenedPlanName] = appendCourseGroups(planCourseGroupsDict,courseGroupList)
-    return courseGroupDict
-
-# Function that appends course groups and options to a specfic plan in course group dict
-#   planCourseGroupDict - dict that maps course groups to a list of options taken in that group
-#   courseGroupList - list of course group options
-# Returns a new course group dict for that specific plan
-def appendCourseGroups(planCourseGroupsDict, courseGroupList):
-    for group in courseGroupList:
-        numOfGroup = int(''.join(filter(lambda s: (s.isdigit()), group))) # for group 3A the numOfGroup is 3
-        if numOfGroup not in planCourseGroupsDict:
-            planCourseGroupsDict[numOfGroup] = []
-        if group not in planCourseGroupsDict[numOfGroup]:
-            planCourseGroupsDict[numOfGroup].append(group)
-    return planCourseGroupsDict
-
-# Function that creates a list of course groups for a specfic variation of a course group
-# selection
-# Parameters:
-#   planName - long plan name of specific variant
-# Returns a list of the options chosen in that variant
-def extractCourseGroupListFromString(planName):
-    index = planName.find("{")
-    if index == -1:
-        return []
-    endIndex = planName.find("}")
-    return planName[index+1:endIndex].split()
+# information and classes to store the info in
 
 # Base class for the wrapper object storing different options groups
 # Fields:
@@ -84,10 +24,10 @@ class Option:
 
 # Class that extends from Option to wrap OR course options (wraps list of course section objects)
 # Fields:
-#   isWithinCourseGroup - boolean flag that indicates whether the OR course group 
+#   isWithinCourseGroup - boolean flag that indicates whether the OR course 
 #   is within a course group
-#   parentCourseGroup - name of parent course group of OR course group, empty if not
-#   not within a course group
+#   parentCourseGroup - name of parent course group of OR course, empty if not
+#   within a course group
 class ORCourseOption(Option):
     def __init__(self, options=None, isWithinCourseGroup=False, parentCourseGroup=""):
         super().__init__(options)
@@ -111,7 +51,7 @@ class CourseGroupOption(Option):
         return self.courseGroupName
 
 # Function that takes the program sequence dict and produces the dict that
-# detrimines a list of the different options sets for a certain plan and term
+# determines a list of the different option sets for a certain plan and term
 def extractingListofOptions(sequenceDict):
     listOptionsDict = {}
     for plan in sequenceDict:
@@ -121,22 +61,28 @@ def extractingListofOptions(sequenceDict):
             optionsList = []
             for course in sequenceDict[plan][term]:
                 if len(course) <= 1:
+                    # Case: course is not in course group and is not an OR course
                     continue
                 if type(course[0]) == type([]):
+                    # Case: course is in a course group
                     courseGroupOpt = CourseGroupOption("group" + course[0][-1][0])
                     for option in course:
                         if len(option) > 2:
+                            # Case: this course is an OR course (in addition to being in a course group)
+                            # append an ORCourseOption object
                             optionsList.append(ORCourseOption(option[:-1], True, option[-1]))
                         courseGroupOpt.addOption(option[-1])
-                    dup = False
+                    dup = False  # track if we have a duplicate course group (course groups are entered multiple times in Excel)
                     for optionWrap in optionsList:
                         if courseGroupOpt.isequal(optionWrap):
+                            # we have a duplicate course group
                             dup = True
                             break
                     if dup:
                         continue
                     optionsList.append(courseGroupOpt)                        
                 else:
+                    # Case: course is an OR course
                     ORCourseOption = ORCourseOption(False, "")
                     for option in course:
                         ORCourseOption.addOption(option)
