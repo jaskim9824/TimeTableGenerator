@@ -3,29 +3,40 @@
 Developed by: Jason Kim, Moaz Abdelmonem, and Zachary Schmidt under the supervision of Dr. David Nobes (University of Alberta)
 in the Summer of 2022
 
-Program written in Python to generate an interactive timetable diagram that lays out the courses offered in an engineering
-discipline at the University of Alberta.
+Intro
 
-Courses are placed on top of a grid which displays days as columns and time divisions as rows. On hovering over
-a course box, the calendar description, instructor details, location, and enrollment information will appear.
+  - Program written in Python to generate an interactive timetable diagram that lays out the courses offered in an engineering
+    discipline at the University of Alberta.
 
-First, the generator parses two Excel spreadsheets. The first of these spreadsheets is a list of all of the courses
-that will be displayed on the page along with information about that course (faculty, description, instructor, location, etc.).
-This information is stored in a dict of objects. The second Excel spreadsheet sequences the courses in a program by plan and
-by term. This spreadheet also describes any course groups. This information is stored in a separate dict of objects.
+  - Courses are placed on top of a grid which displays days as columns and time divisions as rows. On hovering over
+    a course box, the calendar description, instructor details, location, enrollment information,and accreditation
+    units will appear.
 
-The output HTML and Javscript files are programatically generated. The generator locates a template.html file
-(which provides some basic layout information) and appends to this html file using the Beautiful Soup package.
+Parsing
 
-The information from the Excel files is used to create HTML course elements. Information about the course can be retrieved
-from the object associated with that course.
+  - First, the generator parses three Excel spreadsheets. The first of these spreadsheets is a list of all of the courses
+    that will be displayed on the page along with information about that course (faculty, description, instructor, location, etc.).
+    This information is stored in a dict of objects. The second Excel spreadsheet sequences the courses in a program by plan and
+    by term. This spreadheet also describes any course groups. This information is stored in a separate dict of objects.
+    The final Excel spreadsheet contains the accreditation units for courses at the U of A.
 
-The course elements are placed on the page with an absolute vertical position which is derived from the "Hrs From" cell 
-in Excel (which becomes an attribute in the corresponding object). The height of the course element is derived from the 
-difference between the "Hrs From" and "Hrs To" entries in the Excel file.
+Website Generation
 
-If two or more courses are available at the same time on the same day, the courses that are overlapping have their 
-width reduced and are relatively positioned so that they do not overlap.
+  - The output HTML and Javscript files are programatically generated. The generator locates a template.html file
+    (which provides some basic layout information) and appends to this html file using the Beautiful Soup package.
+
+  - The information from the Excel files is used to create HTML course elements. Information about the course can be retrieved
+    from the object associated with that course.
+
+  - The course elements are placed on the page with an absolute vertical position which is derived from the "Hrs From" cell 
+    in Excel (which becomes an attribute in the corresponding object). The height of the course element is derived from the 
+    difference between the "Hrs From" and "Hrs To" entries in the Excel file.
+
+  - The main purpose of the javascript is 1) to allow switching between plans, terms, course groups, and course sections
+    (using angularJS) and 2) to adjust for overlapping courses. JS functions will search through all currently displayed
+    courses and find any overlaps. If there is an overlap, the width and positioning of courses are adjusted.
+
+Details regarding the formatting of the input Excel files are provided in docs/Website Generation Tutorial.pdf
 
 This project requires Python 3.6 or higher.
 
