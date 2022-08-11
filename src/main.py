@@ -38,6 +38,24 @@ canvas = Canvas(
 canvas.place(x = 0, y = 0)
 window.resizable(False, False)
 
+###progress Bar##
+def add_progbar():
+    global progbar
+    progbar = ttk.Progressbar(
+    window,
+    orient='horizontal',
+    mode='determinate',
+    length=280
+    )
+    progbar.place(
+    x=700, y=500
+    )
+
+
+def progress():
+    progbar['value']+= 10.8
+    window.update_idletasks()
+    return progbar['value']
 
 ####new window####
 def new_window():
@@ -217,27 +235,41 @@ def writingHTML(soup):
         raise FileNotFoundError("The directory you are in does not have a directory named output.")
 
 def main():
+    add_progbar()
+    value_label = Label(window, bg="white")
+    value_label.place(x=787, y= 525)
     try:
         with open("template.html") as input:
+            # opening the JS files
+            print("Opening files...")
+            value_label['text'] = 'Opening files...'
             controller = open("./output/js/controller.js", "w")
             soup = BeautifulSoup(input, 'html.parser')
+            progress()
 
             deptName = department.get()
 
-            # parsing the Excel files
+            # parsing the excel files with course, sequencing and accreditation info
+            print("Parsing excel files...")
+            value_label['text'] = 'Parsing excel files...'
             sequenceDict = courseparsing.parseCourses(tableExcel.get(), seqExcel.get(), accrExcel.get(), deptName)
+            progress()
+            progress()
 
             # extracting course group information
             courseGroupDict = coursegroupparsing.extractPlanCourseGroupDict(sequenceDict)
             courseGroupList = coursegroupparsing.findListofAllCourseGroups(courseGroupDict)
             optionDict = coursegroupparsing.extractingListofOptions(sequenceDict)
 
-            # writing JS controller
+            # generating initial JS based on the number and names of plans
+            print("Intialzing JS files...")
+            value_label['text'] = 'Intialzing JS files...'
             javascriptgen.intializeControllerJavaScript(sequenceDict, 
                                                         courseGroupDict,
                                                         courseGroupList, 
                                                         optionDict,
                                                         controller)
+            progress()
 
             topTitleTag = soup.head.find("title")
             titleTag = soup.body.find("a", class_="site-title")
@@ -257,19 +289,27 @@ def main():
             hexcolorlist = ["#6aa2fc", "#fcaeae", "#d13d3d", "#faab4b", "#ede387", "#bced87", "#87edae", "#87eaed", "#6494ed", "#c664ed"]
 
             # radio inputs for plan, term, and course group
+            print("Placing radio inputs...")
+            value_label['text'] = 'Placing radio inputs...'
             htmlgen.placeRadioInputs(formTag, termTag, courseGroupTag, optionDict, sequenceDict, hexcolorlist, soup)
-            # htmlgen.placeSectionRadioInputs(sequenceDict, courseSectionWrapper, soup)
+            progress()
+
             # main tag holding timetable itself
             displayTag = htmlgen.generateDisplayDiv(soup, courseGroupList)
 
             mainTag.append(displayTag)
 
             # generating html for each plan & each term
+            print("Placing courses on page...")
+            value_label['text'] = 'Placing courses on page...'
             htmlgen.placePlanDivs(displayTag, 
                                   sequenceDict,
                                   hexcolorlist, 
                                   soup,
                                   controller)
+            progress()
+            progress()
+            progress()
 
             javascriptgen.closeControllerJavaScript(controller)
 
@@ -280,8 +320,11 @@ def main():
        else:
         raise FileNotFoundError(str(err))
         
-
+    # writing soup to output/index.html
+    print("Writing final HTML...")
+    value_label['text'] = 'Writing final HTML...'
     writingHTML(soup)
+    progress()
     messagebox.showinfo('Status',message="Webpage successfully generated!")
     
 
