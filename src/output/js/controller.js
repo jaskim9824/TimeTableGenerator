@@ -87,7 +87,8 @@ this.updateObjFields = function(plan, term) {
                     }
                     else if (!plainName.includes("__cgoption")) {
                         if (fullName == "ALL") {
-                            if (courseID.includes(plainName)) {
+                            let strippedName = plainName.replace("LEC", "").replace("SEM", "").replace("LAB", "");
+                            if (courseID.includes(strippedName)) {
                                 found = true;
                             }
                         }

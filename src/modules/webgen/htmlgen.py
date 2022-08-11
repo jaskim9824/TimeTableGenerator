@@ -109,7 +109,8 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
                         sectionWrapper.append(breakTag)
                         sectionRadio = soup.new_tag("option", attrs={"value": "ALL",
                                                                         "id":"ALL"})
-                        compDict[comp].append(sectionRadio)
+                        sectionRadio.append("ALL")
+                        compDict[comp].append(deepcopy(sectionRadio))
                         sectionWrapper.append(compDict[comp])
                         breakTag = soup.new_tag("br")
                         sectionWrapper.append(breakTag)
@@ -153,6 +154,7 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
                             sectionWrapper.append(breakTag)
                             sectionRadio = soup.new_tag("option", attrs={"value": "ALL",
                                                                         "id":"ALL"})
+                            sectionRadio.append("ALL")
                             compDict[comp].append(deepcopy(sectionRadio))
                             sectionWrapper.append(compDict[comp])
                             breakTag = soup.new_tag("br")
@@ -553,12 +555,13 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
                                                            "ng-show":"("+cleaner.cleanString(plan)+
                                                            cleaner.cleanString(term)+"obj."+
                                                            cleaner.cleanString(str(course))+
-                                                           section.component + 
+                                                           section.component+ 
                                                            "__cgoption"+courseGroupSubName
                                                            +"==\""+str(section)+"\" ||"+
                                                            cleaner.cleanString(plan)+
                                                            cleaner.cleanString(term)+"obj."+
                                                            cleaner.cleanString(str(course))+
+                                                           section.component+
                                                            "__cgoption"+courseGroupSubName+
                                                            "==\"ALL\""+
                                                            ")"+
@@ -587,7 +590,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
                                                            "ng-show":"("+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(course))+
                                                            section.component+"__cgoption"+courseGroupSubName
                                                            +"==\""+str(section)+"\""+"||"+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+
-                                                           cleaner.cleanString(str(course))+"__cgoption"+courseGroupSubName+"==\"ALL\")"
+                                                           cleaner.cleanString(str(course))+section.component+"__cgoption"+courseGroupSubName+"==\"ALL\")"
                                                            +"&&"+
                                                            cleaner.cleanString(plan)
                                                            +cleaner.cleanString(term)+
@@ -662,7 +665,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
                                                            "px",
                                                            "ng-show":"("+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(courseWrapper))+
                                                            course.component+"==\""+str(course)+"\""+"||"+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+
-                                                           cleaner.cleanString(str(courseWrapper))+"==\"ALL\")"+
+                                                           cleaner.cleanString(str(courseWrapper))+course.component+"==\"ALL\")"+
                                                            "&&"+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+
                                                            orName+"==\""+str(courseWrapper)+"\""})
                     else:
@@ -675,7 +678,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
                                                            "px",
                                                            "ng-show":cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(courseWrapper))+
                                                            course.component+"==\""+str(course)+"\""+"||"+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+
-                                                           cleaner.cleanString(str(courseWrapper))+"==\"ALL\""})
+                                                           cleaner.cleanString(str(courseWrapper))+course.component+"==\"ALL\""})
 
                     # courseDisc = text description which appears on hover
                     courseDisc = soup.new_tag("div", attrs={"id":courseID+"desc",
