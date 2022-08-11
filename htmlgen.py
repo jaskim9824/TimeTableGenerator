@@ -130,35 +130,33 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
                                                                            "==\"" + 
                                                                            opt[-1] + 
                                                                            "\""})
-                            sectionWrapper.append(str(opt[0]))
-                            breakTag = soup.new_tag("br")
-                            sectionWrapper.append(breakTag)
-                            courseGroupName = opt[1]
-                            sectionSelectWrapper = soup.new_tag("select", attrs={"ng-change":"render()",
-                                                                        "name":cleaner.cleanString(plan) + 
-                                                                               cleaner.cleanString(term)+
-                                                                               cleaner.cleanString(str(opt[0])),
-                                                                        "ng-model":cleaner.cleanString(plan) + 
-                                                                               cleaner.cleanString(term) +
-                                                                               "obj."+
-                                                                               cleaner.cleanString(str(opt[0])) + 
-                                                                               "__cgoption" + courseGroupName,
-                                                                        "style":"background:" + hexcolorlist[colorCount] + ";"})
-                            
-                            # for each available section of a course, add a dropdown option
+                            compDict= {}
                             for section in opt[0].sections:
                                 sectionRadio = soup.new_tag("option", attrs={"value": str(section),
-                                                                             "id": str(section)})
-                                sectionRadio.append(str(section) + " (" + section.component + ")")
-                                sectionSelectWrapper.append(sectionRadio)
-                            # last dropdown option is to display all course sections
+                                                                     "id": str(section)})
+                                sectionRadio.append(str(section))
+                                if section.component not in compDict:
+                                    compDict[section.component] = soup.new_tag("select", attrs={"ng-change":"render()",
+                                                                    "name":cleaner.cleanString(plan) + 
+                                                                           cleaner.cleanString(term)+
+                                                                           cleaner.cleanString(str(course[0])),
+                                                                    "ng-model":cleaner.cleanString(plan) + 
+                                                                           cleaner.cleanString(term) +
+                                                                           "obj."+
+                                                                           cleaner.cleanString(str(course[0])) + section.component,
+                                                                    "style":"background:" + hexcolorlist[colorCount] + ";"})
+                                compDict[section.component].append(sectionRadio)
+                        for comp in compDict:
+                            sectionWrapper.append(str(opt[0]) + " (" + comp  + ")")
+                            breakTag = soup.new_tag("br")
+                            sectionWrapper.append(breakTag)
                             sectionRadio = soup.new_tag("option", attrs={"value": "ALL",
-                                                                         "id":"ALL"})
-                            sectionRadio.append("ALL")
-
-                            sectionSelectWrapper.append(sectionRadio)
-                            sectionWrapper.append(sectionSelectWrapper)
-                            courseSectionWrapper.append(sectionWrapper)
+                                                                        "id":"ALL"})
+                            compDict[comp].append(sectionRadio)
+                            sectionWrapper.append(compDict[comp])
+                            breakTag = soup.new_tag("br")
+                            sectionWrapper.append(breakTag)
+                        courseSectionWrapper.append(sectionWrapper)
 
                 colorCount += 1
 
