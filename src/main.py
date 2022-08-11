@@ -288,8 +288,8 @@ def main():
             htmlgen.placeRadioInputs(formTag, termTag, courseGroupTag, optionDict, sequenceDict, hexcolorlist, soup)
             progress()
 
-            # main tag holding timetable itself
-            displayTag = htmlgen.generateDisplayDiv(soup)
+            # this is the primary tag holding timetable itself
+            displayTag = soup.new_tag("div", attrs={"class":"display"})
 
             mainTag.append(displayTag)
 
