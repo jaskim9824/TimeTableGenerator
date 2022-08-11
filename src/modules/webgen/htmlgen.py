@@ -314,14 +314,11 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
 # Function that generates the display div which holds the plan diagram
 # Parameters:
 #   soup - soup object, used to create HTML tags
-#   courseGroupList - list of all possible course groups taken in this program
 # Returns:
 #   displayTag - HTML tag for the display tag (container for the timetable grid)
-def generateDisplayDiv(soup, courseGroupList):
+def generateDisplayDiv(soup):
     switchVariable = "selectedPlan"  # switch on plan selection
     formattedCourseGroupVar="field{number}.group{number}"  # switch on course group selection
-    for element in courseGroupList:
-        switchVariable += "+" + formattedCourseGroupVar.format(number=element)
     switchVariable += "+selectedTerm"  # switch on term selection
     return soup.new_tag("div", attrs={"class":"display"})
 

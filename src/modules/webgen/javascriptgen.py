@@ -12,17 +12,12 @@ from .. import cleaner
 # Function that generates the JS before the generation of the course diagram
 # Parameters:
 #   sequenceDict - dict that maps plan name to a dict that represents the plan sequence
-#   courseGroupDict - dict that maps plans to a dict that maps course groups to the 
-#   options avaiable in that course group 
-#   courseGroupList - list of course groups taken overall in the program
 #   planOptionDict - dict mapping plan & term to the course group options available in that plan & term
 #   controller - file handle for controller JS file
-def intializeControllerJavaScript(sequenceDict, courseGroupDict, courseGroupList, planOptionDict, controller):
-    generateInitialBlockController(courseGroupDict, list(list(sequenceDict.values())[0].keys())[0], controller)
+def intializeControllerJavaScript(sequenceDict, planOptionDict, controller):
+    generateInitialBlockController(sequenceDict, list(list(sequenceDict.values())[0].keys())[0], controller)
     generateInitialOptionObjects(planOptionDict, controller)
     generatePlanBasedBlocksController(sequenceDict, 
-                                      courseGroupDict, 
-                                      courseGroupList,
                                       controller)
 
 # Function that properly concludes and closes the controller JS
@@ -36,12 +31,11 @@ def closeControllerJavaScript(controller):
 # Function that generates the initial block of Javascript in controller.js
 # Initializes variables and writes the main controller function
 # Parameters:
-#   courseGroupDict - dict that maps plans to a dict that maps course groups to the 
-#   options avaiable in that course group
+#   sequenceDict - dict that maps plan name to a dict that represents the plan sequence
 #   initialTerm - First term to occur in the first plan
 #   controller - file handle for controller JS file
-def generateInitialBlockController(courseGroupDict, initialTerm, controller):
-    planList = list(courseGroupDict.keys())  # used to access first occurring plan
+def generateInitialBlockController(sequenceDict, initialTerm, controller):
+    planList = list(sequenceDict.keys())  # used to access first occurring plan
 
     # writing the main controller function
     controller.write("var app = angular.module(\"main\", []);\n")
@@ -85,12 +79,9 @@ Array.prototype.forEach.call(radios, function (radio) {
 # on the number and names of plans provided
 # Parameters:
 #   sequenceDict - dict that maps plan name to a dict that represents the plan sequence
-#   courseGroupDict - dict that maps plans to a dict that maps course groups to the 
-#   options avaiable in that course group 
-#   courseGroupList - list of course groups taken overall in the program
 #   controller - file handle for controller JS file
-def generatePlanBasedBlocksController(sequenceDict, courseGroupDict, courseGroupList, controller):
-    generateSetDefaults(courseGroupDict, courseGroupList, list(list(sequenceDict.values())[0].keys())[0], controller)
+def generatePlanBasedBlocksController(sequenceDict, controller):
+    generateSetDefaults(sequenceDict, controller)
 
 # Function that appends the custom Angular directive used to handle right click
 # events to the end of the controller JS file
@@ -114,30 +105,21 @@ def writeRightClickDirective(controller):
 # The JS generated sets the default term and course group options for each plan. 
 # Reverts to these defaults when switching between plans.
 # Parameters:
-#   courseGroupDict - dict that maps plans to a dict that maps course groups to the 
-#   options avaiable in that course group
-#   courseGroupList - list of course groups taken overall in the program
-#   initialTerm - First term to occur in the first plan
+#   sequenceDict - dict that maps plan name to a dict that represents the plan sequence
 #   controller - file handle for controller JS file
-def generateSetDefaults(courseGroupDict, courseGroupList, initialTerm, controller):
+def generateSetDefaults(sequenceDict, controller):
+    initialTerm = list(list(sequenceDict.values())[0].keys())[0]
     controller.write("this.setDefaults = function(plan) { \n")
     controller.write("  switch(plan) { \n")  # different term and course group options in each plan
     formattedCaseStatement = "      case \"{case}\": \n"
     formattedTerm = "            $scope.selectedTerm = \"" + cleaner.cleanString(initialTerm) + "\";\n"  # set initial term
-    formattedCourseGroup = "            $scope.field{number}.group{number} ="  # set initial course groups
     switchEndString = """    default:
     console.log("shouldn't be here");
     }
 };\n"""
-    for mainPlan in courseGroupDict:
+    for mainPlan in sequenceDict:
         controller.write(formattedCaseStatement.format(case=cleaner.cleanString(mainPlan)))
         controller.write(formattedTerm)
-        for element in courseGroupList:
-            controller.write(formattedCourseGroup.format(number=element))
-            if element not in courseGroupDict[mainPlan]:
-                controller.write("\"\";\n")
-            else:
-                controller.write("\""+str(element)+"A\";\n")
         controller.write("            $scope.$apply();\n")
         controller.write("            break;\n")
     controller.write(switchEndString)

@@ -255,17 +255,12 @@ def main():
             sequenceDict = courseparsing.parseCourses(tableExcel.get(), seqExcel.get(), accrExcel.get(), deptName)
             progress()
 
-            # extracting course group information
-            courseGroupDict = coursegroupparsing.extractPlanCourseGroupDict(sequenceDict)
-            courseGroupList = coursegroupparsing.findListofAllCourseGroups(courseGroupDict)
             optionDict = coursegroupparsing.extractingListofOptions(sequenceDict)
 
             # generating initial JS based on the number and names of plans
             print("Intialzing JS files...")
             value_label['text'] = 'Intialzing JS files...'
-            javascriptgen.intializeControllerJavaScript(sequenceDict, 
-                                                        courseGroupDict,
-                                                        courseGroupList, 
+            javascriptgen.intializeControllerJavaScript(sequenceDict,  
                                                         optionDict,
                                                         controller)
             progress()
@@ -294,7 +289,7 @@ def main():
             progress()
 
             # main tag holding timetable itself
-            displayTag = htmlgen.generateDisplayDiv(soup, courseGroupList)
+            displayTag = htmlgen.generateDisplayDiv(soup)
 
             mainTag.append(displayTag)
 
