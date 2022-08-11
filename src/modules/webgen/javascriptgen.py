@@ -182,7 +182,8 @@ def generateUpdateObjFields(controller):
                         if (fullName == "ALL") {
                             let removeIndex = plainName.indexOf("__cgoption");
                             let strippedName = plainName.substring(0, removeIndex);
-                            if (courseID.includes(strippedName)) {
+                            strippedName = strippedName.replace("LEC", "").replace("SEM", "").replace("LAB", "");
+                            if (courseID.includes(strippedName) && plainName.includes(courseObj.component)) {
                                 found = true;
                             }
                         }
@@ -193,7 +194,7 @@ def generateUpdateObjFields(controller):
                     else if (!plainName.includes("__cgoption")) {
                         if (fullName == "ALL") {
                             let strippedName = plainName.replace("LEC", "").replace("SEM", "").replace("LAB", "");
-                            if (courseID.includes(strippedName)) {
+                            if (courseID.includes(strippedName) && plainName.includes(courseObj.component)) {
                                 found = true;
                             }
                         }

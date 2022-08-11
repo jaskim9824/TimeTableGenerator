@@ -624,7 +624,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
 
                         courseContDiv.append(courseDiv)
                         # need to append courseContDiv to each day that course occurs on
-                        appendToEachDay(tagsList, courseContDiv, plan, term, minutesFromEight, minutesLong, controller)
+                        appendToEachDay(tagsList, courseContDiv, plan, term, minutesFromEight, minutesLong, section.component, controller)
  
             elif type(courseWrapper) == type([]) and len(courseWrapper) == 1:
                 # Case: courseWrapper is for an elective, not used in timetable
@@ -703,7 +703,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
 
                     courseContDiv.append(courseDiv)
                     # need to append courseContDiv to each day that course occurs on
-                    appendToEachDay(tagsList, courseContDiv, plan, term, minutesFromEight, minutesLong, controller)
+                    appendToEachDay(tagsList, courseContDiv, plan, term, minutesFromEight, minutesLong, course.component, controller)
 
         colorCount += 1
 
@@ -955,8 +955,9 @@ def formatCourseDescriptionForRegular(soup, course, courseDisc):
 #   term - name of the current term
 #   startTime - start time for course
 #   courseLength - length of course in minutes
+#   component - LEC, LAB, or SEM to indicate component of this course
 #   controller - file handle for controller.js
-def appendToEachDay(tagsList, courseContDiv, plan, term, startTime, courseLength, controller):
+def appendToEachDay(tagsList, courseContDiv, plan, term, startTime, courseLength, component, controller):
     for dayTag in tagsList:
         # if course on thursday or friday, move tooltip to left of course (so not off page)
         if dayTagInLateWeek(dayTag) and courseContDiv.find(class_="tooltiptextright") is not None:
@@ -987,6 +988,7 @@ def appendToEachDay(tagsList, courseContDiv, plan, term, startTime, courseLength
             controller.write(objectName + ".width = 321;\n")
             controller.write(objectName + ".left = 0;\n")
             controller.write(objectName + ".enabled = false;\n")
+            controller.write(objectName + ".component = \"" + component + "\";\n")
 
         dayTag.append(newDiv)
 
