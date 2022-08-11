@@ -483,6 +483,8 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
                     for section in course.sections:
                         tagsList = []
                         minutesFromEight = calcMinutes(section.hrsFrom)  # minutes from 8:00 to start of class
+                        if minutesFromEight < 0:
+                            continue
                         minutesLong = calcClassDuration(section.hrsFrom, section.hrsTo)  # duration of class
                         # save the tags we will need to append to for later
                         if section.mon == 'Y':
@@ -596,6 +598,8 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
                 for course in courseWrapper.sections:
                     tagsList = []
                     minutesFromEight = calcMinutes(course.hrsFrom)  # minutes from 8:00 to start of class
+                    if minutesFromEight < 0:
+                        continue
                     minutesLong = calcClassDuration(course.hrsFrom, course.hrsTo)  # duration of class
                     # save the tags we will need to append to for later
                     if course.mon == 'Y':
