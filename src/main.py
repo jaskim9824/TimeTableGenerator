@@ -48,12 +48,12 @@ def add_progbar():
     length=280
     )
     progbar.place(
-    x=700, y=500
+    x=685, y=485
     )
 
 
 def progress():
-    progbar['value']+= 10.8
+    progbar['value']+= 10.9
     window.update_idletasks()
     return progbar['value']
 
@@ -237,7 +237,7 @@ def writingHTML(soup):
 def main():
     add_progbar()
     value_label = Label(window, bg="white")
-    value_label.place(x=787, y= 525)
+    value_label.place(x=772, y= 510)
     try:
         with open("template.html") as input:
             # opening the JS files
@@ -253,7 +253,6 @@ def main():
             print("Parsing excel files...")
             value_label['text'] = 'Parsing excel files...'
             sequenceDict = courseparsing.parseCourses(tableExcel.get(), seqExcel.get(), accrExcel.get(), deptName)
-            progress()
             progress()
 
             # extracting course group information
@@ -313,26 +312,28 @@ def main():
 
             javascriptgen.closeControllerJavaScript(controller)
 
+        # writing soup to output/index.html
+        print("Writing final HTML...")
+        value_label['text'] = 'Writing final HTML...'
+        writingHTML(soup)
+        progress()
+        progress()
+        messagebox.showinfo('Status',message="Webpage successfully generated!")
+
     except FileNotFoundError as err:
        if (err.strerror == "No such file or directory"):
         raise FileNotFoundError("Either the template HTML file is not in the same directory as the script or" +
        " the output directory is not organized correctly or does not exist")
        else:
         raise FileNotFoundError(str(err))
-        
-    # writing soup to output/index.html
-    print("Writing final HTML...")
-    value_label['text'] = 'Writing final HTML...'
-    writingHTML(soup)
-    progress()
-    messagebox.showinfo('Status',message="Webpage successfully generated!")
     
-
+    finally:
+        progbar.destroy()
+        value_label.destroy()
 
 def show(selection):
     department.delete(0, END)
     department.insert(tkinter.END, selection) 
-
 
 ########Timetable excel file UI########
 tableEntry_img = PhotoImage(file = f"GUI_images/img_textBox0.png")
@@ -425,7 +426,6 @@ background_img = PhotoImage(file = f"GUI_images/background.png")
 background = canvas.create_image(
     467.5, 297.5,
     image=background_img)
-
 
 ######browse functions######
 def tableBrowse():
