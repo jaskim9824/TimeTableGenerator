@@ -212,14 +212,14 @@ def parseAccred(courseObjDict, accredFileName, deptName):
             for course in courseObjDict:
                 if sheet.cell_value(row, 1) == courseObjDict[course].plainName:  # see if the Excel entry matches a plainName
                     # if there is a match, update the accredUnits field with corresponding values
-                    courseObjDict[course].accredUnits["Math"] = sheet.cell_value(row, 8)
-                    courseObjDict[course].accredUnits["Natural Sciences"] = sheet.cell_value(row, 9)
-                    courseObjDict[course].accredUnits["Math and Natural Sciences"] = sheet.cell_value(row, 10)
-                    courseObjDict[course].accredUnits["Complimentary Studies"] = sheet.cell_value(row, 11)
-                    courseObjDict[course].accredUnits["Engineering Science"] = sheet.cell_value(row, 12)
-                    courseObjDict[course].accredUnits["Engineering Design"] = sheet.cell_value(row, 13)
-                    courseObjDict[course].accredUnits["Engineering Science and Engineering Design"] = sheet.cell_value(row, 14)
-                    courseObjDict[course].accredUnits["Other"] = sheet.cell_value(row, 15)
+                    courseObjDict[course].accredUnits["Math"] = round(sheet.cell_value(row, 8), 2)
+                    courseObjDict[course].accredUnits["Natural Sciences"] = round(sheet.cell_value(row, 9), 2)
+                    courseObjDict[course].accredUnits["Math and Natural Sciences"] = round(sheet.cell_value(row, 10), 2)
+                    courseObjDict[course].accredUnits["Complimentary Studies"] = round(sheet.cell_value(row, 11), 2)
+                    courseObjDict[course].accredUnits["Engineering Science"] = round(sheet.cell_value(row, 12), 2)
+                    courseObjDict[course].accredUnits["Engineering Design"] = round(sheet.cell_value(row, 13), 2)
+                    courseObjDict[course].accredUnits["Engineering Science and Engineering Design"] = round(sheet.cell_value(row, 14), 2)
+                    courseObjDict[course].accredUnits["Other"] = round(sheet.cell_value(row, 15), 2)
 
     except FileNotFoundError:
         messagebox.showerror("Error", "Excel accreditation information file not found, ensure it is present and the name is correct")

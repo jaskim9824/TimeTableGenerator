@@ -88,7 +88,21 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
                     compDict= {}
                     for section in course[0].sections:
                         # create a dropdown option for each section in a course
-                        createDropdownOptions(section, compDict, hexcolorlist, plan, term, str(course[0]), colorCount, soup)
+                        sectionRadio = soup.new_tag("option", attrs={"value": str(section),
+                                                                     "id": str(section)})
+                        sectionRadio.append(str(section))
+
+                        if section.component not in compDict:
+                            compDict[section.component] = soup.new_tag("select", attrs={"ng-change":"render()",
+                                                                    "name":cleaner.cleanString(plan) + 
+                                                                            cleaner.cleanString(term)+
+                                                                            cleaner.cleanString(str(course[0])),
+                                                                    "ng-model":cleaner.cleanString(plan) + 
+                                                                            cleaner.cleanString(term) +
+                                                                            "obj."+
+                                                                            cleaner.cleanString(str(course[0])) + section.component,
+                                                                    "style":"background:" + hexcolorlist[colorCount] + ";"})
+                        compDict[section.component].append(sectionRadio)
                     # fill in title and "ALL" options
                     populateSectionDropdown(compDict, sectionWrapper, courseSectionWrapper, str(course[0]), soup)
 
@@ -111,7 +125,24 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
                             compDict= {}
                             for section in opt[0].sections:
                                 # create a dropdown option for each section in a course 
-                                createDropdownOptions(section, compDict, hexcolorlist, plan, term, str(course[0]), colorCount, soup)
+                                sectionRadio = soup.new_tag("option", attrs={"value": str(section),
+                                                                             "id": str(section)})
+                            sectionRadio.append(str(section))
+
+                            if section.component not in compDict:
+                                compDict[section.component] = soup.new_tag("select", attrs={"ng-change":"render()",
+                                                                        "name":cleaner.cleanString(plan) + 
+                                                                                cleaner.cleanString(term)+
+                                                                                cleaner.cleanString(str(opt[0])),
+                                                                        "ng-model":cleaner.cleanString(plan) + 
+                                                                                cleaner.cleanString(term) +
+                                                                                "obj."+
+                                                                                cleaner.cleanString(str(opt[0])) + 
+                                                                                section.component + 
+                                                                                "__cgoption" +
+                                                                                opt[-1],
+                                                                        "style":"background:" + hexcolorlist[colorCount] + ";"})
+                            compDict[section.component].append(sectionRadio)
                         # fill in title and "ALL" option
                         populateSectionDropdown(compDict, sectionWrapper, courseSectionWrapper, str(opt[0]), soup)
                 colorCount += 1
@@ -247,35 +278,6 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
             wrapperDiv.append(courseGroupWrapperDiv)
             wrapperDiv.append(ORCourseWrapperDiv)
             inputWrapper.append(wrapperDiv)
-
-# Creates the html elements for options in the course section dropdowns.
-# Html tags are appended to compDict under either "LEC", "SEM", or "LAB"
-# Parameters:
-#   section - Course object for an individual course section
-#   compDict - dict storing html tags under "LEC", "SEM", or "LAB"
-#   hexcolorlist - list of colors used to color code courses
-#   plan - name of the plan currently being placed
-#   term - name fo the term currently being placed
-#   courseName - name of the course (with section number on the end)
-#   colorCount - counter used to index hexcolorlist for selecting a color for a course
-#   soup - soup object, used to create HTML tags
-def createDropdownOptions(section, compDict, hexcolorlist, plan, term, courseName, colorCount, soup):
-    # individual dropdown option
-    sectionRadio = soup.new_tag("option", attrs={"value": str(section),
-                        "id": str(section)})
-    sectionRadio.append(str(section))
-
-    if section.component not in compDict:
-        compDict[section.component] = soup.new_tag("select", attrs={"ng-change":"render()",
-                                                "name":cleaner.cleanString(plan) + 
-                                                        cleaner.cleanString(term)+
-                                                        cleaner.cleanString(courseName),
-                                                "ng-model":cleaner.cleanString(plan) + 
-                                                        cleaner.cleanString(term) +
-                                                        "obj."+
-                                                        cleaner.cleanString(courseName) + section.component,
-                                                "style":"background:" + hexcolorlist[colorCount] + ";"})
-    compDict[section.component].append(sectionRadio)
 
 # Fills in title and "ALL" option for each component (LEC, SEM, LAB)
 # for the dropdown menus
