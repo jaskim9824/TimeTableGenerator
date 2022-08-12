@@ -41,12 +41,16 @@ window.resizable(False, False)
 ###progress Bar##
 def add_progbar():
     global progbar
+
+    progStyle = ttk.Style()
+    progStyle.theme_use('clam')
+    progStyle.configure("purple.Horizontal.TProgressbar", foreground='purple', background='purple')
     progbar = ttk.Progressbar(
     window,
-    orient='horizontal',
-    mode='determinate',
-    length=280
-    )
+    style="purple.Horizontal.TProgressbar",
+    orient="horizontal", 
+    length=280,
+    mode="determinate")
     progbar.place(
     x=685, y=485
     )
