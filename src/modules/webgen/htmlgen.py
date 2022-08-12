@@ -41,6 +41,25 @@ def placeRadioInputsforPlan(plan, optionDict, planTag, termTag, soup):
     planTag.append(breakTag)
     # div to hold radio inputs to select term for a given plan
     planWrapper = soup.new_tag("div", attrs={"ng-switch-when": cleaner.cleanString(plan)})
+    # for term in optionDict[plan]:
+    #     placeRadioInputsForTerm(termTag, planWrapper, plan, term, soup)
+
+def placeRadioInputsForTerm(termTag, planWrapper, plan, term, soup):
+    # radio input for selecting term
+    radioInput = soup.new_tag("input", attrs={"type":"radio", 
+                                                  "name":cleaner.cleanString(plan) + "termselector", 
+                                                  "ng-model":"selectedTerm",
+                                                  "ng-change":"render(\"" + cleaner.cleanString(term) + "\")",
+                                                  "value": cleaner.cleanString(term),
+                                                  "id": cleaner.cleanString(term)})
+    # generating label for input
+    labelTag = soup.new_tag("label", attrs={"for": cleaner.cleanString(term)})
+    labelTag.append(term)
+    planWrapper.append(radioInput)
+    planWrapper.append(labelTag)
+    breakTag = soup.new_tag("br")
+    planWrapper.append(breakTag)
+    termTag.append(planWrapper)
 
 # Function that places the inputs into the form which controls
 # what is displayed on the webpage
