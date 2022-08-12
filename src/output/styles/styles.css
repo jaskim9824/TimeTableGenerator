@@ -129,7 +129,7 @@ h3#planhead {
     width: fit-content;
     font-size: 175%;
     position: relative;
-    left: 815px;
+    left: 46rem;
 }
 
 /* Container for radio input selectors */
@@ -143,22 +143,43 @@ h3#planhead {
 #planlegend {
     width: fit-content;
     position: relative;
-    left: 25rem;
+    left: 20rem;
 }
 
 /* Container for term radio inputs */
 #termlegend {
     width: fit-content;
     position: relative;
-    left: 37.5rem;
+    left: 32.5rem;
 }
 
 /* Container for course group radio inputs */
 #optionlegend {
     width: fit-content;
     position: relative;
-    left: 58rem;
+    left: 45rem;
     bottom: 3rem;
+}
+
+.sectionsheader {
+    text-align: center;
+}
+
+.dropdownsrow {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    max-height: 350px;
+}
+
+.dropdownsforcourse {
+    margin: 5px;
+    height: 115px;
+    width: 175px;
+}
+
+.sectiondropdown {
+    width: 160px;
 }
 
 /* Wrapper div for the term names and course boxes, the main content */

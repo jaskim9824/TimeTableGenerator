@@ -72,11 +72,16 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
 
             # div to switch course sections displayed for a given plan & term
             wrapperDiv = soup.new_tag("div", attrs={"ng-switch-when": cleaner.cleanString(plan) + cleaner.cleanString(term)})
-            courseSectionWrapper = soup.new_tag("div")
-            courseSectionHeader = soup.new_tag("h3")
+            courseSectionWrapper = soup.new_tag("table", attrs={"class":"coursesections"})
+            courseSectionRow = soup.new_tag("tr")
+            courseSectionData = soup.new_tag("td")
+            courseSectionHeader = soup.new_tag("h3", attrs={"class":"sectionsheader"})
             courseSectionHeader.append("Course Sections")
-            courseSectionWrapper.append(courseSectionHeader)
+            courseSectionData.append(courseSectionHeader)
+            courseSectionRow.append(courseSectionData)
+            courseSectionWrapper.append(courseSectionRow)
             colorCount = 0
+            dropdownsRow = soup.new_tag("tr", attrs={"class":"dropdownsrow"})
             for course in seqDict[plan][term]:
                 # guard to prevent index out of range of hexcolorlist
                 if colorCount >= len(hexcolorlist):
@@ -84,7 +89,7 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
 
                 if len(course) == 1 and type(course[0]) != type([]):
                     # Case: course is not in a course group
-                    sectionWrapper = soup.new_tag("div")
+                    sectionWrapper = soup.new_tag("td", attrs={"class":"dropdownsforcourse"})
                     compDict= {}
                     for section in course[0].sections:
                         # create a dropdown option for each section in a course
@@ -101,7 +106,8 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
                                                                             cleaner.cleanString(term) +
                                                                             "obj."+
                                                                             cleaner.cleanString(str(course[0])) + section.component,
-                                                                    "style":"background:" + hexcolorlist[colorCount] + ";"})
+                                                                    "style":"background:" + hexcolorlist[colorCount] + ";",
+                                                                    "class":"sectiondropdown"})
                         compDict[section.component].append(sectionRadio)
                     # fill in title and "ALL" options
                     for comp in compDict:
@@ -119,7 +125,7 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
                         sectionWrapper.append(compDict[comp])
                         breakTag = soup.new_tag("br")
                         sectionWrapper.append(breakTag)
-                    courseSectionWrapper.append(sectionWrapper)
+                    dropdownsRow.append(sectionWrapper)
 
                 elif len(course) > 1 and type(course[0]) == type([]):
                     # Case: course is in a course group
@@ -129,14 +135,15 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
                             # opt[1] should hold name of course group (2A, 4B, etc.)
                             continue
                         else:
-                            sectionWrapper = soup.new_tag("div", attrs={"ng-if":cleaner.cleanString(plan) + 
+                            sectionWrapper = soup.new_tag("td", attrs={"ng-if":cleaner.cleanString(plan) + 
                                                                            cleaner.cleanString(term)+
                                                                            "obj."+
                                                                            "group"+
                                                                            opt[-1][0] + 
                                                                            "==\"" + 
                                                                            opt[-1] + 
-                                                                           "\""})
+                                                                           "\"",
+                                                                           "class":"dropdownsforcourse"})
                             compDict= {}
                             for section in opt[0].sections:
                                 # create a dropdown option for each section in a course 
@@ -156,7 +163,8 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
                                                                                     section.component + 
                                                                                     "__cgoption" +
                                                                                     opt[-1],
-                                                                            "style":"background:" + hexcolorlist[colorCount] + ";"})
+                                                                            "style":"background:" + hexcolorlist[colorCount] + ";",
+                                                                            "class":"sectiondropdown"})
                                 compDict[section.component].append(sectionRadio)
                             # fill in title and "ALL" option
                             for comp in compDict:
@@ -174,10 +182,9 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
                                 sectionWrapper.append(compDict[comp])
                                 breakTag = soup.new_tag("br")
                                 sectionWrapper.append(breakTag)
-                            courseSectionWrapper.append(sectionWrapper)
+                            dropdownsRow.append(sectionWrapper)
                 colorCount += 1
 
-            wrapperDiv.append(courseSectionWrapper)
             # Generating div to wrap course group radio inputs
             courseGroupWrapperDiv = soup.new_tag("div")
             courseGroupHeader = soup.new_tag("h3")
@@ -220,7 +227,7 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
                                                                     "value": option,
                                                                     "id": option})
                             labelTag = soup.new_tag("label", attrs={"for":option})
-                            sectionWrapper = soup.new_tag("div", attrs={"ng-if":"(" + cleaner.cleanString(plan) + 
+                            sectionWrapper = soup.new_tag("td", attrs={"ng-if":"(" + cleaner.cleanString(plan) + 
                                                                                cleaner.cleanString(term) +
                                                                                "obj."+
                                                                                course.parentCourseGroup[0] + "=="
@@ -230,7 +237,8 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
                                                                                cleaner.cleanString(term) +
                                                                                "obj."+
                                                                                course.getOptionName() + "==" + 
-                                                                               option + ")"})
+                                                                               option + ")",
+                                                                               "class":"dropdownsforcourse"})
                             sectionWrapper.append(option)
                             sectionSelectWrapper = soup.new_tag("select", attrs={"ng-change":"render()",
                                                                         "name":cleaner.cleanString(plan) + 
@@ -251,7 +259,7 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
                             sectionSelectWrapper.append(sectionRadio)
                             sectionWrapper.append(sectionSelectWrapper)
                             sectionWrapper.append(sectionSelectWrapper)
-                            courseSectionWrapper.append(sectionWrapper)    
+                            dropdownsRow.append(sectionWrapper)    
                             labelTag.append(option)
                             optionWrapper.append(optionRadio)
                             optionWrapper.append(labelTag)
@@ -272,11 +280,12 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
                                                                             course.getOptionName(),
                                                                     "value": option,
                                                                     "id": option})
-                            sectionWrapper = soup.new_tag("div", attrs={"ng-if":cleaner.cleanString(plan) + 
+                            sectionWrapper = soup.new_tag("td", attrs={"ng-if":cleaner.cleanString(plan) + 
                                                                                cleaner.cleanString(term) +
                                                                                "obj."+
                                                                                course.getOptionName() +
-                                                                               "==" + option})
+                                                                               "==" + option,
+                                                                               "class":"dropdownsforcourse"})
                             sectionWrapper.append(option)
                             for section in option.sections:
                                 sectionRadio = soup.new_tag("input", attrs={"type":"radio",
@@ -294,12 +303,15 @@ def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcol
                                 labelTag.append(str(section) + " (" + section.component + ")")
                                 sectionWrapper.append(sectionRadio)
                                 sectionWrapper.append(labelTag)
-                            courseSectionWrapper.append(sectionWrapper)                                             
+                            dropdownsRow.append(sectionWrapper)                                             
                             labelTag = soup.new_tag("label", attrs={"for":option})
                             labelTag.append(option)
                             optionWrapper.append(optionRadio)
                             optionWrapper.append(labelTag)
                         ORCourseWrapperDiv.append(optionWrapper)
+
+            courseSectionWrapper.append(dropdownsRow)
+            wrapperDiv.append(courseSectionWrapper)
             # Only add header if OR courses or course groups present
             if ORCourseCoursesPresent:
                 ORCourseHeader.append("Switchable Courses")
@@ -483,7 +495,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
                     for section in course.sections:
                         tagsList = []
                         minutesFromEight = calcMinutes(section.hrsFrom)  # minutes from 8:00 to start of class
-                        if minutesFromEight < 0:
+                        if minutesFromEight < 0:  # if class starts before 8, don't place it
                             continue
                         minutesLong = calcClassDuration(section.hrsFrom, section.hrsTo)  # duration of class
                         # save the tags we will need to append to for later
@@ -598,7 +610,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
                 for course in courseWrapper.sections:
                     tagsList = []
                     minutesFromEight = calcMinutes(course.hrsFrom)  # minutes from 8:00 to start of class
-                    if minutesFromEight < 0:
+                    if minutesFromEight < 0:  # if class starts before 8, don't place it
                         continue
                     minutesLong = calcClassDuration(course.hrsFrom, course.hrsTo)  # duration of class
                     # save the tags we will need to append to for later
