@@ -285,7 +285,7 @@ def main():
             # radio inputs for plan, term, and course group
             print("Placing radio inputs...")
             value_label['text'] = 'Placing radio inputs...'
-            htmlgen.placeRadioInputs(formTag, termTag, courseGroupTag, optionDict, sequenceDict, hexcolorlist, soup)
+            htmlgen.placeInputs(formTag, termTag, courseGroupTag, optionDict, sequenceDict, hexcolorlist, soup)
             progress()
 
             # this is the primary tag holding timetable itself
