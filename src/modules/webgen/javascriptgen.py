@@ -4,7 +4,7 @@
 # University of Alberta, Summer 2022, Curriculum Development Co-op Term
 
 # This file contains all the functions neccessary to generate the JS of the 
-# webpage. Primarily for switching between plans/terms/course groups
+# webpage. Primarily for switching between plans/terms/course groups/sections
 
 # Dependencies: cleaner
 from .. import cleaner
@@ -64,6 +64,7 @@ def generateInitialBlockController(sequenceDict, initialTerm, controller):
     $scope.selectedTerm = term;
 };\n""")
 
+    # writing the JS functions that are called in render()
     generateCheckOverlaps(controller)
     generateUpdateObjFields(controller)
     generateSetAllCourses(controller)
@@ -149,10 +150,14 @@ def generateUpdateObjFields(controller):
     # For each courseObj on the currently displayed page, search through the elements in the
     # [plan + term + "obj"] object. The course group name (if there is one) should be stored
     # under the key "groupX" & should be the first entry. After this, check if the entry is
-    # for a course group and if it is, check if the fullName (includes section name) is a substring
-    # in courseID & if the course group matches groupName. If the entry is not for a course group, 
-    # simply check if fullName is a substring of courseID. If the conditions are met, set 'found' to true.
-    # After this search, update the ".enabled" field with the value of 'found'
+    # for a course group and if it is, check if the course group of the course matches the 
+    # currently selected course group (groupName). Then for the ALL option, check if the
+    # courseID matches the processed plainName and if the component (LEC, SEM, or LAB) matches.
+    # For non-ALL option, simply check if fullName is a substring in courseID.
+    # If the entry is not for a course group, go through a similar process as above with
+    # modified text processing. 
+    # If the conditions are met, set 'found' to true. After this search, update the ".enabled" 
+    # field with the value of 'found'
     formattedFunctionStatement = """this.updateObjFields = function(plan, term) {
     for (const [day, dayList] of Object.entries($scope.coursesobj[plan][term])) {
         for (const [courseID, courseObj] of Object.entries($scope.coursesobj[plan][term][day])) {
@@ -202,7 +207,7 @@ def generateUpdateObjFields(controller):
 # Parameters:
 #   controller - file handle for controller JS file
 def generateCheckOverlaps(controller):
-    # first main loop: Reset each courses width & left values to default. 
+    # first main loop: Reset each course's width & left values to default. 
     # For each day, compare a given course to every other course
     # in that day. If there is an overlap, search through the existing list of overlaps
     # and if either of the overlapping courses is already in a list and the other isn't,
