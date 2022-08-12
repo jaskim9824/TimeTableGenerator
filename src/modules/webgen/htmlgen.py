@@ -22,7 +22,13 @@ def switchTitle(titleTag, topTitleTag, deptName):
     titleTag.append(deptName + " Timetable")
     topTitleTag.append(deptName + " Timetable")
 
-def placeRadioInputsforPlan(plan, optionDict, planTag, termTag, soup):
+# Places the radio inputs for selecting the current plan
+# Parameters:
+#   plan - name of the plan being placed
+#   optionDict - dict that holds all the options present in a term
+#   planTag - form HTML tag where the plan radio inputs will be placed
+#   soup - soup object, used to create HTML tags
+def placeRadioInputsforPlan(plan, optionDict, planTag, soup):
     # name of first term in current plan
     firstTermInPlan = cleaner.cleanString((list(optionDict[plan].keys()))[0])
     # radio inputs for selecting plan, can ng-model directly to selectedPlan
@@ -39,11 +45,14 @@ def placeRadioInputsforPlan(plan, optionDict, planTag, termTag, soup):
     planTag.append(labelTag)
     breakTag = soup.new_tag("br")
     planTag.append(breakTag)
-    # div to hold radio inputs to select term for a given plan
-    planWrapper = soup.new_tag("div", attrs={"ng-switch-when": cleaner.cleanString(plan)})
-    # for term in optionDict[plan]:
-    #     placeRadioInputsForTerm(termTag, planWrapper, plan, term, soup)
 
+# Places the radio inputs for selecting the current term
+# Parameters:
+#   termTag - div HTML tag where the term radio inputs will be placed
+#   planWrapper - div HTML tag that displays only if a certain plan is selected
+#   plan - name of the plan being placed
+#   term - name of the term being placed
+#   soup - soup object, used to create HTML tags
 def placeRadioInputsForTerm(termTag, planWrapper, plan, term, soup):
     # radio input for selecting term
     radioInput = soup.new_tag("input", attrs={"type":"radio", 
@@ -74,23 +83,11 @@ def placeRadioInputsForTerm(termTag, planWrapper, plan, term, soup):
 #   soup - soup object, used to create HTML tags
 def placeInputs(planTag, termTag, inputWrapper, optionDict, seqDict, hexcolorlist, soup):
     for plan in optionDict:
-        placeRadioInputsforPlan(plan, optionDict, planTag, termTag, soup)
+        placeRadioInputsforPlan(plan, optionDict, planTag, soup)
         planWrapper = soup.new_tag("div", attrs={"ng-switch-when": cleaner.cleanString(plan)})
         for term in optionDict[plan]:
             # ng-change & render() used to update $scope.selectedTerm
-            radioInput = soup.new_tag("input", attrs={"type":"radio", 
-                                                  "name":cleaner.cleanString(plan) + "termselector", 
-                                                  "ng-model":"selectedTerm",
-                                                  "ng-change":"render(\"" + cleaner.cleanString(term) + "\")",
-                                                  "value": cleaner.cleanString(term),
-                                                  "id": cleaner.cleanString(term)})
-            labelTag = soup.new_tag("label", attrs={"for": cleaner.cleanString(term)})
-            labelTag.append(term)
-            planWrapper.append(radioInput)
-            planWrapper.append(labelTag)
-            breakTag = soup.new_tag("br")
-            planWrapper.append(breakTag)
-            termTag.append(planWrapper)
+            placeRadioInputsForTerm(termTag, planWrapper, plan, term, soup)
 
             # div to switch course sections displayed for a given plan & term
             wrapperDiv = soup.new_tag("div", attrs={"ng-switch-when": cleaner.cleanString(plan) + cleaner.cleanString(term)})
