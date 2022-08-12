@@ -53,7 +53,7 @@ def add_progbar():
 
 
 def progress():
-    progbar['value']+= 10.9
+    progbar['value'] += 10.9
     window.update_idletasks()
     return progbar['value']
 
@@ -228,7 +228,6 @@ help_menu.add_command(
 def writingHTML(soup):
     # writing output string to an output html file
     try:
-        print("Writing final HTML.....")
         with open("./output/index.html", "w", encoding="utf-8") as output:
             output.write(str(soup))
     except FileNotFoundError:
@@ -243,27 +242,27 @@ def main():
             # opening the JS files
             print("Opening files...")
             value_label['text'] = 'Opening files...'
+            progress()
             controller = open("./output/js/controller.js", "w")
             soup = BeautifulSoup(input, 'html.parser')
-            progress()
 
             deptName = department.get()
 
             # parsing the excel files with course, sequencing and accreditation info
             print("Parsing excel files...")
             value_label['text'] = 'Parsing excel files...'
-            sequenceDict = courseparsing.parseCourses(tableExcel.get(), seqExcel.get(), accrExcel.get(), deptName)
             progress()
+            sequenceDict = courseparsing.parseCourses(tableExcel.get(), seqExcel.get(), accrExcel.get(), deptName)
 
             optionDict = coursegroupparsing.extractingListofOptions(sequenceDict)
 
             # generating initial JS based on the number and names of plans
             print("Intialzing JS files...")
             value_label['text'] = 'Intialzing JS files...'
+            progress()
             javascriptgen.intializeControllerJavaScript(sequenceDict,  
                                                         optionDict,
                                                         controller)
-            progress()
 
             topTitleTag = soup.head.find("title")
             titleTag = soup.body.find("a", class_="site-title")
@@ -285,8 +284,8 @@ def main():
             # radio inputs for plan, term, and course group
             print("Placing radio inputs...")
             value_label['text'] = 'Placing radio inputs...'
-            htmlgen.placeInputs(formTag, termTag, courseGroupTag, optionDict, sequenceDict, hexcolorlist, soup)
             progress()
+            htmlgen.placeInputs(formTag, termTag, courseGroupTag, optionDict, sequenceDict, hexcolorlist, soup)
 
             # this is the primary tag holding timetable itself
             displayTag = soup.new_tag("div", attrs={"class":"display"})
@@ -296,24 +295,26 @@ def main():
             # generating html for each plan & each term
             print("Placing courses on page...")
             value_label['text'] = 'Placing courses on page...'
+            progress()
             htmlgen.placePlanDivs(displayTag, 
                                   sequenceDict,
                                   hexcolorlist, 
                                   soup,
                                   controller)
-            progress()
-            progress()
-            progress()
 
             javascriptgen.closeControllerJavaScript(controller)
 
-        # writing soup to output/index.html
-        print("Writing final HTML...")
-        value_label['text'] = 'Writing final HTML...'
-        writingHTML(soup)
-        progress()
-        progress()
-        messagebox.showinfo('Status',message="Webpage successfully generated!")
+            # writing soup to output/index.html
+            print("Writing final HTML...")
+            value_label['text'] = 'Writing final HTML...'
+            progress()
+            progress()
+            writingHTML(soup)
+            print('Webpage generation complete!')
+            value_label['text'] = 'Webpage generation complete!'
+            progress()
+            progress()
+            messagebox.showinfo('Status',message="Webpage successfully generated!")
 
     except FileNotFoundError as err:
        if (err.strerror == "No such file or directory"):
