@@ -236,7 +236,7 @@ def writingHTML(soup):
 def main():
     add_progbar()
     value_label = Label(window, bg="white")
-    value_label.place(x=772, y= 510)
+    value_label.place(x=760, y= 510)
     try:
         with open("template.html") as input:
             # opening the JS files
