@@ -22,37 +22,40 @@ def switchTitle(titleTag, topTitleTag, deptName):
     titleTag.append(deptName + " Timetable")
     topTitleTag.append(deptName + " Timetable")
 
-# Function that places the radio inputs into the form which controls
-# which plan is currently selected on the webpage
-# Parameters:
-#   formTag - form HTML tag where the plan radio inputs will be placed
-#   termTag - div HTML tag where the term radio inputs will be placed
-#   inputWrapper - div HTML tag that holds the corresponding inputs
-#   courseGroupDict - dict that maps the plans to the course groups in it
-#   optionDict - dict that holds all the options present in a term
-#   seqDict - dict that contains the sequence information
-#   hexcolorlist - list of hex color codes for distinguishing between courses
-#   soup - soup object, used to create HTML tags
-def placeRadioInputs(formTag, termTag, inputWrapper, optionDict, seqDict, hexcolorlist, soup):
-    for plan in optionDict:
-        # name of first term in current plan
-        firstTermInPlan = cleaner.cleanString((list(optionDict[plan].keys()))[0])  
-
-        # radio inputs for selecting plan, can ng-model directly to selectedPlan
-        radioInput = soup.new_tag("input", attrs={"ng-change":"render(\"" + firstTermInPlan + "\")",
+def placeRadioInputsforPlan(plan, optionDict, planTag, termTag, soup):
+    # name of first term in current plan
+    firstTermInPlan = cleaner.cleanString((list(optionDict[plan].keys()))[0])
+    # radio inputs for selecting plan, can ng-model directly to selectedPlan
+    radioInput = soup.new_tag("input", attrs={"ng-change":"render(\"" + firstTermInPlan + "\")",
                                                   "type":"radio", 
                                                   "name":"planselector", 
                                                   "ng-model":"selectedPlan",
                                                   "value": cleaner.cleanString(plan),
                                                   "id": cleaner.cleanString(plan)})
-        labelTag = soup.new_tag("label", attrs={"for":cleaner.cleanString(plan)})
-        labelTag.append(plan)
-        formTag.append(radioInput)
-        formTag.append(labelTag)
-        breakTag = soup.new_tag("br")
-        formTag.append(breakTag)
+    # generating label for input
+    labelTag = soup.new_tag("label", attrs={"for":cleaner.cleanString(plan)})
+    labelTag.append(plan)
+    planTag.append(radioInput)
+    planTag.append(labelTag)
+    breakTag = soup.new_tag("br")
+    planTag.append(breakTag)
+    # div to hold radio inputs to select term for a given plan
+    planWrapper = soup.new_tag("div", attrs={"ng-switch-when": cleaner.cleanString(plan)})
 
-        # div to hold radio inputs to select term for a given plan
+# Function that places the inputs into the form which controls
+# what is displayed on the webpage
+# Parameters:
+#   planTag - form HTML tag where the plan radio inputs will be placed
+#   termTag - div HTML tag where the term radio inputs will be placed
+#   inputWrapper - div HTML tag that holds inputs for course sections, course groups and 
+#   OR courses
+#   optionDict - dict that holds all the options present in a term
+#   seqDict - dict that contains the sequence information
+#   hexcolorlist - list of hex color codes for distinguishing between courses
+#   soup - soup object, used to create HTML tags
+def placeInputs(planTag, termTag, inputWrapper, optionDict, seqDict, hexcolorlist, soup):
+    for plan in optionDict:
+        placeRadioInputsforPlan(plan, optionDict, planTag, termTag, soup)
         planWrapper = soup.new_tag("div", attrs={"ng-switch-when": cleaner.cleanString(plan)})
         for term in optionDict[plan]:
             # ng-change & render() used to update $scope.selectedTerm
@@ -862,20 +865,12 @@ def appendToEachDay(tagsList, courseContDiv, plan, term, startTime, courseLength
         newDiv = deepcopy(courseContDiv)
 
         # determining which day we are placing on (should only be one)
-        day = ""
-        if "monday" in dayTag["class"]:
-            day = "monday"
-        elif "tuesday" in dayTag["class"]:
-            day = "tuesday"
-        elif "wednesday" in dayTag["class"]:
-            day= "wednesday"
-        elif "thursday" in dayTag["class"]:
-            day = "thursday"
-        elif "friday" in dayTag["class"]:
-            day = "friday"
-
-        if day != "":  # guard, every course should have a day
-            newDiv.find(class_="course tooltip")["id"] += "-" + day  # id should be unique identifier, different for each day
+        day = findDayOfDayTag(dayTag)
+        
+        # guard, every course should have a day
+        if day != "":  
+            # id should be unique identifier, different for each day
+            newDiv.find(class_="course tooltip")["id"] += "-" + day  
 
             objectName = "$scope.coursesobj." + cleaner.cleanString(plan) + "." + cleaner.cleanString(term) + "." + day + "."  + newDiv.find(class_="course tooltip")["id"].replace("-", "_")
             controller.write(objectName + " = {};\n")
@@ -895,9 +890,27 @@ def appendToEachDay(tagsList, courseContDiv, plan, term, startTime, courseLength
 # Returns:
 #   boolean - True if dayTag is for thursday or friday, False otherwise
 def dayTagInLateWeek(dayTag):
-    if "thursday" in dayTag["class"]:
-        return True
-    elif "friday" in dayTag["class"]:
+    if "thursday" in dayTag["class"] or "friday" in dayTag["class"]:
         return True
     else:
         return False
+
+# Finds the day of a certain day tag
+# Parameters:
+#   dayTag - HTML tag for a day
+# Returns:
+#   string - day of the week of the day tag, empty string if does not exist
+def findDayOfDayTag(dayTag):
+    if "monday" in dayTag["class"]:
+        return "monday"
+    elif "tuesday" in dayTag["class"]:
+        return "tuesday"
+    elif "wednesday" in dayTag["class"]:
+        return "wednesday"
+    elif "thursday" in dayTag["class"]:
+        return "thursday"
+    elif "friday" in dayTag["class"]:
+        return "friday"
+    else:
+        return ""
+
