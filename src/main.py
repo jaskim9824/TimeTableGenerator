@@ -310,7 +310,7 @@ def main():
 
             # writing soup to output/index.html
             print("Writing final HTML...")
-            value_label['text'] = 'Writing final HTML...'
+            value_label['text'] = 'Writing final HTML...        '
             progress()
             progress()
             writingHTML(soup)
