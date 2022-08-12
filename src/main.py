@@ -53,7 +53,7 @@ def add_progbar():
 
 
 def progress():
-    progbar['value'] += 10.9
+    progbar['value'] += 11.2
     window.update_idletasks()
     return progbar['value']
 
