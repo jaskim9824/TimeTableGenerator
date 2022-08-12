@@ -424,7 +424,7 @@ menubutton.place(x=1005, y=365)
 
 background_img = PhotoImage(file = f"GUI_images/background.png")
 background = canvas.create_image(
-    467.5, 297.5,
+    483.0, 297.5,
     image=background_img)
 
 ######browse functions######
