@@ -3,7 +3,7 @@
     font-size: 100%;
 }
 
-/*body style*/
+/* body style */
 body {
     margin: 0;
     width: fit-content;
@@ -19,7 +19,7 @@ html {
     overflow-y: scroll;
 }
 
-/*Header style*/
+/* Main green header along top of page */
 header {
     padding: 8px 8px;
     background-color: #275d38;
@@ -28,18 +28,21 @@ header {
     min-width: 100vw;
 }
 
+/* backbutton in top left corner */
 .backbutton {
     background-color: white;
     text-align: center;
     border-radius: 4px;
 }
 
+/* text inside backbutton, ensure padding matches button size */
 .header .backbutton a {
     color: black;
     font-size: 110%;
     padding: 15px 27px 15px 27px;
 }
 
+/* change text color on hover */
 .header .backbutton:hover a {
     color: blue;
 }
@@ -56,7 +59,7 @@ header {
     text-align: center;
 }
 
-/*Title style*/
+/* Title style */
 .header a.site-title {
     width: fit-content;
     font-size: 25px;
@@ -66,7 +69,7 @@ header {
     color: #F2CD00;
 }
 
-/*Image style*/
+/*Image style, U of a logo*/
 .header img {
     width: 183px;
     height: 50px;
@@ -87,6 +90,11 @@ header {
         margin-right: 0;
         float: left;
         /* img needs to be re-aligned on narrow screens */
+        position: relative;
+        bottom: 10px;
+    }
+
+    .header .backbutton {
         position: relative;
         bottom: 10px;
     }
@@ -124,16 +132,6 @@ header {
     }
 }
 
-.planheader {
-    margin: 0px 0px 5px 35px;
-    font-size: 150%;
-}
-
-.termheader {
-    margin: 0px 0px 5px 20px;
-    font-size: 150%
-}
-
 /* Container for radio input selectors */
 #toprowcontainer {
     display: flex;
@@ -148,6 +146,12 @@ header {
     left: 15rem;
 }
 
+/* text above plan radio inputs */
+.planheader {
+    margin: 0px 0px 5px 35px;
+    font-size: 150%;
+}
+
 /* Container for term radio inputs */
 #termlegend {
     width: fit-content;
@@ -155,7 +159,13 @@ header {
     left: 27.5rem;
 }
 
-/* Container for course group radio inputs */
+/* text above term inputs */
+.termheader {
+    margin: 0px 0px 5px 20px;
+    font-size: 150%
+}
+
+/* Container for sections dropdowns and cours groups radios */
 #optionlegend {
     width: fit-content;
     position: relative;
@@ -163,12 +173,14 @@ header {
     bottom: 2rem;
 }
 
+/* title above section dropdowns */
 .sectionsheader {
     text-align: center;
     margin-bottom: 0;
     margin-top: 30px;
 }
 
+/* flexbox holding all title and all dropdowns */
 .dropdownsrow {
     display: flex;
     flex-direction: column;
@@ -176,16 +188,20 @@ header {
     max-height: 200px;
 }
 
+/* container for dropdowns for one course
+(holds Lec, Sem, and Lab dropdowns for one course */
 .dropdownsforcourse {
     margin: 0px 5px 5px 0px;
     height: fit-content;
     width: 175px;
 }
 
+/* dropdown box for sections */
 .sectiondropdown {
     width: 160px;
 }
 
+/* title above course group radio inputs */
 .coursegroupsheader {
     margin: 0;
 }
