@@ -82,6 +82,15 @@ def placeRadioInputsForTerm(termTag, planWrapper, plan, term, soup):
 #   hexcolorlist - list of hex color codes for distinguishing between courses
 #   soup - soup object, used to create HTML tags
 def placeInputs(planTag, termTag, inputWrapper, optionDict, seqDict, hexcolorlist, soup):
+    # placing plan and term title above radio inputs
+    planHeader = soup.new_tag("h3", attrs={"class":"planheader"})
+    planHeader.append("Plans")
+    planTag.append(planHeader)
+
+    termHeader = soup.new_tag("h3", attrs={"class":"termheader"})
+    termHeader.append("Terms")
+    termTag.append(termHeader)
+
     for plan in optionDict:
         placeRadioInputsforPlan(plan, optionDict, planTag, soup)
         planWrapper = soup.new_tag("div", attrs={"ng-switch-when": cleaner.cleanString(plan)})
@@ -210,7 +219,7 @@ def placeInputs(planTag, termTag, inputWrapper, optionDict, seqDict, hexcolorlis
 
             # Generating div to wrap course group radio inputs
             courseGroupWrapperDiv = soup.new_tag("div")
-            courseGroupHeader = soup.new_tag("h3")
+            courseGroupHeader = soup.new_tag("h3", attrs={"class": "coursegroupsheader"})
             courseGroupWrapperDiv.append(courseGroupHeader)
             # Generating div to wrap OR course radio inputs
             ORCourseWrapperDiv = soup.new_tag("div")
@@ -438,9 +447,9 @@ def createTimeGridDivs(soup):
         timeSlotDiv = soup.new_tag("div", attrs={"class":"timeslot"})
         timeSlotDiv.append(str(i) + ":00")
 
-        # 1 hour = 135.35 pixels. Initial value 24.5 aligns times to the rest of the grid
+        # 1 hour = 75 pixels. Initial value 24.5 aligns times to the rest of the grid
         timeDiv.append(soup.new_tag("hr", attrs={"class":"horizontaldivider", 
-                                "style":"position:absolute; top:" + str(24.5+135.35*(i - 8) + adjustmentFactor) + "px"}))
+                                "style":"position:absolute; top:" + str(24.5+75*(i - 8) + adjustmentFactor) + "px"}))
         timeDiv.append(timeSlotDiv)
     
     return timeDiv
@@ -468,9 +477,9 @@ def createDailyDivs(plan, term, soup, controller):
         currentDiv.append(dayHeaderDiv)
         currentDiv.append(soup.new_tag("hr", attrs={"class":"horizontaldivider"}))
         for i in range(1, 14):
-            # placing the horizontal dividing lines, 1 hr = 135.35 px, 22.15 is to align to the rest of the grid
+            # placing the horizontal dividing lines, 1 hr = 75 px, 22.15 is to align to the rest of the grid
             currentDiv.append(soup.new_tag("hr", attrs={"class":"horizontaldivider", 
-                                                    "style":"position:absolute; top:" + str(22.15+135.35*i) + "px"}))
+                                                    "style":"position:absolute; top:" + str(22.15+75*i) + "px"}))
             daysTagsDict[day.lower()] = currentDiv
 
     return daysTagsDict
@@ -545,10 +554,10 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
                             # (that the corresponding radio button is selected)
                             courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", 
                                                            "style":"position:absolute; top:" + 
-                                                           str(37 + (135.35/60)*minutesFromEight 
+                                                           str(37 + (75/60)*minutesFromEight 
                                                            + adjustmentFactor) + 
                                                            "px; height:" + 
-                                                           str((135.35/60)*minutesLong) + 
+                                                           str((75/60)*minutesLong) + 
                                                            "px",
                                                            "ng-show":"("+cleaner.cleanString(plan)+
                                                            cleaner.cleanString(term)+"obj."+
@@ -580,10 +589,10 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
                         else:
                             courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", 
                                                            "style":"position:absolute; top:" + 
-                                                           str(37 + (135.35/60)*minutesFromEight 
+                                                           str(37 + (75/60)*minutesFromEight 
                                                            + adjustmentFactor) + 
                                                            "px; height:" + 
-                                                           str((135.35/60)*minutesLong) + 
+                                                           str((75/60)*minutesLong) + 
                                                            "px",
                                                            "ng-show":"("+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(course))+
                                                            section.component+"__cgoption"+courseGroupSubName
@@ -658,10 +667,10 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
                     if orCase:
                         courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", 
                                                            "style":"position:absolute; top:" + 
-                                                           str(37 + (135.35/60)*minutesFromEight 
+                                                           str(37 + (75/60)*minutesFromEight 
                                                            + adjustmentFactor) + 
                                                            "px; height:" + 
-                                                           str((135.35/60)*minutesLong) + 
+                                                           str((75/60)*minutesLong) + 
                                                            "px",
                                                            "ng-show":"("+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(courseWrapper))+
                                                            course.component+"==\""+str(course)+"\""+"||"+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+
@@ -671,10 +680,10 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
                     else:
                         courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", 
                                                            "style":"position:absolute; top:" + 
-                                                           str(37 + (135.35/60)*minutesFromEight 
+                                                           str(37 + (75/60)*minutesFromEight 
                                                            + adjustmentFactor) + 
                                                            "px; height:" + 
-                                                           str((135.35/60)*minutesLong) + 
+                                                           str((75/60)*minutesLong) + 
                                                            "px",
                                                            "ng-show":cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(courseWrapper))+
                                                            course.component+"==\""+str(course)+"\""+"||"+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+
@@ -780,7 +789,7 @@ def createCourseDiv(soup, courseID, minutesFromEight, minutesLong, courseColor):
                                         "id": courseID,
                                         "ng-click":courseID+"Listener()",
                                         "ng-right-click":courseID+"RCListener()",
-                                        "style":"height:" + str((135.35/60)*minutesLong + adjustmentFactor) + 
+                                        "style":"height:" + str((75/60)*minutesLong + adjustmentFactor) + 
                                             "px; background-color:" + courseColor + ";"})
 
 # Function that constructs the course description tooltip for a regular course

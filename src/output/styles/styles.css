@@ -124,12 +124,14 @@ header {
     }
 }
 
-/* Plan header styling */
-h3#planhead {
-    width: fit-content;
-    font-size: 175%;
-    position: relative;
-    left: 46rem;
+.planheader {
+    margin: 0px 0px 5px 35px;
+    font-size: 150%;
+}
+
+.termheader {
+    margin: 0px 0px 5px 20px;
+    font-size: 150%
 }
 
 /* Container for radio input selectors */
@@ -143,22 +145,22 @@ h3#planhead {
 #planlegend {
     width: fit-content;
     position: relative;
-    left: 20rem;
+    left: 15rem;
 }
 
 /* Container for term radio inputs */
 #termlegend {
     width: fit-content;
     position: relative;
-    left: 32.5rem;
+    left: 27.5rem;
 }
 
 /* Container for course group radio inputs */
 #optionlegend {
     width: fit-content;
     position: relative;
-    left: 45rem;
-    bottom: 3rem;
+    left: 40rem;
+    bottom: 2rem;
 }
 
 .sectionsheader {
@@ -169,12 +171,12 @@ h3#planhead {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    max-height: 350px;
+    max-height: 200px;
 }
 
 .dropdownsforcourse {
-    margin: 5px;
-    height: 115px;
+    margin: 5px 5px 0px 0px;
+    height: fit-content;
     width: 175px;
 }
 
@@ -182,9 +184,13 @@ h3#planhead {
     width: 160px;
 }
 
+.coursegroupsheader {
+    margin: 0;
+}
+
 /* Wrapper div for the term names and course boxes, the main content */
 #main {
-    height: 2800px;
+    height: 1700px;
     width: fit-content;
 }
 
@@ -199,6 +205,7 @@ h3#planhead {
     height: fit-content;
     position: relative;
     right: 15px;
+    bottom: 40px;
 }
 
 /* Term column styling */
@@ -207,14 +214,6 @@ h3#planhead {
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-/* Term header styling */
-.termheader {
-    margin-bottom: 30px;
-    width: 125%;
-    text-align: center;
-    font-size: 115%;
 }
 
 /* Main content, grid of times/days */
@@ -252,7 +251,7 @@ h3#planhead {
 
 /* Individual time text */
 .timeslot {
-    margin-bottom: 113.6px;
+    margin-bottom: 53px;
 }
 
 /* Contains one course */
@@ -266,12 +265,12 @@ h3#planhead {
 /* Text within a course box */
 .embed {
     text-align: center;
-    font-size: 110%;
+    font-size: 100%;
 }
 
 /* Courses that are very narrow need smaller font */
 .narrowcourse .embed {
-    font-size: 40%;
+    font-size: 30%;
 }
 
 /* Course box */
