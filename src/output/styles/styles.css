@@ -165,6 +165,8 @@ header {
 
 .sectionsheader {
     text-align: center;
+    margin-bottom: 0;
+    margin-top: 30px;
 }
 
 .dropdownsrow {
@@ -175,7 +177,7 @@ header {
 }
 
 .dropdownsforcourse {
-    margin: 5px 5px 0px 0px;
+    margin: 0px 5px 5px 0px;
     height: fit-content;
     width: 175px;
 }
@@ -190,7 +192,7 @@ header {
 
 /* Wrapper div for the term names and course boxes, the main content */
 #main {
-    height: 1700px;
+    height: 1300px;
     width: fit-content;
 }
 
@@ -224,7 +226,7 @@ header {
 
 /* Column-oriented flexboxes for each day of the week */
 .monday, .tuesday, .wednesday, .thursday, .friday {
-    width: 320px;
+    width: 310px;
     text-align: center;
     font-size: 120%;
     border-right: 3px solid black;
@@ -237,6 +239,7 @@ header {
     box-sizing: border-box;
     border-top: 3px solid black;
     width: inherit;
+    margin: 0;
 }
 
 /* Container for the times along left of page */ 
@@ -251,7 +254,7 @@ header {
 
 /* Individual time text */
 .timeslot {
-    margin-bottom: 53px;
+    margin-bottom: 28px;
 }
 
 /* Contains one course */
@@ -265,7 +268,7 @@ header {
 /* Text within a course box */
 .embed {
     text-align: center;
-    font-size: 100%;
+    font-size: 65%;
 }
 
 /* Courses that are very narrow need smaller font */
@@ -275,13 +278,10 @@ header {
 
 /* Course box */
 .course, .narrowcourse {
-    width: 321px;
     box-sizing: border-box;
     border-style: solid;
     border-color: black;
     border-width: 2px;
-    height: 50px;
-    background-color: #eec89a;
 }
 
 /* Default course hover */

@@ -222,7 +222,7 @@ def generateCheckOverlaps(controller):
     for (const [day, dayList] of Object.entries($scope.coursesobj[plan][term])) {
         allOverlaps[day] = [];
         for (const [courseID, courseObj] of Object.entries($scope.coursesobj[plan][term][day])) {
-            courseObj.width = 321;
+            courseObj.width = 311;
             courseObj.left = 0;
             if (courseObj.enabled) {
                 for (const [checkID, checkObj] of Object.entries($scope.coursesobj[plan][term][day])) {
@@ -260,9 +260,9 @@ def generateCheckOverlaps(controller):
         for (let i = 0; i < list.length; i++) {
             if (list[i].length > 0) {
                 for (const [index, overlapObj] of Object.entries(list[i])) {
-                    if (321/list[i].length < overlapObj.width) {
-                        overlapObj.width = 321/list[i].length;
-                        overlapObj.left = (321/list[i].length)*index;
+                    if (311/list[i].length < overlapObj.width) {
+                        overlapObj.width = 311/list[i].length;
+                        overlapObj.left = (311/list[i].length)*index;
                     }
                 }
             }

@@ -447,9 +447,9 @@ def createTimeGridDivs(soup):
         timeSlotDiv = soup.new_tag("div", attrs={"class":"timeslot"})
         timeSlotDiv.append(str(i) + ":00")
 
-        # 1 hour = 75 pixels. Initial value 24.5 aligns times to the rest of the grid
+        # 1 hour = 50 pixels. Initial value 24.5 aligns times to the rest of the grid
         timeDiv.append(soup.new_tag("hr", attrs={"class":"horizontaldivider", 
-                                "style":"position:absolute; top:" + str(24.5+75*(i - 8) + adjustmentFactor) + "px"}))
+                                "style":"position:absolute; top:" + str(24+50*(i - 8) + adjustmentFactor) + "px"}))
         timeDiv.append(timeSlotDiv)
     
     return timeDiv
@@ -477,9 +477,9 @@ def createDailyDivs(plan, term, soup, controller):
         currentDiv.append(dayHeaderDiv)
         currentDiv.append(soup.new_tag("hr", attrs={"class":"horizontaldivider"}))
         for i in range(1, 14):
-            # placing the horizontal dividing lines, 1 hr = 75 px, 22.15 is to align to the rest of the grid
+            # placing the horizontal dividing lines, 1 hr = 50 px, 22.15 is to align to the rest of the grid
             currentDiv.append(soup.new_tag("hr", attrs={"class":"horizontaldivider", 
-                                                    "style":"position:absolute; top:" + str(22.15+75*i) + "px"}))
+                                                    "style":"position:absolute; top:" + str(22.15+50*i) + "px"}))
             daysTagsDict[day.lower()] = currentDiv
 
     return daysTagsDict
@@ -554,10 +554,10 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
                             # (that the corresponding radio button is selected)
                             courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", 
                                                            "style":"position:absolute; top:" + 
-                                                           str(37 + (75/60)*minutesFromEight 
+                                                           str(27 + (50/60)*minutesFromEight 
                                                            + adjustmentFactor) + 
                                                            "px; height:" + 
-                                                           str((75/60)*minutesLong) + 
+                                                           str((50/60)*minutesLong) + 
                                                            "px",
                                                            "ng-show":"("+cleaner.cleanString(plan)+
                                                            cleaner.cleanString(term)+"obj."+
@@ -589,10 +589,10 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
                         else:
                             courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", 
                                                            "style":"position:absolute; top:" + 
-                                                           str(37 + (75/60)*minutesFromEight 
+                                                           str(27 + (50/60)*minutesFromEight 
                                                            + adjustmentFactor) + 
                                                            "px; height:" + 
-                                                           str((75/60)*minutesLong) + 
+                                                           str((50/60)*minutesLong) + 
                                                            "px",
                                                            "ng-show":"("+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(course))+
                                                            section.component+"__cgoption"+courseGroupSubName
@@ -617,7 +617,6 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
                         # JS if there is an overlap
                         courseDiv = createCourseDiv(soup,
                                                     courseID, 
-                                                    minutesFromEight,
                                                     minutesLong,
                                                     hexcolorlist[colorCount]) 
                         formatCourseDescriptionForRegular(soup, section, courseDisc)
@@ -667,10 +666,10 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
                     if orCase:
                         courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", 
                                                            "style":"position:absolute; top:" + 
-                                                           str(37 + (75/60)*minutesFromEight 
+                                                           str(27 + (50/60)*minutesFromEight 
                                                            + adjustmentFactor) + 
                                                            "px; height:" + 
-                                                           str((75/60)*minutesLong) + 
+                                                           str((50/60)*minutesLong) + 
                                                            "px",
                                                            "ng-show":"("+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(courseWrapper))+
                                                            course.component+"==\""+str(course)+"\""+"||"+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+
@@ -680,10 +679,10 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
                     else:
                         courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", 
                                                            "style":"position:absolute; top:" + 
-                                                           str(37 + (75/60)*minutesFromEight 
+                                                           str(27 + (50/60)*minutesFromEight 
                                                            + adjustmentFactor) + 
                                                            "px; height:" + 
-                                                           str((75/60)*minutesLong) + 
+                                                           str((50/60)*minutesLong) + 
                                                            "px",
                                                            "ng-show":cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+cleaner.cleanString(str(courseWrapper))+
                                                            course.component+"==\""+str(course)+"\""+"||"+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+
@@ -698,7 +697,6 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
                     # JS if there is an overlap
                     courseDiv = createCourseDiv(soup,
                                             courseID, 
-                                            minutesFromEight,
                                             minutesLong,
                                             hexcolorlist[colorCount]) 
                     formatCourseDescriptionForRegular(soup, course, courseDisc)
@@ -767,29 +765,17 @@ def calcClassDuration(startTime, endTime):
 # Parameters:
 #   soup - soup object, used to create HTML tags 
 #   courseID - ID of the course being placed (str)
-#   minutesFromEight - minutes from 8:00am to start of class
 #   minutesLong - length in minutes of class, rounded to the nearest 30 minutes
 #   courseColor - hex code for color of current course
 # Returns:
 #   courseDiv - HTML tag for the container of the course
-def createCourseDiv(soup, courseID, minutesFromEight, minutesLong, courseColor):
-    # adjustmentFactor helps format vertical position of courses
-    adjustmentFactor = -2
-    if minutesFromEight == 0:
-        # course starts at 8:00am
-        adjustmentFactor = -5
-    if (minutesFromEight % 60 == 30) and (minutesLong % 60 != 30):
-        # course starts at X:30 (8:30, 9:30, etc.) and is n hours long, i.e., it is an integer number of hours long
-        adjustmentFactor = 0
-    if (minutesFromEight % 60 == 0) and (minutesLong % 60 == 30):
-        # course starts at X:00 (8:00, 9:00, etc.) and is Y hours and 30 minutes long (1 hour & 30 mins, 2 hours & 30 mins, etc.)
-        adjustmentFactor = 2
+def createCourseDiv(soup, courseID, minutesLong, courseColor):
     classStr = "course tooltip"
     return soup.new_tag("div", attrs={"class":classStr,
                                         "id": courseID,
                                         "ng-click":courseID+"Listener()",
                                         "ng-right-click":courseID+"RCListener()",
-                                        "style":"height:" + str((75/60)*minutesLong + adjustmentFactor) + 
+                                        "style":"height:" + str((50/60)*minutesLong) + 
                                             "px; background-color:" + courseColor + ";"})
 
 # Function that constructs the course description tooltip for a regular course
@@ -918,7 +904,7 @@ def appendToEachDay(tagsList, courseContDiv, plan, term, startTime, courseLength
             controller.write(objectName + ".courseID = \"" + newDiv.find(class_="course tooltip")["id"].replace("-", "_") + "\";\n")
             controller.write(objectName + ".start = \"" +  str(startTime) + "\";\n")
             controller.write(objectName + ".end = \"" + str(startTime + courseLength) + "\";\n")
-            controller.write(objectName + ".width = 321;\n")
+            controller.write(objectName + ".width = 311;\n")
             controller.write(objectName + ".left = 0;\n")
             controller.write(objectName + ".enabled = false;\n")
             controller.write(objectName + ".component = \"" + component + "\";\n")
