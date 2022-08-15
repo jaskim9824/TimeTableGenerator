@@ -544,9 +544,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
                         courseID = cleaner.cleanString(section.name)+cleaner.cleanString(plan)+cleaner.cleanString(term)
 
                         # helps align courses to the grid
-                        adjustmentFactor = 0
-                        if minutesFromEight != 0:
-                            adjustmentFactor = -3
+                        adjustmentFactor = -3
 
                          # courseContDiv = outer course container used for absolute vertical positioning
                         if orCase:
@@ -658,9 +656,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
                     courseID = cleaner.cleanString(course.name)+cleaner.cleanString(plan)+cleaner.cleanString(term)  # id of html element
                 
                     # helps align courses to the grid
-                    adjustmentFactor = 0
-                    if minutesFromEight != 0:
-                        adjustmentFactor = -3
+                    adjustmentFactor = -3
 
                     # courseContDiv = outer course container used for absolute vertical positioning
                     if orCase:
@@ -843,10 +839,6 @@ def formatCourseDescriptionForRegular(soup, course, courseDisc):
     courseTime.append(courseStart)
     courseTime.append(courseEnd)
 
-    # adding enrolled info
-    courseEnrolled = soup.new_tag("div", attrs={"class":"enrolled"})
-    courseEnrolled.append(course.totEnrl + " enrolled out of " + course.capEnrl + " total seats")
-
     # adding accreditation info
     courseAccreditationHeader = soup.new_tag("b", attrs={"class":"accreditationheader"})
     courseAccreditationHeader.append("Accreditation Units")
@@ -867,7 +859,6 @@ def formatCourseDescriptionForRegular(soup, course, courseDisc):
     courseDisc.append(courseInstructorEmail)
     courseDisc.append(courseLocation)
     courseDisc.append(courseTime)
-    courseDisc.append(courseEnrolled)
     courseDisc.append(courseAccreditationHeader)
     courseDisc.append(courseAccreditationUnits)
 

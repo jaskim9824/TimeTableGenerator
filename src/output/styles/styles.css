@@ -363,7 +363,7 @@ header {
 /* Title of description, format taken from Calendar */
 .descriptiontitle {
     color: #2b292a;
-    font-size: 30px;
+    font-size: 20px;
     font-weight: 500;
     font-family: 'Roboto', sans-serif;
 }
@@ -380,6 +380,11 @@ header {
     overflow: hidden;
     border-style: inset;
     border-width: 1px;
+}
+
+.descriptioncredits, .descriptionfeeindex, .descriptionavailability, .descriptionalphahours, .fulldescription,
+.instructorname, .instructoremail, .place, .building, .starttime, .endtime, .accreditationunits {
+    font-size: 15px;
 }
 
 /* Various components of description body */
@@ -400,13 +405,8 @@ header {
     margin-left: 50px;
 }
 
-/* Separation between enrolled and accreditation info */
-.enrolled {
-    margin: 0px 0px 10px 0px;
-}
-
 .accreditationheader {
-    font-size: 105%;
+    font-size: 80%;
 }
 
 /* footer formatting */
