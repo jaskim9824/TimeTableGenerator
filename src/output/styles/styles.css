@@ -96,7 +96,7 @@ header {
 
     .header .backbutton {
         position: relative;
-        bottom: 10px;
+        bottom: 5px;
     }
 
     /* Changing width of tooltip on narrow screens */

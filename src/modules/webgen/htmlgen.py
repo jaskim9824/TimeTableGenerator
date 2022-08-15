@@ -95,11 +95,11 @@ def placeInputs(planTag, termTag, inputWrapper, optionDict, seqDict, hexcolorlis
         placeRadioInputsforPlan(plan, optionDict, planTag, soup)
         planWrapper = soup.new_tag("div", attrs={"ng-switch-when": cleaner.cleanString(plan)})
         for term in optionDict[plan]:
-            # ng-change & render() used to update $scope.selectedTerm
             placeRadioInputsForTerm(termTag, planWrapper, plan, term, soup)
 
             # div to switch course sections displayed for a given plan & term
             wrapperDiv = soup.new_tag("div", attrs={"ng-switch-when": cleaner.cleanString(plan) + cleaner.cleanString(term)})
+            # table helps to align things easily
             courseSectionWrapper = soup.new_tag("table", attrs={"class":"coursesections"})
             courseSectionRow = soup.new_tag("tr")
             courseSectionData = soup.new_tag("td")
@@ -109,6 +109,7 @@ def placeInputs(planTag, termTag, inputWrapper, optionDict, seqDict, hexcolorlis
             courseSectionRow.append(courseSectionData)
             courseSectionWrapper.append(courseSectionRow)
             colorCount = 0
+            # dropdownsRow contains all of the section dropdown menus
             dropdownsRow = soup.new_tag("tr", attrs={"class":"dropdownsrow"})
             for course in seqDict[plan][term]:
                 # guard to prevent index out of range of hexcolorlist
@@ -388,11 +389,13 @@ def createCourseGroupRadioButtons(course, plan, term, courseGroupWrapper, course
 #   soup - soup object, used to create HTML tags
 #   controller - file handle for controller.js
 def placePlanDivs(displayTag, sequenceDict, hexcolorlist, soup, controller):
-    controller.write("$scope.coursesobj = {};\n")
+    controller.write("$scope.coursesobj = {};\n")  # initializing objects as empty dicts
     for plan in sequenceDict:
-        controller.write("$scope.coursesobj." + cleaner.cleanString(plan) + " = {};\n")
+        controller.write("$scope.coursesobj." + cleaner.cleanString(plan) + " = {};\n")  # initializing objects as empty dicts
         for term in sequenceDict[plan]:
+            # initializing objects as empty dicts
             controller.write("$scope.coursesobj." + cleaner.cleanString(plan) + "." + cleaner.cleanString(term) + " = {};\n")
+            # placing the div to hold timetable
             switchInput = soup.new_tag("div", attrs={"id":cleaner.cleanString(plan) + cleaner.cleanString(term),
                                                     "ng-show":"selectedPlan+selectedTerm == \"" + cleaner.cleanString(plan) + cleaner.cleanString(term) + "\"",
                                                     "style":"height:fit-content; display:flex; flex-direction:row; flex-wrap:column;"})
