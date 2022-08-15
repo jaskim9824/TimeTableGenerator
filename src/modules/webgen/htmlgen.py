@@ -546,17 +546,13 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
                             tagsList.append(daysTagsDict["friday"])
                         courseID = cleaner.cleanString(section.name)+cleaner.cleanString(plan)+cleaner.cleanString(term)
 
-                        # helps align courses to the grid
-                        adjustmentFactor = -3
-
                          # courseContDiv = outer course container used for absolute vertical positioning
                         if orCase:
                             # ng-show requires additional condition for OR case
                             # (that the corresponding radio button is selected)
                             courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", 
                                                            "style":"position:absolute; top:" + 
-                                                           str(27 + (50/60)*minutesFromEight 
-                                                           + adjustmentFactor) + 
+                                                           str(24 + (50/60)*minutesFromEight) + 
                                                            "px; height:" + 
                                                            str((50/60)*minutesLong) + 
                                                            "px",
@@ -590,8 +586,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
                         else:
                             courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", 
                                                            "style":"position:absolute; top:" + 
-                                                           str(27 + (50/60)*minutesFromEight 
-                                                           + adjustmentFactor) + 
+                                                           str(24 + (50/60)*minutesFromEight) + 
                                                            "px; height:" + 
                                                            str((50/60)*minutesLong) + 
                                                            "px",
@@ -657,16 +652,12 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
                     if course.fri == 'Y':
                         tagsList.append(daysTagsDict["friday"])
                     courseID = cleaner.cleanString(course.name)+cleaner.cleanString(plan)+cleaner.cleanString(term)  # id of html element
-                
-                    # helps align courses to the grid
-                    adjustmentFactor = -3
 
                     # courseContDiv = outer course container used for absolute vertical positioning
                     if orCase:
                         courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", 
                                                            "style":"position:absolute; top:" + 
-                                                           str(27 + (50/60)*minutesFromEight 
-                                                           + adjustmentFactor) + 
+                                                           str(24 + (50/60)*minutesFromEight) + 
                                                            "px; height:" + 
                                                            str((50/60)*minutesLong) + 
                                                            "px",
@@ -678,8 +669,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
                     else:
                         courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", 
                                                            "style":"position:absolute; top:" + 
-                                                           str(27 + (50/60)*minutesFromEight 
-                                                           + adjustmentFactor) + 
+                                                           str(24 + (50/60)*minutesFromEight) + 
                                                            "px; height:" + 
                                                            str((50/60)*minutesLong) + 
                                                            "px",
