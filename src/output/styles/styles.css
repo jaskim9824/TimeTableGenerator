@@ -315,7 +315,7 @@ header {
 /* Most properties taken from Calendar */
 .tooltip .tooltiptextleft, .tooltip .tooltiptextright {
     visibility: hidden;
-    width: 46vw;
+    width: 40vw;
     max-width: 900px;
     padding: 0px 10px;
     background-color: #EEEEEE;

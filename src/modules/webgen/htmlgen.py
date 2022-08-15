@@ -875,6 +875,7 @@ def appendToEachDay(tagsList, courseContDiv, plan, term, startTime, courseLength
             # id should be unique identifier, different for each day
             newDiv.find(class_="course tooltip")["id"] += "-" + day  
 
+            # setting JS object fields with appropriate values
             objectName = "$scope.coursesobj." + cleaner.cleanString(plan) + "." + cleaner.cleanString(term) + "." + day + "."  + newDiv.find(class_="course tooltip")["id"].replace("-", "_")
             controller.write(objectName + " = {};\n")
             controller.write(objectName + ".courseID = \"" + newDiv.find(class_="course tooltip")["id"].replace("-", "_") + "\";\n")
