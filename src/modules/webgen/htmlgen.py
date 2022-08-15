@@ -606,8 +606,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
                         
                         # courseDisc = text description which appears on hover
                         courseDisc = soup.new_tag("div", attrs={"id":courseID+"desc",
-                                                        "class":"tooltiptextright",
-                                                        "ng-click":"$event.stopPropagation()"})
+                                                        "class":"tooltiptextright"})
 
                         # courseDiv = container for course, width & position determined in
                         # JS if there is an overlap
@@ -679,8 +678,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
 
                     # courseDisc = text description which appears on hover
                     courseDisc = soup.new_tag("div", attrs={"id":courseID+"desc",
-                                                "class":"tooltiptextright",
-                                                "ng-click":"$event.stopPropagation()"})
+                                                "class":"tooltiptextright"})
 
                     # courseDiv = container for course, width & position determined in
                     # JS if there is an overlap
@@ -730,6 +728,7 @@ def calcClassDuration(startTime, endTime):
     if endColonIndex == -1:
         raise ValueError("Error in end time, ensure the Excel file is properly formatted in the Hrs To column")
 
+    # converting 24 hour string to int number of minutes
     startHours = int(startTime[:startColonIndex])
     startMinutes = int(startTime[startColonIndex + 1:])
     startTime = startHours*60 + startMinutes
@@ -762,8 +761,6 @@ def createCourseDiv(soup, courseID, minutesLong, courseColor):
     classStr = "course tooltip"
     return soup.new_tag("div", attrs={"class":classStr,
                                         "id": courseID,
-                                        "ng-click":courseID+"Listener()",
-                                        "ng-right-click":courseID+"RCListener()",
                                         "style":"height:" + str((50/60)*minutesLong) + 
                                             "px; background-color:" + courseColor + ";"})
 
@@ -791,10 +788,6 @@ def formatCourseDescriptionForRegular(soup, course, courseDisc):
     # adding number of credits
     courseCredits = soup.new_tag("p", attrs={"class":"descriptioncredits"})
     courseCredits.append(html.unescape("&#9733 ") + course.maxUnits + " ")
-
-    # adding fee index
-    # courseFeeIndex = soup.new_tag("i", attrs={"class":"descriptionfeeindex"})
-    # courseFeeIndex.append("(" + "fi " + course.calc_fee_index + ")" + " ")
 
     # adding term avail 
     courseTermAvail = soup.new_tag("p", attrs={"class":"descriptionavailability"})
@@ -844,7 +837,6 @@ def formatCourseDescriptionForRegular(soup, course, courseDisc):
     courseDisc.append(courseTitle)
     courseDisc.append(courseLine)
     courseDisc.append(courseCredits)
-    # courseDisc.append(courseFeeIndex)
     courseDisc.append(courseTermAvail)
     courseDisc.append(courseAlphaHours)
     courseDisc.append(courseDescription)
@@ -924,4 +916,3 @@ def findDayOfDayTag(dayTag):
         return "friday"
     else:
         return ""
-
