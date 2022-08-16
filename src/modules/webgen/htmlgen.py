@@ -209,23 +209,23 @@ def placeCourseSectionInputsForCourse(sectionWrapper, hexcolorlist, plan, term, 
                                                                     "ng-model": varName + section.component + endString,
                                                                     "style":"background:" + hexcolorlist[colorCount] + ";"})
         compDict[section.component].append(sectionSelect)
-        compKeys = ["LEC", "SEM", "LAB"]
-        for comp in compKeys:
-            if comp in compDict:
-                # title above  
-                sectionWrapper.append(str(section) + " (" + comp  + ")")
-                breakTag = soup.new_tag("br")
-                sectionWrapper.append(breakTag)
+    compKeys = ["LEC", "SEM", "LAB"]
+    for comp in compKeys:
+        if comp in compDict:
+            # title above  
+            sectionWrapper.append(str(course) + " (" + comp  + ")")
+            breakTag = soup.new_tag("br")
+            sectionWrapper.append(breakTag)
 
-                # ALL option
-                sectionRadio = soup.new_tag("option", attrs={"value": "ALL",
+            # ALL option
+            sectionRadio = soup.new_tag("option", attrs={"value": "ALL",
                                                                                 "id":"ALL"})
-                sectionRadio.append("ALL")
-                compDict[comp].append(deepcopy(sectionRadio))
+            sectionRadio.append("ALL")
+            compDict[comp].append(deepcopy(sectionRadio))
 
-                sectionWrapper.append(compDict[comp])
-                breakTag = soup.new_tag("br")
-                sectionWrapper.append(breakTag)
+            sectionWrapper.append(compDict[comp])
+            breakTag = soup.new_tag("br")
+            sectionWrapper.append(breakTag)
 
 
 
