@@ -28,7 +28,7 @@ def switchTitle(titleTag, topTitleTag, deptName):
 #   optionDict - dict that holds all the options present in a term
 #   planTag - form HTML tag where the plan radio inputs will be placed
 #   soup - soup object, used to create HTML tags
-def placeInputsforPlan(plan, optionDict, planTag, soup):
+def placeInputsforPlan(plan, optionDict, seqDict, hexcolorlist, planTag, termTag, inputWrapper, soup):
     # name of first term in current plan
     firstTermInPlan = cleaner.cleanString((list(optionDict[plan].keys()))[0])
     # radio inputs for selecting plan, can ng-model directly to selectedPlan
@@ -45,6 +45,10 @@ def placeInputsforPlan(plan, optionDict, planTag, soup):
     planTag.append(labelTag)
     breakTag = soup.new_tag("br")
     planTag.append(breakTag)
+    # div to hold radio inputs to select term for a given plan
+    planWrapper = soup.new_tag("div", attrs={"ng-switch-when": cleaner.cleanString(plan)})
+    for term in optionDict[plan]:
+        placeInputsForTerm(termTag, optionDict, seqDict, hexcolorlist, planWrapper, inputWrapper, plan, term, soup)
 
 # Places the radio inputs for selecting the current term
 # Parameters:
@@ -88,17 +92,23 @@ def placeInputsForTerm(termTag, optionDict, seqDict, hexcolorlist, planWrapper, 
 #   soup - soup object, used to create HTML tags
 def placeCourseSectionInputsForTerm(seqDict, optionDict, courseSelectionDiv, hexcolorlist, plan, term, soup):
     colorCount = 0
-    courseSectionWrapper = soup.new_tag("div")
-    courseSectionHeader = soup.new_tag("h3")
+    courseSectionWrapper = soup.new_tag("table", attrs={"class":"coursesections"})
+    courseSectionRow = soup.new_tag("tr")
+    courseSectionData = soup.new_tag("td")
+    courseSectionHeader = soup.new_tag("h3", attrs={"class":"sectionsheader"})
     courseSectionHeader.append("Course Sections")
-    courseSectionWrapper.append(courseSectionHeader)
+    courseSectionData.append(courseSectionHeader)
+    courseSectionRow.append(courseSectionData)
+    courseSectionWrapper.append(courseSectionRow)
+
+    dropdownsRow = soup.new_tag("tr", attrs={"class":"dropdownsrow"})
     for course in seqDict[plan][term]:
         # Case: course is not in a course group
         if len(course) == 1 and type(course[0]) != type([]):
-            sectionWrapper = soup.new_tag("div")
+            sectionWrapper = soup.new_tag("td")
        
             placeCourseSectionInputsForCourse(sectionWrapper, hexcolorlist, plan, term, colorCount, course[0], soup, "")
-            courseSectionWrapper.append(sectionWrapper)
+            dropdownsRow.append(sectionWrapper)
             colorCount += 1
             
         # Case: course is in a course group
@@ -109,7 +119,7 @@ def placeCourseSectionInputsForTerm(seqDict, optionDict, courseSelectionDiv, hex
                     # opt[1] should hold name of course group (2A, 4B, etc.)
                     continue
                 else:
-                    sectionWrapper = soup.new_tag("div", attrs={"ng-if":cleaner.cleanString(plan) + 
+                    sectionWrapper = soup.new_tag("td", attrs={"ng-if":cleaner.cleanString(plan) + 
                                                                            cleaner.cleanString(term)+
                                                                            "obj."+
                                                                            "group"+
@@ -118,15 +128,14 @@ def placeCourseSectionInputsForTerm(seqDict, optionDict, courseSelectionDiv, hex
                                                                            opt[-1] + 
                                                                            "\""})
                     placeCourseSectionInputsForCourse(sectionWrapper, hexcolorlist, plan, term, colorCount, opt[0], soup, "__cgoption" + opt[-1])
-                    courseSectionWrapper.append(sectionWrapper)
+                    dropdownsRow.append(sectionWrapper)
                     colorCount += 1
         # guard to prevent index out of range of hexcolorlist
         if colorCount >= len(hexcolorlist):
             colorCount = 0
-    courseSelectionDiv.append(courseSectionWrapper)
     # Generating div to wrap course group radio inputs
     courseGroupWrapperDiv = soup.new_tag("div")
-    courseGroupHeader = soup.new_tag("h3")
+    courseGroupHeader = soup.new_tag("h3", attrs={"class":"coursegroupsheader"})
     courseGroupWrapperDiv.append(courseGroupHeader)
     # Generating div to wrap OR course radio inputs
     ORCourseWrapperDiv = soup.new_tag("div")
@@ -163,7 +172,7 @@ def placeCourseSectionInputsForTerm(seqDict, optionDict, courseSelectionDiv, hex
                                                                     "value": option,
                                                                     "id": option})
                     labelTag = soup.new_tag("label", attrs={"for":option})
-                    sectionWrapper = soup.new_tag("div", attrs={"ng-if":"(" + cleaner.cleanString(plan) + 
+                    sectionWrapper = soup.new_tag("td", attrs={"ng-if":"(" + cleaner.cleanString(plan) + 
                                                                                cleaner.cleanString(term) +
                                                                                "obj."+
                                                                                optionSet.parentCourseGroup[0] + "=="
@@ -175,7 +184,7 @@ def placeCourseSectionInputsForTerm(seqDict, optionDict, courseSelectionDiv, hex
                                                                                optionSet.getOptionName() + "==" + 
                                                                                option + ")"})
                     placeCourseSectionInputsForCourse(sectionWrapper, hexcolorlist, plan, term, colorCount, option, soup, "__oroption" + optionSet.getOptionName())
-                    courseSectionWrapper.append(sectionWrapper)    
+                    dropdownsRow.append(sectionWrapper)  
                     labelTag.append(option)
                     optionWrapper.append(optionRadio)
                     optionWrapper.append(labelTag)
@@ -195,22 +204,25 @@ def placeCourseSectionInputsForTerm(seqDict, optionDict, courseSelectionDiv, hex
                                                                             optionSet.getOptionName(),
                                                                     "value": option,
                                                                     "id": option})
-                    sectionWrapper = soup.new_tag("div", attrs={"ng-if":cleaner.cleanString(plan) + 
+                    sectionWrapper = soup.new_tag("td", attrs={"ng-if":cleaner.cleanString(plan) + 
                                                                                cleaner.cleanString(term) +
                                                                                "obj."+
                                                                                optionSet.getOptionName() +
                                                                                "==" + option})
                     placeCourseSectionInputsForCourse(sectionWrapper, hexcolorlist, plan, term, colorCount, option, soup, "__oroption" + optionSet.getOptionName())
-                    courseSectionWrapper.append(sectionWrapper)                                             
+                    dropdownsRow.append(sectionWrapper)                                             
                     labelTag = soup.new_tag("label", attrs={"for":option})
                     labelTag.append(option)
                     optionWrapper.append(optionRadio)
                     optionWrapper.append(labelTag)
                 ORCourseWrapperDiv.append(optionWrapper)
+
     if ORCourseCoursesPresent:
         ORCourseHeader.append("Switchable Courses")
     if courseGroupsPresent:
         courseGroupHeader.append("Course Groups")
+    courseSectionWrapper.append(dropdownsRow)
+    courseSelectionDiv.append(courseSectionWrapper)
     courseSelectionDiv.append(courseGroupWrapperDiv)
     courseSelectionDiv.append(ORCourseWrapperDiv)
 

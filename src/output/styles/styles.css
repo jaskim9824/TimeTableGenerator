@@ -180,7 +180,7 @@ header {
     margin-top: 30px;
 }
 
-/* flexbox holding all title and all dropdowns */
+/* flexbox holding title and all dropdowns */
 .dropdownsrow {
     display: flex;
     flex-direction: column;
