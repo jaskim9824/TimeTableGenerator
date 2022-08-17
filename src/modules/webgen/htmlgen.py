@@ -22,11 +22,31 @@ def switchTitle(titleTag, topTitleTag, deptName):
     titleTag.append(deptName + " Timetable")
     topTitleTag.append(deptName + " Timetable")
 
-# Places the radio inputs for selecting the current plan
+# Function that places the inputs into the form which controls
+# what is displayed on the webpage
+# Parameters:
+#   planTag - form HTML tag where the plan radio inputs will be placed
+#   termTag - div HTML tag where the term radio inputs will be placed
+#   inputWrapper - div HTML tag that holds inputs for course sections, course groups and 
+#   OR courses
+#   optionDict - dict that holds all the options present in a term
+#   seqDict - dict that contains the sequence information
+#   hexcolorlist - list of hex color codes for distinguishing between courses
+#   soup - soup object, used to create HTML tags
+def placeInputs(planTag, termTag, inputWrapper, optionDict, seqDict, hexcolorlist, soup):
+    for plan in optionDict:
+        placeInputsforPlan(plan, optionDict, seqDict, hexcolorlist, planTag, termTag, inputWrapper, soup)
+
+# Places the inputs related to a specified plan
 # Parameters:
 #   plan - name of the plan being placed
 #   optionDict - dict that holds all the options present in a term
+#   seqDict - dict that holds the course seq information
+#   hexcolorlist - list of hex color codes for distinguishing between courses
 #   planTag - form HTML tag where the plan radio inputs will be placed
+#   termTag - div HTML tag where the term radio inputs will be placed
+#   inputWrapper - div HTML tag that holds inputs for course sections, course groups and 
+#   OR courses
 #   soup - soup object, used to create HTML tags
 def placeInputsforPlan(plan, optionDict, seqDict, hexcolorlist, planTag, termTag, inputWrapper, soup):
     # name of first term in current plan
@@ -50,10 +70,15 @@ def placeInputsforPlan(plan, optionDict, seqDict, hexcolorlist, planTag, termTag
     for term in optionDict[plan]:
         placeInputsForTerm(termTag, optionDict, seqDict, hexcolorlist, planWrapper, inputWrapper, plan, term, soup)
 
-# Places the radio inputs for selecting the current term
+# Places the inputs for related to the specified term
 # Parameters:
 #   termTag - div HTML tag where the term radio inputs will be placed
+#   optionDict - dict that holds all the options present in a term
+#   seqDict - dict that holds the course seq information
+#   hexcolorlist - list of hex color codes for distinguishing between cours
 #   planWrapper - div HTML tag that displays only if a certain plan is selected
+#   inputWrapper - div HTML tag that holds inputs for course sections, course groups and 
+#   OR courses
 #   plan - name of the plan being placed
 #   term - name of the term being placed
 #   soup - soup object, used to create HTML tags
@@ -79,16 +104,14 @@ def placeInputsForTerm(termTag, optionDict, seqDict, hexcolorlist, planWrapper, 
     placeCourseSectionInputsForTerm(seqDict, optionDict, courseSelectionDiv, hexcolorlist, plan, term, soup)
     inputWrapper.append(courseSelectionDiv)
 
-# Function that places the inputs into the form which controls
-# what is displayed on the webpage
+# Function that places the course section inputs for a specfic term
 # Parameters:
-#   planTag - form HTML tag where the plan radio inputs will be placed
-#   termTag - div HTML tag where the term radio inputs will be placed
-#   inputWrapper - div HTML tag that holds inputs for course sections, course groups and 
-#   OR courses
+#   seqDict - dict that holds the course seq information
 #   optionDict - dict that holds all the options present in a term
-#   seqDict - dict that contains the sequence information
-#   hexcolorlist - list of hex color codes for distinguishing between courses
+#   courseSelectionDiv - div that holds the inputs specfic to that term
+#   hexcolorlist - list of hex color codes for distinguishing between cours
+#   plan - name of the plan being placed
+#   term - name of the term being placed
 #   soup - soup object, used to create HTML tags
 def placeCourseSectionInputsForTerm(seqDict, optionDict, courseSelectionDiv, hexcolorlist, plan, term, soup):
     colorCount = 0
@@ -188,6 +211,10 @@ def placeCourseSectionInputsForTerm(seqDict, optionDict, courseSelectionDiv, hex
                     labelTag.append(option)
                     optionWrapper.append(optionRadio)
                     optionWrapper.append(labelTag)
+                    colorCount += 1
+                     # guard to prevent index out of range of hexcolorlist
+                    if colorCount >= len(hexcolorlist):
+                        colorCount = 0
                 optionOutsideWrapper.append(optionWrapper)
                 ORCourseWrapperDiv.append(optionOutsideWrapper)
             else:
@@ -215,6 +242,10 @@ def placeCourseSectionInputsForTerm(seqDict, optionDict, courseSelectionDiv, hex
                     labelTag.append(option)
                     optionWrapper.append(optionRadio)
                     optionWrapper.append(labelTag)
+                    colorCount += 1
+                     # guard to prevent index out of range of hexcolorlist
+                    if colorCount >= len(hexcolorlist):
+                        colorCount = 0
                 ORCourseWrapperDiv.append(optionWrapper)
 
     if ORCourseCoursesPresent:
@@ -226,6 +257,16 @@ def placeCourseSectionInputsForTerm(seqDict, optionDict, courseSelectionDiv, hex
     courseSelectionDiv.append(courseGroupWrapperDiv)
     courseSelectionDiv.append(ORCourseWrapperDiv)
 
+# Function that places the section inputs for a specfic course
+# Parameters:
+#   sectionWrapper - div that holds the course section inputs for the specificed course
+#   hexcolorlist - list of hex color codes for distinguishing between cours
+#   plan - name of plan of course being placed
+#   term - name of term of course being placed
+#   colorCount - count for course within hexcolorlist
+#   course - course object for specifcied course
+#   soup - soup object used to create HTML tags
+#   endString - optional endstring used by OR and course group courses
 def placeCourseSectionInputsForCourse(sectionWrapper, hexcolorlist, plan, term, colorCount, course, soup, endString):
     compDict= {}
     name = cleaner.cleanString(plan) + cleaner.cleanString(term)+ cleaner.cleanString(str(course))
@@ -259,20 +300,7 @@ def placeCourseSectionInputsForCourse(sectionWrapper, hexcolorlist, plan, term, 
             breakTag = soup.new_tag("br")
             sectionWrapper.append(breakTag)
 
-# Function that places the inputs into the form which controls
-# what is displayed on the webpage
-# Parameters:
-#   planTag - form HTML tag where the plan radio inputs will be placed
-#   termTag - div HTML tag where the term radio inputs will be placed
-#   inputWrapper - div HTML tag that holds inputs for course sections, course groups and 
-#   OR courses
-#   optionDict - dict that holds all the options present in a term
-#   seqDict - dict that contains the sequence information
-#   hexcolorlist - list of hex color codes for distinguishing between courses
-#   soup - soup object, used to create HTML tags
-def placeInputs(planTag, termTag, inputWrapper, optionDict, seqDict, hexcolorlist, soup):
-    for plan in optionDict:
-        placeInputsforPlan(plan, optionDict, seqDict, hexcolorlist, planTag, termTag, inputWrapper, soup)
+
 
 # Creates the radio buttons for switching between course group options
 # Parameters:
