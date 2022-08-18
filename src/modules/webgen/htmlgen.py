@@ -206,7 +206,7 @@ def placeCourseSectionInputsForTerm(seqDict, optionDict, courseSelectionDiv, hex
                                                                                "obj."+
                                                                                optionSet.getOptionName() + "==" + 
                                                                                option + ")"})
-                    placeCourseSectionInputsForCourse(sectionWrapper, hexcolorlist, plan, term, colorCount, option, soup, "__oroption" + optionSet.getOptionName())
+                    placeCourseSectionInputsForCourse(sectionWrapper, hexcolorlist, plan, term, colorCount, option, soup, "__cgoption" + optionSet.parentCourseGroup)
                     dropdownsRow.append(sectionWrapper)  
                     labelTag.append(option)
                     optionWrapper.append(optionRadio)
@@ -236,7 +236,7 @@ def placeCourseSectionInputsForTerm(seqDict, optionDict, courseSelectionDiv, hex
                                                                                "obj."+
                                                                                optionSet.getOptionName() +
                                                                                "==" + option})
-                    placeCourseSectionInputsForCourse(sectionWrapper, hexcolorlist, plan, term, colorCount, option, soup, "__oroption" + optionSet.getOptionName())
+                    placeCourseSectionInputsForCourse(sectionWrapper, hexcolorlist, plan, term, colorCount, option, soup)
                     dropdownsRow.append(sectionWrapper)                                             
                     labelTag = soup.new_tag("label", attrs={"for":option})
                     labelTag.append(option)
