@@ -38,6 +38,7 @@ class ORCourseOption(Option):
         outputStr = ""
         for option in self.options:
             outputStr += option.name
+        return outputStr
 
 # Class that extends from Option to wrap course group options (wraps list of course groups names)
 # Fields:
@@ -83,9 +84,9 @@ def extractingListofOptions(sequenceDict):
                     optionsList.append(courseGroupOpt)                        
                 else:
                     # Case: course is an OR course
-                    ORCourseOption = ORCourseOption(False, "")
+                    ORCourse = ORCourseOption(False, "")
                     for option in course:
-                        ORCourseOption.addOption(option)
+                        ORCourse.addOption(option)
             listOptionsDict[plan][term] = optionsList
     return listOptionsDict
                 

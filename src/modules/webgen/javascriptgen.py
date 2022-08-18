@@ -136,7 +136,7 @@ def generateInitialOptionObjects(planOptionDict, controller):
             # new object for each plan & term combo
             controller.write("$scope."+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj = {")
             for count, optionGroup in enumerate(planOptionDict[plan][term]):
-                controller.write(optionGroup.getOptionName() + ":\"" + optionGroup.options[0] + "\"")
+                controller.write(cleaner.cleanString(optionGroup.getOptionName()) + ":\"" + str(optionGroup.options[0]) + "\"")
                 if count != len(planOptionDict[plan][term]) - 1:
                     # still more options to go, add comma as separator
                     controller.write(",")

@@ -171,44 +171,44 @@ def placeCourseSectionInputsForTerm(seqDict, optionDict, courseSelectionDiv, hex
         if type(optionSet) == type(CourseGroupOption()):
             courseGroupsPresent = True
             # Case: course is for a course group option
-            courseGroupWrapper = soup.new_tag("div", attrs={"id":optionSet.getOptionName()})
+            courseGroupWrapper = soup.new_tag("div", attrs={"id":cleaner.cleanString(optionSet.getOptionName())})
 
             # for each course group option, add a radio button
             createCourseGroupRadioButtons(optionSet, plan, term, courseGroupWrapper, courseGroupWrapperDiv, soup)
         else:
             ORCourseCoursesPresent = True
-            if optionSet.isWithCourseGroup:
+            if optionSet.isWithinCourseGroup:
                  # this OR course is bound to a course group
                 optionOutsideWrapper = soup.new_tag("div", attrs={"ng-switch":cleaner.cleanString(plan) + 
                                                                                cleaner.cleanString(term) +
-                                                                               "obj."+ optionSet.parentCourseGroup[0]})
+                                                                               "obj.group"+ optionSet.parentCourseGroup[0]})
                 optionWrapper = soup.new_tag("div", attrs={"ng-switch-when":optionSet.parentCourseGroup})
                 for option in optionSet.options:
                     optionRadio = soup.new_tag("input", attrs={"type":"radio",
                                                                     "name":cleaner.cleanString(plan) + 
                                                                            cleaner.cleanString(term) + 
-                                                                           optionSet.getOptionName(),
+                                                                           cleaner.cleanString(optionSet.getOptionName()),
                                                                     "ng-model":cleaner.cleanString(plan) + 
                                                                             cleaner.cleanString(term) +
                                                                             "obj."+
-                                                                            optionSet.getOptionName(),
-                                                                    "value": option,
-                                                                    "id": option})
+                                                                            cleaner.cleanString(optionSet.getOptionName()),
+                                                                    "value": str(option),
+                                                                    "id": str(option)})
                     labelTag = soup.new_tag("label", attrs={"for":option})
                     sectionWrapper = soup.new_tag("td", attrs={"ng-if":"(" + cleaner.cleanString(plan) + 
                                                                                cleaner.cleanString(term) +
-                                                                               "obj."+
-                                                                               optionSet.parentCourseGroup[0] + "=="
-                                                                               + optionSet.parentCourseGroup + ")" + 
-                                                                               "& (" +
+                                                                               "obj.group"+
+                                                                               optionSet.parentCourseGroup[0] + "==\""
+                                                                               + optionSet.parentCourseGroup + "\")" + 
+                                                                               "&& (" +
                                                                                cleaner.cleanString(plan) + 
                                                                                cleaner.cleanString(term) +
                                                                                "obj."+
-                                                                               optionSet.getOptionName() + "==" + 
-                                                                               option + ")"})
+                                                                               cleaner.cleanString(optionSet.getOptionName()) + "==\"" + 
+                                                                               str(option) + "\")"})
                     placeCourseSectionInputsForCourse(sectionWrapper, hexcolorlist, plan, term, colorCount, option, soup, "__cgoption" + optionSet.parentCourseGroup)
                     dropdownsRow.append(sectionWrapper)  
-                    labelTag.append(option)
+                    labelTag.append(str(option))
                     optionWrapper.append(optionRadio)
                     optionWrapper.append(labelTag)
                     colorCount += 1
@@ -219,23 +219,23 @@ def placeCourseSectionInputsForTerm(seqDict, optionDict, courseSelectionDiv, hex
                 ORCourseWrapperDiv.append(optionOutsideWrapper)
             else:
                 # this OR course is indep of a course group
-                optionWrapper = soup.new_tag("div", attrs={"id":optionSet.getOptionName()})
+                optionWrapper = soup.new_tag("div", attrs={"id":cleaner.cleanString(optionSet.getOptionName())})
                 for option in optionSet.options:
                     optionRadio = soup.new_tag("input", attrs={"type":"radio",
                                                                     "name":cleaner.cleanString(plan) + 
                                                                            cleaner.cleanString(term) + 
-                                                                           optionSet.getOptionName(),
+                                                                           cleaner.cleanString(optionSet.getOptionName()),
                                                                     "ng-model":cleaner.cleanString(plan) + 
                                                                             cleaner.cleanString(term) +
                                                                             "obj."+
-                                                                            optionSet.getOptionName(),
+                                                                            cleaner.cleanString(optionSet.getOptionName()),
                                                                     "value": option,
                                                                     "id": option})
                     sectionWrapper = soup.new_tag("td", attrs={"ng-if":cleaner.cleanString(plan) + 
                                                                                cleaner.cleanString(term) +
                                                                                "obj."+
-                                                                               optionSet.getOptionName() +
-                                                                               "==" + option})
+                                                                               cleaner.cleanString(optionSet.getOptionName()) +
+                                                                               "==" + "\"" + option + "\""})
                     placeCourseSectionInputsForCourse(sectionWrapper, hexcolorlist, plan, term, colorCount, option, soup)
                     dropdownsRow.append(sectionWrapper)                                             
                     labelTag = soup.new_tag("label", attrs={"for":option})
@@ -316,11 +316,11 @@ def createCourseGroupRadioButtons(course, plan, term, courseGroupWrapper, course
                                                     "type":"radio",
                                                     "name":cleaner.cleanString(plan) + 
                                                             cleaner.cleanString(term) + 
-                                                            course.getOptionName(),
+                                                            cleaner.cleanString(course.getOptionName()),
                                                     "ng-model":cleaner.cleanString(plan) + 
                                                             cleaner.cleanString(term) +
                                                             "obj."+
-                                                            course.getOptionName(),
+                                                            cleaner.cleanString(course.getOptionName()),
                                                     "value": option,
                                                     "id": option})
         labelTag = soup.new_tag("label", attrs={"for":option})
@@ -529,7 +529,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
                                                            cleaner.cleanString(plan)
                                                            +cleaner.cleanString(term)+
                                                            "obj."+
-                                                           orName+
+                                                           cleaner.cleanString(orName)+
                                                            "=="+"\""+str(course)+"\""})
                         else:
                             courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", 
@@ -612,7 +612,7 @@ def placeCourses(daysTagsDict, termList, soup, plan, term, hexcolorlist, control
                                                            course.component+"==\""+str(course)+"\""+"||"+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+
                                                            cleaner.cleanString(str(courseWrapper))+course.component+"==\"ALL\")"+
                                                            "&&"+cleaner.cleanString(plan)+cleaner.cleanString(term)+"obj."+
-                                                           orName+"==\""+str(courseWrapper)+"\""})
+                                                           cleaner.cleanString(orName)+"==\""+str(courseWrapper)+"\""})
                     else:
                         courseContDiv = soup.new_tag("div", attrs={"class":"coursecontainer", 
                                                            "style":"position:absolute; top:" + 
