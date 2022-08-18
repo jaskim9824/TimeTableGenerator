@@ -136,7 +136,7 @@ header {
 #toprowcontainer {
     display: flex;
     flex-direction: row;
-    margin-bottom: 25px;
+    margin-bottom: 10px;
 }
 
 /* Container for plan radio inputs */
@@ -222,8 +222,6 @@ header {
     width:fit-content;
     height: fit-content;
     position: relative;
-    right: 15px;
-    bottom: 40px;
 }
 
 /* Term column styling */
