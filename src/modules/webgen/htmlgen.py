@@ -34,6 +34,13 @@ def switchTitle(titleTag, topTitleTag, deptName):
 #   hexcolorlist - list of hex color codes for distinguishing between courses
 #   soup - soup object, used to create HTML tags
 def placeInputs(planTag, termTag, inputWrapper, optionDict, seqDict, hexcolorlist, soup):
+    planHeader = soup.new_tag("h3", attrs={"class":"planheader"})
+    planHeader.append("Plans")
+    planTag.append(planHeader)
+
+    termHeader = soup.new_tag("h3", attrs={"class":"termheader"})
+    termHeader.append("Terms")
+    termTag.append(termHeader)
     for plan in optionDict:
         placeInputsforPlan(plan, optionDict, seqDict, hexcolorlist, planTag, termTag, inputWrapper, soup)
 
