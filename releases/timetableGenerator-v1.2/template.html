@@ -1,0 +1,70 @@
+<!--This is the template HTML which is the input for the generation script-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- This makes website responsive on different devices-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <!--Styles sheets & web icon-->
+    <link rel="stylesheet" href="./styles/styles.css">
+    <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
+    <!--Angular import-->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <!--Leader Line import-->
+    <script src="https://cdn.jsdelivr.net/npm/leader-line@1.0.7/leader-line.min.js"></script>
+</head>
+<body>
+    <!--header-->
+    <header>
+        <div class="header" id="header" style="width:1730px;">
+            <table>
+                <tr>
+                    <td class="backbutton"><a href="../index.html">&#8592 Back</a></td>
+                    <td style="width: 65%;"><a href="#"> <img src="./images/uofalogo.png" alt="UofA logo"></a></td>
+                    <td><a href="#default" class="site-title"></a> </td>
+                </tr>
+            </table>
+        </div>
+    </header>
+    <div id="main" ng-app="main" ng-controller="main">
+        <div id="explainertext">
+            <p>Welcome to the University of Alberta's Engineering Weekly Timetable.</p>
+            <p>On this page, you will find the weekly timetable for each plan and each term in an Engineering discipline.</p>
+            <p>To view the calendar description and instructor, location, and enrollment information for a course, simply hover your cursor over that course.</p>
+            <p>Note that the locations and times of the classes are based on the upcoming term (or past terms) and can be subject to change 
+                in future terms.
+            </p>
+            <p>Under <b>Course Sections</b>, you can select which section of a course you wish to display on the timetable. You can also
+                select "ALL" to display all sections. Note that this includes lab and seminar sections.
+            </p>
+            <p>Under <b>Course Groups</b> (if present), you can select which course group you are taking that term, and 
+                timetable and Course Sections menu will change accordingly.
+            </p>
+            <p>Under <b>Switchable Course</b> (if present), you can select which course out of a set of options you 
+                can take in that term.
+            </p>
+        </div>
+        <div id="toprowcontainer">
+            <div id="planlegend">
+            </div>
+            <div id="termlegend" ng-switch="selectedPlan">
+            </div>
+            <div id="optionlegend" ng-switch="selectedPlan+selectedTerm">
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="footer" id="footer" style="width:1730px;">
+            <table>
+                <tr>
+                    <td style="width: 65%;"><a href="#"> <img src="./images/uofalogo.png" alt="UofA logo"></a></td>
+                    <td><p id="copyright">&copy 2022 University of Alberta</p></td>
+                </tr>
+            </table>
+        </div>
+    </footer>
+    <script src="js/controller.js"></script>
+</body>
+</html>

@@ -2,3 +2,7 @@
 __pycache__/
 src/output/index.html
 src/output/js/controller.js
+src/timetableGenerator.exe
+src/dist
+src/build
+src/programVisualizer.spec

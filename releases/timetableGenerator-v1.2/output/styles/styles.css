@@ -1,0 +1,454 @@
+/* Set the <html> font size to 100%, ensures rem scaling is correct */
+:root {
+    font-size: 100%;
+}
+
+/* body style */
+body {
+    margin: 0;
+    width: fit-content;
+    height: fit-content;
+}
+
+/* entire page style, scroll on overflow */
+html {
+    margin: 0;
+    width: fit-content;
+    height: fit-content;
+    overflow-x: scroll;
+    overflow-y: scroll;
+}
+
+/* Main green header along top of page */
+header {
+    padding: 8px 8px;
+    background-color: #275d38;
+    margin-bottom: 10px;
+    height: 60px;
+    min-width: 100vw;
+}
+
+/* backbutton in top left corner */
+.backbutton {
+    background-color: white;
+    text-align: center;
+    border-radius: 4px;
+}
+
+/* text inside backbutton, ensure padding matches button size */
+.header .backbutton a {
+    color: black;
+    font-size: 110%;
+    padding: 15px 27px 15px 27px;
+}
+
+/* change text color on hover */
+.header .backbutton:hover a {
+    color: blue;
+}
+
+/*Header link style */
+.header a {
+    padding: 15px;
+    text-decoration: none;
+    line-height: 1.5rem;
+    border-radius: 4px;
+    color: #f2cd00;
+    font-size: 100%;
+    font-family: inherit;
+    text-align: center;
+}
+
+/* Title style */
+.header a.site-title {
+    width: fit-content;
+    font-size: 25px;
+    position: absolute;
+    left: 710px;
+    top: 12px;
+    color: #F2CD00;
+}
+
+/*Image style, U of a logo*/
+.header img {
+    width: 183px;
+    height: 50px;
+    margin-right: 0;
+    float: left;
+}
+
+/* Applies when screen width < 840px */
+@media screen and (max-width: 840px) {
+    .header a {
+        float: none;
+        display: block;
+        text-align: center;
+        
+    }
+
+    .header img {
+        margin-right: 0;
+        float: left;
+        /* img needs to be re-aligned on narrow screens */
+        position: relative;
+        bottom: 10px;
+    }
+
+    .header .backbutton {
+        position: relative;
+        bottom: 5px;
+    }
+
+    /* Changing width of tooltip on narrow screens */
+    .coursecontainer .tooltip .tooltiptextleft, .coursecontainer .tooltip .tooltiptextright {
+        width: 250px;
+    }
+
+    .coursecontainer .tooltip .tooltiptextleft {
+        right: 10%;
+    }
+
+    .coursecontainer .tooltip .tooltiptextright {
+        left: 10%;
+    }
+
+    /* Smaller font on narrow screens */
+    .coursecontainer .tooltip .descriptiontitle {
+        font-size: 15px;
+    }
+
+    .coursecontainer .tooltip .tooltiptextright .calendardescription,
+    .coursecontainer .tooltip .tooltiptextleft .calendardescription {
+        display: block;
+        line-height: 0.7;
+    }
+
+    /* Smaller font on narrow screens */
+    .coursecontainer .descriptionalphahours, .coursecontainer .descriptionavailability, 
+    .coursecontainer .descriptioncredits, .coursecontainer .descriptionfeeindex, .coursecontainer .fulldescription,
+    .coursecontainer .instructorname, .coursecontainer .instructoremail, .coursecontainer .location, .coursecontainer .coursetime,
+    .coursecontainer .enrolled, .coursecontainer .accreditationheader, .coursecontainer .accreditationunits {
+        font-size: 12px;
+    }
+}
+
+/* Container for radio input selectors */
+#toprowcontainer {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+}
+
+/* Container for plan radio inputs */
+#planlegend {
+    width: fit-content;
+    position: relative;
+    left: 15rem;
+}
+
+/* text above plan radio inputs */
+.planheader {
+    margin: 0px 0px 5px 35px;
+    font-size: 150%;
+}
+
+/* Container for term radio inputs */
+#termlegend {
+    width: fit-content;
+    position: relative;
+    left: 27.5rem;
+}
+
+/* text above term inputs */
+.termheader {
+    margin: 0px 0px 5px 20px;
+    font-size: 150%
+}
+
+/* Container for sections dropdowns and cours groups radios */
+#optionlegend {
+    width: fit-content;
+    position: relative;
+    left: 40rem;
+    bottom: 2rem;
+}
+
+/* title above section dropdowns */
+.sectionsheader {
+    text-align: center;
+    margin-bottom: 0;
+    margin-top: 30px;
+}
+
+/* flexbox holding title and all dropdowns */
+.dropdownsrow {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    max-height: 200px;
+}
+
+/* container for dropdowns for one course
+(holds Lec, Sem, and Lab dropdowns for one course */
+.dropdownsforcourse {
+    margin: 0px 5px 5px 0px;
+    height: fit-content;
+    width: 175px;
+}
+
+/* dropdown box for sections */
+.sectiondropdown {
+    width: 160px;
+}
+
+/* title above course group radio inputs */
+.coursegroupsheader {
+    margin: 0;
+}
+
+/* Wrapper div for the term names and course boxes, the main content */
+#main {
+    height: 1300px;
+    width: fit-content;
+}
+
+/* Text just below header giving user some info */
+#explainertext {
+    margin-left: 10px;
+}
+
+/* Plan diagram styling */
+.display {
+    width:fit-content;
+    height: fit-content;
+    position: relative;
+}
+
+/* Term column styling */
+#coursegrid {
+    margin-left: 4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Main content, grid of times/days */
+.coursegrid {
+    display: flex;
+    flex-direction: row;
+}
+
+/* Column-oriented flexboxes for each day of the week */
+.monday, .tuesday, .wednesday, .thursday, .friday {
+    width: 310px;
+    text-align: center;
+    font-size: 120%;
+    border-right: 3px solid black;
+    border-top: 3px solid black;
+    border-bottom: 3px solid black;
+}
+
+/* All of the horizontal lines in the grid */
+.horizontaldivider {
+    box-sizing: border-box;
+    border-top: 3px solid black;
+    width: inherit;
+    margin: 0;
+}
+
+/* Container for the times along left of page */ 
+.time {
+    width: 100px;
+    margin-left: 20px;
+    padding-top: 35px;
+    text-align: center;
+    font-size: 120%;
+    border: 3px solid black;
+}
+
+/* Individual time text */
+.timeslot {
+    margin-bottom: 28px;
+}
+
+/* Contains one course */
+.coursecontainer {
+    display: flex;
+    flex-direction: column;
+    height: 0px;
+    width: 0px;
+}
+
+/* Text within a course box */
+.embed {
+    text-align: center;
+    font-size: 65%;
+}
+
+/* Courses that are very narrow need smaller font */
+.narrowcourse .embed {
+    font-size: 30%;
+}
+
+/* Course box */
+.course, .narrowcourse {
+    box-sizing: border-box;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+}
+
+/* Default course hover */
+.course:hover, .narrowcourse:hover {
+    background-color: #f2cd00;
+    border-color:#f2cd00;
+}
+    
+/* This is for the hover over course description */
+.tooltip {
+    position: relative;
+    display: inline-block;            
+}
+ 
+/* Most properties taken from Calendar */
+.tooltip .tooltiptextleft, .tooltip .tooltiptextright {
+    visibility: hidden;
+    width: 40vw;
+    max-width: 900px;
+    padding: 0px 10px;
+    background-color: #EEEEEE;
+    border: 1px solid #444444;
+    color: #2B292A;
+    text-align: left;           
+    border-radius: 0px;
+    padding: 5px 10px;
+    position: absolute;
+    z-index: 1;
+    bottom: 110%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 100%;
+    font-weight: inherit;
+    font-style: inherit;
+    font-family: 'Roboto', sans-serif;
+    vertical-align: baseline;
+    white-space: pre-wrap;
+}
+
+/* Course on left of page so tooltip appears to right of course */
+.tooltip .tooltiptextright {
+    left: 50%;
+}
+
+/* Course on right of page so tooltip appears to left of course */
+.tooltip .tooltiptextleft {
+    right: 50%;
+}
+
+/* After hovering, set content to empty */
+.tooltip .tooltiptextright::after {
+    content: "";         
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #EEEEEE transparent transparent transparent;
+}
+
+/* After hovering, set content to empty */
+.tooltip .tooltiptextleft::after {
+    content: "";         
+    top: 100%;
+    right: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #EEEEEE transparent transparent transparent;
+}
+
+/* On hover, display course description */
+.tooltip:hover .tooltiptextright, .tooltip:hover .tooltiptextleft {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Title of description, format taken from Calendar */
+.descriptiontitle {
+    color: #2b292a;
+    font-size: 20px;
+    font-weight: 500;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Line between title and body of description */
+.descriptionline {
+    height: 0;
+    border: 0;
+    border-top: 1px solid #444444;
+    background: transparent;
+    display: block;
+    unicode-bidi: isolate;
+    margin: 4px;
+    overflow: hidden;
+    border-style: inset;
+    border-width: 1px;
+}
+
+.descriptioncredits, .descriptionfeeindex, .descriptionavailability, .descriptionalphahours, .fulldescription,
+.instructorname, .instructoremail, .place, .building, .starttime, .endtime, .accreditationunits {
+    font-size: 15px;
+}
+
+/* Various components of description body */
+.descriptioncredits, .descriptionfeeindex, .descriptionavailability, .descriptionalphahours, .fulldescription {
+    display: inline;
+}
+
+/* Ensure instructor name and email don't overlap */
+.instructorname {
+    margin: 10px 0px 0px 0px;
+}
+
+.instructoremail {
+    margin: 0;
+}
+
+.building, .endtime {
+    margin-left: 50px;
+}
+
+.accreditationheader {
+    font-size: 80%;
+}
+
+/* footer formatting */
+footer {
+    padding: 8px 8px;
+    background-color: #275d38;
+    margin-top: 10px;
+    margin-bottom: 0;
+    height: 64px;
+    position: relative;
+    bottom: 0;
+    min-width: 100vw;
+}
+
+/* U of A logo */
+.footer img {
+    width: 183px;
+    height: 50px;
+    margin-right: 0;
+    position: relative;
+    left: 46rem;
+}
+
+/* copyright logo and text */
+#copyright {
+    position: relative;
+    left: 60rem;
+    color: #FFFFFF;
+    font-family: 'Roboto',sans-serif;
+    font-size: 75%;
+}
