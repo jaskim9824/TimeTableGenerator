@@ -40,6 +40,9 @@ Details regarding the formatting of the input Excel files are provided in docs/W
 
 This project requires Python 3.6 or higher.
 
+To produce an executable of the project, run the command `pyinstaller main.py -F --onefile -n timetableGenerator` in the `src` directory. An
+executable will be produced in the resulting `dist` directory. The other produced directories and files can be deleted.
+
 This project has the following dependencies:
   - AngularJS for the front end logic on the generated webpage
   - BeautifulSoup for generation of the final HTML within Python
